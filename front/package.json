@@ -1,9 +1,6 @@
 {
   "name": "front",
   "version": "0.1.0",
-<<<<<<< HEAD
-  "private": true
-=======
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",
@@ -43,5 +40,4 @@
       "last 1 safari version"
     ]
   }
->>>>>>> 0653bf5f50e428487de339e115cd67a973462f38
 }
