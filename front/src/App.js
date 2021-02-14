@@ -7,7 +7,7 @@ import NuevoCliente from "./layout/clientes/NuevoCliente"
 import ListaEmpleados from "./layout/empleados/ListaEmpleados"
 import NuevoEmpleado from "./layout/empleados/NuevoEmpleado"
 import Informes from "./layout/informes/Informes"
-import Perfiles from "./layout/perfiles/Perfiles"
+import NuevoPerfil from "./layout/perfiles/NuevoPerfil"
 import ListaProyectos from "./layout/proyectos/ListaProyectos"
 import NuevoProyecto from "./layout/proyectos/NuevoProyecto"
 import ListaTareas from "./layout/tareas/ListaTareas"
@@ -42,6 +42,9 @@ function App() {
             <li>
               <Link to="/nuevo-cliente">Nuevo Cliente</Link>
             </li>
+            <li>
+              <Link to="/nuevo-perfil">Nuevo Perfil</Link>
+            </li>
           </ul>
         </nav>
     <Switch>
@@ -75,6 +78,9 @@ function App() {
         <Route exact path="/nuevo-empleado">
           <NuevoEmpleado/>
         </Route>
+        <Route exact path="/nuevo-perfil">
+          <NuevoPerfil/>
+        </Route>
         <Redirect from="*" to="/lista-proyectos"/>
 
         {/* HABLAR CON OMAR SOBRE SI PERFILES TIENE MENÚ (MEPA Q NO) */}
@@ -85,3 +91,20 @@ function App() {
 
 export default App;
 // http://localhost:27195
+// /api/login/authenticate (login -> devuelve token)
+
+// Axios para las conexiones
+// https://github.com/axios/axios
+
+// Renderizado condicional
+// https://es.reactjs.org/docs/conditional-rendering.html
+
+// hooks 
+// https://reactjs.org/docs/hooks-state.html - Reemplaza la forma de armar los estados
+// https://reactjs.org/docs/hooks-effect.html - Reemplaza el ComponentDidMount/WillMount etc
+
+// Formularios con Formik
+// https://formik.org/docs/overview
+
+// generar archivos PDF (temporal) - Buscar biblioteca
+//https://dev.to/finallynero/generating-pdf-documents-in-react-using-react-pdf-4ka7 
