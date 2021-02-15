@@ -14,7 +14,7 @@ import NavBar from "../nav/Nav"
 
 function Gramps() {
     return (
-        <Router>
+        <Switch>
             <Route exact path="/lista-proyectos">
                 <ListaProyectos/>
             </Route>
@@ -46,7 +46,7 @@ function Gramps() {
                 <NuevoPerfil/>
             </Route>
             <Redirect from="*" to="/lista-proyectos"/>
-        </Router>
+        </Switch>
     )
 }
 

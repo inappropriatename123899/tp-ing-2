@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {  IconButton, 
@@ -29,9 +28,7 @@ const rows = [
 ];
 
 function ListaProyectos() {
-
   const classes = useStyles();
-
 
   return (
     <div>
