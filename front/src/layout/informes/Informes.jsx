@@ -1,4 +1,5 @@
 import React from 'react'
+import NavBar from "../nav/Nav.jsx"
 
 function Informes() {
   return (

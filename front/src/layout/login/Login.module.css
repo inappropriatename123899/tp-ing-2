@@ -1,0 +1,14 @@
+
+.ContainerLogin{
+  background-color:#3abc9c;
+  height:100vh;
+  width:100%;
+  display:flex;
+  justify-content: center;
+  align-items: center
+}
+
+.cardContainer{
+  padding: 15px
+  
+}

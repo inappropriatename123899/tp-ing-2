@@ -1,91 +1,119 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route ,Switch , Link, Redirect } from "react-router-dom";
-import Login from "./layout/login/Login"
-import ListaClientes from "./layout/clientes/ListaClientes"
-import NuevoCliente from "./layout/clientes/NuevoCliente"
-import ListaEmpleados from "./layout/empleados/ListaEmpleados"
-import NuevoEmpleado from "./layout/empleados/NuevoEmpleado"
-import Informes from "./layout/informes/Informes"
-import NuevoPerfil from "./layout/perfiles/NuevoPerfil"
-import ListaProyectos from "./layout/proyectos/ListaProyectos"
-import NuevoProyecto from "./layout/proyectos/NuevoProyecto"
-import ListaTareas from "./layout/tareas/ListaTareas"
-import NuevaTarea from "./layout/tareas/NuevaTarea"
+import { BrowserRouter as Router, Route ,Switch , useHistory, Link, Redirect } from "react-router-dom";
+//import Login from "./layout/login/Login";
+import NavBar from "./layout/nav/Nav"
+import ListaProyectos from './layout/proyectos/ListaProyectos';
+
+// cosas de login
+import React, {useState, useEffect} from "react"
+import style from "./layout/login/Login.module.css"
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { Formik, Field, Form } from 'formik';
+import axios from "axios";
+import {TextField} from "@material-ui/core"
+
+
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+  },
+});
 
 function App() {
+
+
+
+  const classes = useStyles();
+
+  const [testFlag, setTestFlag] = useState(true);
+  const [falseCreds, setFalseCreds] = useState({
+    username: "admin",
+    password: "1234"
+  });
+  
   return (
     <Router>
-      <nav>
-          <ul>
-            <li>
-              <Link to="/login">login</Link>
-            </li>
-            <li>
-              <Link to="/lista-tareas">Tareas</Link>
-            </li>
-            <li>
-              <Link to="/nueva-tarea">Crear Tarea</Link>
-            </li>
-            <li>
-              <Link to="/informes">Informes</Link>
-            </li>
-            <li>
-              <Link to="/lista-proyectos">Proyectos</Link>
-            </li>
-            <li>
-              <Link to="/nuevo-proyecto">Nuevo Proyecto</Link>
-            </li>
-            <li>
-              <Link to="/lista-clientes">Clientes</Link>
-            </li>
-            <li>
-              <Link to="/nuevo-cliente">Nuevo Cliente</Link>
-            </li>
-            <li>
-              <Link to="/nuevo-perfil">Nuevo Perfil</Link>
-            </li>
-          </ul>
-        </nav>
-    <Switch>
-        <Route exact path="/login">
-          <Login/>
-        </Route>
-        <Route exact path="/lista-tareas">
-          <ListaTareas/>
-        </Route>
-        <Route exact path="/nueva-tarea">
-          <NuevaTarea/>
-        </Route>
-        <Route exact path="/informes">
-          <Informes/>
-        </Route>
-        <Route exact path="/lista-proyectos">
-          <ListaProyectos/>
-        </Route>
-        <Route exact path="/nuevo-proyecto">
-          <NuevoProyecto/>
-        </Route>
-        <Route exact path="/lista-clientes">
-          <ListaClientes/>
-        </Route>
-        <Route exact path="/nuevo-cliente">
-          <NuevoCliente/>
-        </Route>
-        <Route exact path="/lista-empleados">
-          <ListaEmpleados/>
-        </Route>
-        <Route exact path="/nuevo-empleado">
-          <NuevoEmpleado/>
-        </Route>
-        <Route exact path="/nuevo-perfil">
-          <NuevoPerfil/>
-        </Route>
-        <Redirect from="*" to="/lista-proyectos"/>
-
-        {/* HABLAR CON OMAR SOBRE SI PERFILES TIENE MENÚ (MEPA Q NO) */}
-      </Switch>
-    </Router>
+      {
+        !testFlag ? 
+          <div className={style.ContainerLogin}> {/* login */}
+        
+          <Card className={classes.root, style.cardContainer}>
+          <h1>Bienvenido</h1>
+            <CardContent>
+              <Formik 
+                initialValues={{
+                  username: '',
+                  password: '',
+                }}
+    
+                validate={values=>{
+                  const errors ={};
+                  if (!values.username || !values.password){
+                    errors.username = "Requerido";
+                    errors.password = "Requerido"
+                  }
+                  return errors
+                  }}
+    
+                onSubmit={(values, setSubmitting) => {
+                  // enganchar a endpoint
+                  // http://localhost:27195/api/login/authenticate
+                  /*
+                  axios.post("http://localhost:27195/api/login/authenticate",{username: values.username, password:values.password}).then(res => {
+                    console.log(res) //
+                  }).catch((error)=> {
+                    console.error("error en get login: ",error)
+                  })
+                  */
+                  if (values.password == falseCreds.password && values.username == falseCreds.username) {
+                    setTestFlag(true);
+                  }
+                }
+              }>
+              {
+                ({
+                  values,
+                  errors,
+                  touched,
+                  handleChange,   
+                  handleBlur,   
+                  handleSubmit,   
+                  isSubmitting
+                }) => (
+                  <Form onSubmit={handleSubmit}>
+                    <br/>
+                    <TextField onChange={handleChange} value={values.username} onBlur={handleBlur} id="username standard-basic" name="username" label="Username" />
+                    {errors.username && touched.username}
+                    <br/>
+                    <br/>
+                    <TextField onChange={handleChange} type="password" value={values.password} onBlur={handleBlur} id="password" name="password" label="Password" />
+                    {errors.password && touched.password}
+                    <br/>
+                    <br/>
+                    <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
+                      Ingresar
+                    </Button>
+                  </Form>
+                )
+              }  
+              </Formik>
+            </CardContent>
+          </Card>
+        </div> 
+        :
+          
+          <NavBar />      
+      }
+      {/* <Redirect from="*" to="/lista-proyectos"/> Redirecciona el login inclusive */}
+    </Router>  
   );
 }
 
