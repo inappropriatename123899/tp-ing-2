@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {  IconButton, 
           Table, 
@@ -76,45 +77,56 @@ const rows = [
 function ListaEmpleados() {
   const classes = useStyles();
 
+  useEffect(() => {
+    axios.get("http://localhost:27195/api/Empleados").then(res => {
+            console.log(res) //
+          }).catch((error)=> {
+            console.error("error en get proyectos: ",error)
+          })
+    return () => {
+      
+    }
+  }, [])
+
   return (
     <div>
       <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Nombre</TableCell>
-            <TableCell align="right">Apellido</TableCell>
-            <TableCell align="right">DNI</TableCell>
-            <TableCell align="right">Fecha de Ingreso</TableCell>
-            <TableCell align="right">Perfiles</TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="center">Nombre</TableCell>
+            <TableCell align="center">Apellido</TableCell>
+            <TableCell align="center">DNI</TableCell>
+            <TableCell align="center">Fecha de Ingreso</TableCell>
+            <TableCell align="center">Perfiles</TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.nombre}>
-              <TableCell component="th" scope="row">
+              <TableCell align="center" component="th" scope="row">
                 {row.nombre}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.apellido}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.dni}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.fechaIngreso}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.perfiles.length}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <IconButton>
                   <EditIcon/>
                 </IconButton>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <IconButton>
                   <DeleteIcon/>
                 </IconButton>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios'
 import {  IconButton, 
           Table, 
           TableBody, 
@@ -30,37 +31,49 @@ const rows = [
 function ListaProyectos() {
   const classes = useStyles();
 
+
+  useEffect(() => {
+    axios.get("http://localhost:27195/api/Proyectos").then(res => {
+            console.log(res) //
+          }).catch((error)=> {
+            console.error("error en get proyectos: ",error)
+          })
+    return () => {
+      
+    }
+  }, [])
+
   return (
     <div>
       <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Nombre</TableCell>
-            <TableCell align="right">Estado</TableCell>
-            <TableCell align="right">Cliente</TableCell>
-            <TableCell align="right"></TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="center">Nombre</TableCell>
+            <TableCell align="center">Estado</TableCell>
+            <TableCell align="center">Cliente</TableCell>
+            <TableCell align="center"></TableCell>
+            <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.nombre}>
-              <TableCell component="th" scope="row">
+              <TableCell align="center" component="th" scope="row">
                 {row.nombre}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.estado}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.cliente}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <IconButton>
                   <EditIcon/>
                 </IconButton>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 <IconButton>
                   <DeleteIcon/>
                 </IconButton>

@@ -50,8 +50,7 @@ export default function Nav() {
       </AppBar>
       <LeftBar/>
       <div className={classes.content}>
-      <div className={classes.toolbar} />
-  
+        <div className={classes.toolbar}/>
         <Gramps/>
       </div> 
 

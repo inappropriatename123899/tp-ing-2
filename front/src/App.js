@@ -109,8 +109,7 @@ function App() {
           </Card>
         </div> 
         :
-          
-          <NavBar />      
+          <NavBar/>      
       }
       {/* <Redirect from="*" to="/lista-proyectos"/> Redirecciona el login inclusive */}
     </Router>  

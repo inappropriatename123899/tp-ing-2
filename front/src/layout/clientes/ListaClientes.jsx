@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {  IconButton, 
           Table, 
@@ -18,12 +19,12 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(nombre, apellido, dni, razonSocial, direccion, telefonoFijo, telefonoCelular, email, proyectos) {
-  return { nombre, apellido, dni, razonSocial, direccion, telefonoFijo, telefonoCelular, email, proyectos };
+function createData(nombre, apellido, razonSocial, dniCuit, direccion, telefonoFijo, telefonoCelular, email, proyectos) {
+  return { nombre, apellido, razonSocial, dniCuit, direccion, telefonoFijo, telefonoCelular, email, proyectos };
 }
 // nombre y apellido <|no vienen nunca juntas|> razonSocial
 const rows = [
-  createData(null, null, 33222111, "La Cochinilla S.A.", "blabla 123", 123123123123, 123123123123, "blabla@pete.com", 
+  createData(null, null, "La Cochinilla S.A.", 12334567890, "blabla 123", 123123123123, 123123123123, "blabla@pete.com", 
     [
       {
         "id": 1,
@@ -41,7 +42,7 @@ const rows = [
       }
     ]
   ),
-  createData("Juancho", "Talarga", 33222111, null, "blabla 123", 123123123123, 123123123123, "blabla@pete.com", 
+  createData("Juancho", "Talarga", null, 33222111, "blabla 123", 123123123123, 123123123123, "blabla@pete.com", 
     [
       {
         "id": 1,
@@ -80,6 +81,37 @@ const rows = [
 function ListaClientes() {
   const classes = useStyles();
 
+  const [clientes,setClientes] =useState([]);
+  const [loadClientes,setLoadClientes] = useState(false);
+
+
+  console.log("clientes: ",clientes)
+  console.log("load: ",loadClientes)
+
+
+  useEffect(() => {
+    setLoadClientes(true);
+    fetchClientes();
+    return () => {
+      
+    }
+  }, [])
+
+
+  const fetchClientes = async () => {
+    
+    axios.get("http://localhost:27195/api/Clientes").then((response)=>{
+      const data = response;
+      setClientes(data.data);
+      setLoadClientes(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadClientes(false)
+    }); 
+  }
+
+
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -88,46 +120,42 @@ function ListaClientes() {
           <TableRow>
             <TableCell align="center">Nombre</TableCell>
             <TableCell align="center">Apellido</TableCell>
-            <TableCell align="center">DNI</TableCell>
-            <TableCell align="center">Razon Social</TableCell>
+            <TableCell align="center">Razón Social</TableCell>
+            <TableCell align="center">DNI/CUIT</TableCell>
             <TableCell align="center">Dirección</TableCell>
-            <TableCell align="center">Teléfono</TableCell>
-            <TableCell align="center">Celular</TableCell>
+            <TableCell align="center">Teléfono Contacto</TableCell>
             <TableCell align="center">Email</TableCell>
-            <TableCell align="center">Proyectos</TableCell>
+            <TableCell align="center">Tipo de persona</TableCell>
             <TableCell align="center"></TableCell>
             <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.dni}>
+          {!loadClientes && clientes.map((cliente) => (
+            <TableRow key={cliente.dniCuit}>
             <TableCell align="center" component="th" scope="row">
-              {row.nombre === null ? "-" : row.nombre}
+              {cliente.nombre === null ? "-" : cliente.nombre}
             </TableCell>
             <TableCell align="center">
-              {row.apellido === null ? "-" : row.apellido}
+              {cliente.apellido === null ? "-" : cliente.apellido}
             </TableCell>
             <TableCell align="center">
-              {row.dni}
+              {cliente.razonSocial === null ? "-" : cliente.razonSocial}
             </TableCell>
             <TableCell align="center">
-              {row.razonSocial === null ? "-" : row.razonSocial}
+              {cliente.dniCuit}
             </TableCell>
             <TableCell align="center">
-              {row.direccion}
+              {cliente.direccion}
             </TableCell>
             <TableCell align="center">
-              {row.telefonoFijo}
+              {cliente.telefonoContacto}
             </TableCell>
             <TableCell align="center">
-              {row.telefonoCelular}
+              {cliente.email}
             </TableCell>
-            <TableCell align="center">
-              {row.email}
-            </TableCell>
-            <TableCell align="center">
-              {row.proyectos.length}
+            <TableCell  align="center">
+              {cliente.razonSocial === null  ? "Física" : "Jurídica"}
             </TableCell>
             <TableCell align="center">
               <IconButton>
