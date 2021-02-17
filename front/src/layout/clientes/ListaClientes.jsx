@@ -19,75 +19,14 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(nombre, apellido, razonSocial, dniCuit, direccion, telefonoFijo, telefonoCelular, email, proyectos) {
-  return { nombre, apellido, razonSocial, dniCuit, direccion, telefonoFijo, telefonoCelular, email, proyectos };
-}
-// nombre y apellido <|no vienen nunca juntas|> razonSocial
-const rows = [
-  createData(null, null, "La Cochinilla S.A.", 12334567890, "blabla 123", 123123123123, 123123123123, "blabla@pete.com", 
-    [
-      {
-        "id": 1,
-        "clienteNombre": "sample string 2",
-        "nombre": "sample string 3",
-        "proyectoEstadoID": 4,
-        "proyectoEstadoDescripcion": "sample string 5"
-      },
-      {
-        "id": 1,
-        "clienteNombre": "sample string 2",
-        "nombre": "sample string 3",
-        "proyectoEstadoID": 4,
-        "proyectoEstadoDescripcion": "sample string 5"
-      }
-    ]
-  ),
-  createData("Juancho", "Talarga", null, 33222111, "blabla 123", 123123123123, 123123123123, "blabla@pete.com", 
-    [
-      {
-        "id": 1,
-        "clienteNombre": "sample string 2",
-        "nombre": "sample string 3",
-        "proyectoEstadoID": 4,
-        "proyectoEstadoDescripcion": "sample string 5"
-      },
-      {
-        "id": 1,
-        "clienteNombre": "sample string 2",
-        "nombre": "sample string 3",
-        "proyectoEstadoID": 4,
-        "proyectoEstadoDescripcion": "sample string 5"
-      },
-      {
-        "id": 1,
-        "clienteNombre": "sample string 2",
-        "nombre": "sample string 3",
-        "proyectoEstadoID": 4,
-        "proyectoEstadoDescripcion": "sample string 5"
-      },
-      {
-        "id": 1,
-        "clienteNombre": "sample string 2",
-        "nombre": "sample string 3",
-        "proyectoEstadoID": 4,
-        "proyectoEstadoDescripcion": "sample string 5"
-      }
-    ]
-  )
-];
-
-
-
 function ListaClientes() {
   const classes = useStyles();
 
   const [clientes,setClientes] =useState([]);
   const [loadClientes,setLoadClientes] = useState(false);
 
-
   console.log("clientes: ",clientes)
   console.log("load: ",loadClientes)
-
 
   useEffect(() => {
     setLoadClientes(true);
@@ -96,7 +35,6 @@ function ListaClientes() {
       
     }
   }, [])
-
 
   const fetchClientes = async () => {
     
@@ -109,8 +47,6 @@ function ListaClientes() {
       setLoadClientes(false)
     }); 
   }
-
-
 
   return (
     <div>

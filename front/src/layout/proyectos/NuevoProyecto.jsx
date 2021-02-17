@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form } from 'formik';
 import axios from "axios";
 import {TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 
 function NuevoProyecto() {
+
+  const [clientes,setClientes] =useState([]);
+  const [loadClientes,setLoadClientes] = useState(false);
+
+  console.log("clientes: ",clientes)
+  console.log("load: ",loadClientes)
+
+  useEffect(() => {
+    setLoadClientes(true);
+    fetchClientes();
+    return () => {
+      
+    }
+  }, [])
+
+  const fetchClientes = async () => {
+    
+    axios.get("http://localhost:27195/api/Clientes").then((response)=>{
+      const data = response;
+      setClientes(data.data);
+      setLoadClientes(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadClientes(false)
+    }); 
+  }
+
   return (
     <div>
       <Formik 

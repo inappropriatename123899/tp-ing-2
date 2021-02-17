@@ -1,10 +1,102 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form } from 'formik';
 import axios from "axios";
 import {TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 
 function NuevaTarea() {
+
+  const [proyectos,setProyectos] = useState([]);
+  const [loadProyectos,setLoadProyectos] = useState(false);
+
+  const [perfiles,setPerfiles] = useState([]);
+  const [loadPerfiles,setLoadPerfiles] = useState(false);
+
+  const [empleados,setEmpleados] = useState([]);
+  const [loadEmpleados,setLoadEmpleados] = useState(false);
+
+  // const [empleadosPerfiles,setEmpleadosPerfiles] = useState([]);
+  // const [loadEmpleadosPerfiles,setLoadEmpleadosPerfiles] = useState(false);
+
+  console.log("proyectos: ",proyectos)
+  console.log("load: ",loadProyectos)
+
+  console.log("perfiles: ",perfiles)
+  console.log("load: ",loadPerfiles)
+
+  console.log("empleados: ",empleados)
+  console.log("load: ",loadEmpleados)
+
+  // console.log("empleadosPerfiles: ",empleadosPerfiles)
+  // console.log("load: ",loadEmpleadosPerfiles)
+
+  useEffect(() => {
+    // proyectos
+    setLoadProyectos(true);
+    fetchProyectos();
+    // perfiles
+    setLoadPerfiles(true);
+    fetchPerfiles();
+    // empleados
+    setLoadEmpleados(true);
+    fetchEmpleados();
+    // empleadosPerfiles
+    // setLoadEmpleadosPerfiles(true);
+    // fetchEmpleadosPerfiles();
+    return () => {
+      
+    }
+  }, [])
+
+
+  const fetchProyectos = async () => {
+    
+    axios.get("http://localhost:27195/api/Proyectos").then((response)=>{
+      const data = response;
+      setProyectos(data.data);
+      setLoadProyectos(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadProyectos(false)
+    }); 
+  }
+
+  const fetchPerfiles = async () => {
+    
+    axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
+      const data = response;
+      setPerfiles(data.data);
+      setLoadPerfiles(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadPerfiles(false)
+    }); 
+  }
+
+  const fetchEmpleados = async () => {
+    
+    axios.get("http://localhost:27195/api/Empleados").then((response)=>{
+      const data = response;
+      setEmpleados(data.data);
+      setLoadEmpleados(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadEmpleados(false)
+    }); 
+  }
+
+  // const fetchEmpleadosPerfiles = async () => {
+    
+  //   axios.get("http://localhost:27195/api/EmpleadosPerfiles").then((response)=>{
+  //     const data = response;
+  //     setEmpleados(data.data);
+  //     setLoadEmpleados(false);
+  //   }).catch((error)=>{
+  //     console.error("Error pidiendo datos: ",error);
+  //     setLoadEmpleados(false)
+  //   }); 
+  // }
+
   return (
     <div>
       <Formik 
@@ -18,8 +110,6 @@ function NuevaTarea() {
           horasOB: ''
         }}
 /*
-
-
 {
   "id": 1,
   "proyectoID": 2,
@@ -32,30 +122,34 @@ function NuevaTarea() {
   "horasOB": 9.0
 }
 */
-        validate={values=>{
-          const errors ={};
-          if (!values.proyectoNombre || !values.proyectoID || !values.perfilID || !values.empleadoID || !values.horasEstimadas || !values.horasOB){
-            errors.name = "Requerido";
-            errors.proyectoID = "Requerido";
-            errors.perfilID = "Requerido";
-            errors.empleadoPerfilID = "Requerido";
-            errors.horasEstimadas = "Requerido";
-            errors.horasOB = "Requerido";
-          }
-          return errors;
-          }}
+        // validate={values=>{
+        //   const errors ={};
+        //   if (!values.proyectoNombre || !values.proyectoID || !values.perfilID || !values.empleadoID || !values.horasEstimadas || !values.horasOB){
+        //     errors.name = "Requerido";
+        //     errors.proyectoID = "Requerido";
+        //     errors.perfilID = "Requerido";
+        //     errors.empleadoPerfilID = "Requerido";
+        //     errors.horasEstimadas = "Requerido";
+        //     errors.horasOB = "Requerido";
+        //   }
+        //   return errors;
+        //   }}
 
         onSubmit={(values, {setSubmitting}) => {
-          // enganchar a endpoint
-          // http://localhost:27195/api/login/authenticate
-          
-          axios.post("http://localhost:27195/api/Tareas/update", values).then(res => {
+          axios.post("http://localhost:27195/api/Tareas/update", {
+            id: 0,
+            proyectoNombre: values.proyectoNombre,
+            proyectoID: parseInt(values.proyectoID),
+            perfilID: parseInt(values.perfilID),
+            //empleadoPerfilID: , falta poner
+            horasEstimadas: '',
+            horasOB: ''
+          }).then(res => {
             console.log(res) 
           }).catch((error)=> {
             console.error("error en get login: ",error)
           })
           setSubmitting(false)
-          
         }
       }>
       {

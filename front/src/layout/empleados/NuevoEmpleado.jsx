@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Field, Form, FieldArray,ErrorMessage } from 'formik';
 import axios from "axios";
 import {ListItemAvatar, TextField} from "@material-ui/core";
@@ -7,43 +7,71 @@ import {Select,InputLabel, MenuItem,FormControl} from "@material-ui/core";
 import Moment from 'react-moment';
 
 function NuevoEmpleado() {
-  const perfilesFetch = [ // esto se carga con el endpoint http://localhost:27195/api/Perfiles
-    {
-      id: 0,
-      descripcion: "Elija un perfil",
-      valorHorario: 0
-    },
-    {
-      id: 1,
-      descripcion: "Analista",
-      valorHorario: 3.0
-    },
-    {
-      id: 2,
-      descripcion: "Desarrollador",
-      valorHorario: 3.0
-    },
-    {
-      id: 3,
-      descripcion: "Tester",
-      valorHorario: 3.0
-    },
-    {
-      id: 4,
-      descripcion: "Implementador",
-      valorHorario: 3.0
-    },
-    {
-      id: 5,
-      descripcion: "Capacitador",
-      valorHorario: 3.0
-    },
-    {
-      id: 6,
-      descripcion: "Supervisor",
-      valorHorario: 3.0
+
+  const [profiles,setProfiles] = useState([]);
+  const [loadProfiles,setLoadProfiles] = useState(false);
+
+  console.log("perfiles: ",profiles)
+  console.log("load: ",loadProfiles)
+
+  useEffect(() => {
+    // perfiles
+    setLoadProfiles(true);
+    fetchProfiles();
+    return () => {
+      
     }
-  ]
+  }, [])
+
+  const fetchProfiles = async () => {
+    
+    axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
+      const data = response;
+      setProfiles(data.data);
+      setLoadProfiles(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadProfiles(false)
+    }); 
+  }
+
+  // const perfilesFetch = [ // esto se carga con el endpoint http://localhost:27195/api/Perfiles
+  //   {
+  //     id: 0,
+  //     descripcion: "Elija un perfil",
+  //     valorHorario: 0
+  //   },
+  //   {
+  //     id: 1,
+  //     descripcion: "Analista",
+  //     valorHorario: 3.0
+  //   },
+  //   {
+  //     id: 2,
+  //     descripcion: "Desarrollador",
+  //     valorHorario: 3.0
+  //   },
+  //   {
+  //     id: 3,
+  //     descripcion: "Tester",
+  //     valorHorario: 3.0
+  //   },
+  //   {
+  //     id: 4,
+  //     descripcion: "Implementador",
+  //     valorHorario: 3.0
+  //   },
+  //   {
+  //     id: 5,
+  //     descripcion: "Capacitador",
+  //     valorHorario: 3.0
+  //   },
+  //   {
+  //     id: 6,
+  //     descripcion: "Supervisor",
+  //     valorHorario: 3.0
+  //   }
+  // ]
 
   return (
     <div>
@@ -52,11 +80,11 @@ function NuevoEmpleado() {
           id: 0,
           nombre: '',
           apellido: '',
-          dni: 0,
+          dni: '',
           fechaIngreso: '',
           usuario: '',
           clave: '',
-          perfiles: [0] // array de int
+          perfiles2: [0] // array de int
         }}
 /*
 
@@ -105,18 +133,24 @@ https://material-ui.com/components/pickers/#date-time-pickers
         }}
 */
         onSubmit={ async (values, setSubmitting) => {
-          // enganchar a endpoint
-          // http://localhost:27195/api/login/authenticate
-          /*
-          axios.post("http://localhost:27195/api/login/authenticate",{username: values.username, password:values.password}).then(res => {
-            console.log(res) //
+          axios.post("http://localhost:27195/api/Tareas/update", {
+            id: values.id,
+            tipoPersona: parseInt(values.tipoPersona),
+            nombre: values.nombre,
+            apellido: values.apellido,
+            dni: parseInt(values.dni),
+            usuario: values.usuario,
+            clave: values.clave,
+            fechaIngreso: Date.parse(values.fechaIngreso),
+            perfiles: [] // investigar
+          }).then(res => {
+            console.log(res) 
           }).catch((error)=> {
             console.error("error en get login: ",error)
           })
-          */
-         await new Promise((r) => setTimeout(r, 500));
-        alert(JSON.stringify(values, null, 2));
+          setSubmitting(false)
         }
+
       }>
       {
         ({
@@ -130,36 +164,36 @@ https://material-ui.com/components/pickers/#date-time-pickers
         }) => (
           <Form onSubmit={handleSubmit}>
             <br/>
-            <TextField onChange={handleChange} value={values.name} onBlur={handleBlur} id="name standard-basic" name="name" label="Nombre" />
-            {errors.name && touched.name}
+            <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre" />
+            {errors.nombre && touched.nombre}
             <br/>
             <br/>
-            <TextField onChange={handleChange} value={values.surname} onBlur={handleBlur} id="surname standard-basic" name="surname" label="Apellido" />
-            {errors.surname && touched.surname}
+            <TextField onChange={handleChange} value={values.apellido} onBlur={handleBlur} id="apellido standard-basic" name="apellido" label="Apellido" />
+            {errors.apellido && touched.apellido}
             <br/>
             <br/>
-            <TextField onChange={handleChange} value={values.dni} onBlur={handleBlur} id="dni standard-basic" name="dni" label="DNI" />
+            <TextField onChange={handleChange} value={values.dni} placeholder="0" onBlur={handleBlur} id="dni standard-basic" name="dni" label="DNI" />
             {errors.dni && touched.dni}
             <br/>
             <br/>{/* a rellenar con un fetch de perfiles */}
             <FieldArray name="perfiles">
             {({ insert, remove, push }) => (
               <div>
-                {values.perfiles.length > 0 &&
-                  values.perfiles.map((perfil, index) => (
+                {values.perfiles2.length > 0 &&
+                  values.perfiles2.map((perfil, index) => (
                     <div className="row" key={index}>
                       <div className="col">
                         <label >Perfil: </label>
                         <br/>
                         <Field
                           //labelId="labelSelectPerfiles"
-                          name={`perfiles.${index}`}
+                          name={`perfiles2.${index}`}
                           // component={Select} esto da error
                           as="select"
                           // defaultValue={`perfilesFetch[0]`}
                           onChange={handleChange}
                         >
-                          {perfilesFetch.map((item,i) => (
+                          {profiles.map((item,i) => (
                                   <option key={i} value={item.id}>{item.descripcion}</option>
                               )
                             )
@@ -218,7 +252,7 @@ https://material-ui.com/components/pickers/#date-time-pickers
             {errors.clave && touched.clave}
             <br/>
             <br/>
-            <TextField onChange={handleChange} placeholder='1976-04-19T12:59-0500' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
+            <TextField onChange={handleChange} placeholder='1976-04-19' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
             {errors.fechaIngreso && touched.fechaIngreso}
             <br/>
             <br/>

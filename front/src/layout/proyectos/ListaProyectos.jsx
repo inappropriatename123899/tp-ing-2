@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios'
 import {  IconButton, 
@@ -31,13 +31,28 @@ const rows = [
 function ListaProyectos() {
   const classes = useStyles();
 
+  const [proyectos,setProyectos] = useState([]);
+  const [loadProyectos,setLoadProyectos] = useState(false);
+
+  const fetchProyectos = async () => {
+    
+    axios.get("http://localhost:27195/api/Proyectos").then((response)=>{
+      const data = response;
+      setProyectos(data.data);
+      setLoadProyectos(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadProyectos(false)
+    }); 
+  }
+
+  console.log("proyectos: ",proyectos)
+  console.log("load: ",loadProyectos)
 
   useEffect(() => {
-    axios.get("http://localhost:27195/api/Proyectos").then(res => {
-            console.log(res) //
-          }).catch((error)=> {
-            console.error("error en get proyectos: ",error)
-          })
+    // proyectos
+    setLoadProyectos(true);
+    fetchProyectos();
     return () => {
       
     }
