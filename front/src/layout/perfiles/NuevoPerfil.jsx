@@ -22,20 +22,6 @@ function NuevoPerfil() {
           valorHorario: ''
         }}
 /*
-
-
-{
-  "id": 1,
-  "proyectoID": 2,
-  "proyectoNombre": "sample string 3",
-  "empleadoPerfilID": 4,
-  "empleadoPerfilNombreEmplado": "sample string 5",
-  "empleadoPerfilDescripcion": "sample string 6",
-  "nombre": "sample string 7",
-  "horasEstimadas": 8.0,
-  "horasOB": 9.0
-}
-
         validate={values=>{
           const errors ={};
           if (!values.proyectoNombre || !values.proyectoID || !values.perfilID || !values.empleadoID || !values.horasEstimadas || !values.horasOB){
@@ -50,16 +36,12 @@ function NuevoPerfil() {
           }}
 */
         onSubmit={(values, {setSubmitting}) => {
-          // enganchar a endpoint
-          // http://localhost:27195/api/login/authenticate
-          
           axios.post("http://localhost:27195/api/Perfiles/update", values).then(res => {
             console.log(res) 
           }).catch((error)=> {
-            console.error("error en get login: ",error)
+            console.error("error: ",error)
           })
           setSubmitting(false)
-          
         }
       }>
       {
