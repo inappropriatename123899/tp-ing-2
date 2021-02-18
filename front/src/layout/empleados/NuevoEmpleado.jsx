@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Formik, Field, Form, FieldArray,ErrorMessage } from 'formik';
+import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import axios from "axios";
 import {ListItemAvatar, TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
@@ -34,44 +34,6 @@ function NuevoEmpleado() {
       setLoadProfiles(false)
     }); 
   }
-
-  // const perfilesFetch = [ // esto se carga con el endpoint http://localhost:27195/api/Perfiles
-  //   {
-  //     id: 0,
-  //     descripcion: "Elija un perfil",
-  //     valorHorario: 0
-  //   },
-  //   {
-  //     id: 1,
-  //     descripcion: "Analista",
-  //     valorHorario: 3.0
-  //   },
-  //   {
-  //     id: 2,
-  //     descripcion: "Desarrollador",
-  //     valorHorario: 3.0
-  //   },
-  //   {
-  //     id: 3,
-  //     descripcion: "Tester",
-  //     valorHorario: 3.0
-  //   },
-  //   {
-  //     id: 4,
-  //     descripcion: "Implementador",
-  //     valorHorario: 3.0
-  //   },
-  //   {
-  //     id: 5,
-  //     descripcion: "Capacitador",
-  //     valorHorario: 3.0
-  //   },
-  //   {
-  //     id: 6,
-  //     descripcion: "Supervisor",
-  //     valorHorario: 3.0
-  //   }
-  // ]
 
   return (
     <div>
@@ -133,16 +95,32 @@ https://material-ui.com/components/pickers/#date-time-pickers
         }}
 */
         onSubmit={ async (values, setSubmitting) => {
-          axios.post("http://localhost:27195/api/Tareas/update", {
+          // acá se arma el array de perfiles para enviar como detalle
+          let array2 = profiles
+            .map((element) => (values.perfiles2.find(x => x == element.id) ? element : null))
+            .filter((element) => element !== null);
+
+          let array3 = [];
+
+          array2.forEach((x) => {
+            array3.push({
+              id: 0,
+              empleadoID: 0,
+              empleadoNombre: null,
+              perfilID: x.id,
+              perfilDescripcion: null
+            })
+          })
+
+          axios.post("http://localhost:27195/api/Empleados/update", {
             id: values.id,
-            tipoPersona: parseInt(values.tipoPersona),
             nombre: values.nombre,
             apellido: values.apellido,
             dni: parseInt(values.dni),
             usuario: values.usuario,
             clave: values.clave,
-            fechaIngreso: Date.parse(values.fechaIngreso),
-            perfiles: [] // investigar
+            fechaIngreso: values.fechaIngreso,
+            perfiles: array3
           }).then(res => {
             console.log(res) 
           }).catch((error)=> {
@@ -150,7 +128,6 @@ https://material-ui.com/components/pickers/#date-time-pickers
           })
           setSubmitting(false)
         }
-
       }>
       {
         ({
@@ -176,14 +153,14 @@ https://material-ui.com/components/pickers/#date-time-pickers
             {errors.dni && touched.dni}
             <br/>
             <br/>{/* a rellenar con un fetch de perfiles */}
-            <FieldArray name="perfiles">
+            <FieldArray name="perfiles2">
             {({ insert, remove, push }) => (
               <div>
                 {values.perfiles2.length > 0 &&
                   values.perfiles2.map((perfil, index) => (
                     <div className="row" key={index}>
                       <div className="col">
-                        <label >Perfil: </label>
+                        <label>Perfil: </label>
                         <br/>
                         <Field
                           //labelId="labelSelectPerfiles"
@@ -193,6 +170,7 @@ https://material-ui.com/components/pickers/#date-time-pickers
                           // defaultValue={`perfilesFetch[0]`}
                           onChange={handleChange}
                         >
+                          <option value={0}>Elija un perfil...</option>
                           {profiles.map((item,i) => (
                                   <option key={i} value={item.id}>{item.descripcion}</option>
                               )

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Field, Form, FieldArray } from 'formik';
 import axios from "axios";
 import {TextField} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
@@ -9,8 +9,8 @@ function NuevoProyecto() {
   const [clientes,setClientes] =useState([]);
   const [loadClientes,setLoadClientes] = useState(false);
 
-  console.log("clientes: ",clientes)
-  console.log("load: ",loadClientes)
+  console.log("clientes: ", clientes)
+  console.log("load: ", loadClientes)
 
   useEffect(() => {
     setLoadClientes(true);
@@ -21,8 +21,7 @@ function NuevoProyecto() {
   }, [])
 
   const fetchClientes = async () => {
-    
-    axios.get("http://localhost:27195/api/Clientes").then((response)=>{
+    await axios.get("http://localhost:27195/api/Clientes").then((response)=>{
       const data = response;
       setClientes(data.data);
       setLoadClientes(false);
@@ -65,60 +64,61 @@ function NuevoProyecto() {
         //   return errors
         //   }}
 
-        onSubmit={(values, {setSubmitting}) => {
-          // enganchar a endpoint
-          // http://localhost:27195/api/login/authenticate
-          /*
-          axios.post("http://localhost:27195/api/login/authenticate",{username: values.username, password:values.password}).then(res => {
-            console.log(res) //
-          }).catch((error)=> {
-            console.error("error en get login: ",error)
-          })
-          */
-        
-          alert(JSON.stringify(values,null,2));
-          setSubmitting(false);
-        }
-      }>
-      {
-        ({
-          values,
-          errors,
-          touched,
-          handleChange,   
-          handleBlur,   
-          handleSubmit,   
-          isSubmitting
-        }) => (
-          <Form onSubmit={handleSubmit}>
-            <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre Proyecto" />
-            {errors.nombre && touched.nombre}
-            <br/>
-            
-            <br/>
-            <br/> 
-            <Field name="clienteID" as="select">
-              <option value="0">Cliente ID</option>
-              <option value="1">opcion 1</option>
-              <option value="2">opcion 2</option>
-
-            </Field>
-            <br/>
-            <br/>
-            <Field onChange={handleChange} value={values.proyectoEstadoDescripcion} onBlur={handleBlur} id="state" name="proyectoEstadoDescripcion" label="Estado" as="select">
-              <option value="0">Abierto</option>
-              <option value="1">Cerrado</option>
-              <option value="2">Terminado</option>
-            </Field>
-            {errors.proyectoEstadoDescripcion && touched.proyectoEstadoDescripcion}
-            <br/>
-            <br/>
-            <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
-              Agregar
-            </Button>
-          </Form>
-        )
-      }  
+          onSubmit={(values, {setSubmitting}) => {
+            axios.post("http://localhost:27195/api/Proyectos/update", values).then(res => {
+              console.log(res) 
+            }).catch((error)=> {
+              console.error("error en get login: ",error)
+            })
+            setSubmitting(false)
+          }
+        }>
+        {
+          ({
+            values,
+            errors,
+            touched,
+            handleChange,   
+            handleBlur,   
+            handleSubmit,   
+            isSubmitting
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre Proyecto" />
+              {errors.nombre && touched.nombre}
+              <br/>
+              <br/> 
+              <Field
+                id="clienteID standard-basic"
+                name="clienteID"
+                as="select"
+                onChange={handleChange}
+                // no poner default value xq empieza a dar el error de uncontrolled select
+              >
+                {clientes.map((item,i) => (
+                        <option key={i} value={item.id}>{ item.razonSocial == null ? item.nombre : item.razonSocial }</option>
+                    )
+                  )
+                }
+              </Field>
+              <br/>
+              <br/>
+              <Field onChange={handleChange} value={values.proyectoEstadoID} onBlur={handleBlur} id="state" name="proyectoEstadoID" label="Estado" as="select">
+                <option value="0">Cambie el estado de su proyecto</option>
+                <option value="1">Vigente</option>
+                <option value="2">Pausado</option>
+                <option value="3">Cancelado</option>
+                <option value="4">Finzalizado</option>
+              </Field>
+              {errors.proyectoEstadoID && touched.proyectoEstadoID}
+              <br/>
+              <br/>
+              <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
+                Agregar
+              </Button>
+            </Form>
+          )
+        }  
       </Formik>
     </div>
   )

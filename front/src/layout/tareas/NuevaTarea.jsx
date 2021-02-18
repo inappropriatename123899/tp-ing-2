@@ -37,12 +37,9 @@ function NuevaTarea() {
     // perfiles
     setLoadPerfiles(true);
     fetchPerfiles();
-    // empleados
+    // empleadosPerfiles
     setLoadEmpleados(true);
     fetchEmpleados();
-    // empleadosPerfiles
-    // setLoadEmpleadosPerfiles(true);
-    // fetchEmpleadosPerfiles();
     return () => {
       
     }
@@ -74,7 +71,6 @@ function NuevaTarea() {
   }
 
   const fetchEmpleados = async () => {
-    
     axios.get("http://localhost:27195/api/Empleados").then((response)=>{
       const data = response;
       setEmpleados(data.data);
@@ -85,29 +81,17 @@ function NuevaTarea() {
     }); 
   }
 
-  // const fetchEmpleadosPerfiles = async () => {
-    
-  //   axios.get("http://localhost:27195/api/EmpleadosPerfiles").then((response)=>{
-  //     const data = response;
-  //     setEmpleados(data.data);
-  //     setLoadEmpleados(false);
-  //   }).catch((error)=>{
-  //     console.error("Error pidiendo datos: ",error);
-  //     setLoadEmpleados(false)
-  //   }); 
-  // }
-
   return (
     <div>
       <Formik 
         initialValues={{
           id: 0,
-          proyectoNombre: '',
-          proyectoID: '',
-          perfilID: '',
-          empleadoPerfilID: '',
-          horasEstimadas: '',
-          horasOB: ''
+          nombre: '',
+          proyectoID: 0,
+          perfilID: 0,
+          empleadoID: 0,
+          horasEstimadas: 0,
+          horasOB: 0
         }}
 /*
 {
@@ -136,19 +120,31 @@ function NuevaTarea() {
         //   }}
 
         onSubmit={(values, {setSubmitting}) => {
-          axios.post("http://localhost:27195/api/Tareas/update", {
-            id: 0,
-            proyectoNombre: values.proyectoNombre,
-            proyectoID: parseInt(values.proyectoID),
-            perfilID: parseInt(values.perfilID),
-            //empleadoPerfilID: , falta poner
-            horasEstimadas: '',
-            horasOB: ''
-          }).then(res => {
-            console.log(res) 
-          }).catch((error)=> {
-            console.error("error en get login: ",error)
-          })
+          // console.log(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${values.empleadoID}&perfilID=${values.perfilID}`);
+          // console.log(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`);
+          // console.log(values.empleadoID);
+          // console.log(values.perfilID);
+          // console.log(parseInt(values.empleadoID));
+          // console.log(parseInt(values.perfilID));
+          axios.get(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`).then((response)=>{
+            console.log(response.data);
+
+              axios.post("http://localhost:27195/api/Tareas/update", {
+              id: 0,
+              nombre: values.nombre,
+              proyectoID: values.proyectoID,
+              empleadoPerfilID: response.data,
+              horasEstimadas: parseFloat(values.horasEstimadas),
+              horasOB: parseFloat(values.horasOB)
+            }).then(res => {
+              console.log(res) 
+            }).catch((error)=> {
+              console.error("error en get login: ",error)
+            })
+          }).catch((error)=>{
+            console.error("Error pidiendo datos: ",error);
+            setLoadEmpleados(false)
+          }); 
           setSubmitting(false)
         }
       }>
@@ -164,60 +160,47 @@ function NuevaTarea() {
         }) => (
           <Form onSubmit={handleSubmit}>
             <br/>
-            <TextField onChange={handleChange} value={values.proyectoNombre} onBlur={handleBlur} id="proyectoNombre standard-basic" name="proyectoNombre" label="Nombre" />
-            {errors.proyectoNombre && touched.proyectoNombre}
+            <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre" />
+            {errors.nombre && touched.nombre}
             <br/>
             <br/>
             <p>Pertenece al proyecto: </p>
             <Field onChange={handleChange} value={values.proyectoID} onBlur={handleBlur} id="proyectoID" name="proyectoID" label="Pertenece al proyecto" as="select">
-              <option value="0">Física</option>
-              <option value="1">Jurídica</option>
+            <option value={0}>Elija un proyecto...</option>
+              { proyectos.map((item,i) => (
+                <option key={i} value={item.id}>{ item.nombre }</option>
+              ))}
             </Field>
             {errors.proyectoID && touched.proyectoID}
             <br/>
             <br/>
             <p>Perfil del empleado</p>
             <Field onChange={handleChange} value={values.perfilID} onBlur={handleBlur} id="perfilID standard-basic" name="perfilID" label="Perfil" as="select">
-              <option value="0">Analista</option>
-              <option value="1">Desarrollador</option>
+              <option value={0}>Elija un perfil...</option>
+              { perfiles.map((item,i) => (
+                <option key={i} value={item.id}>{ item.descripcion }</option>
+              ))}
             </Field>
             {errors.perfilID && touched.perfilID}
             <br/>
             <br/>
-            { // para armar el empleadoperfilid, pido todos los perfiles, elijo uno y luego pido todos los empleadoperfil que tengan el id de ese perfil, desde ahí
-              // se arma el select de empleadoid y luego se consigue el empleadoperfilid adecuado para enviar en este dto para dar de alta/modificar
-              
-              // en realidad no sería values.perfilID sino fetch de axios
-              values.perfilID == 0 &&
-              <div> {/* teniendo el perfil, filtrar los empleadoperfil que se pidieron antes por perfilid elegido para armar el select de empleado */}
-                <p>Empleado: </p>
-                <Field onChange={handleChange} value={values.empleadoPerfilID} onBlur={handleBlur} id="empleadoPerfilID standard-basic" name="empleadoPerfilID" label="Empleado" as="select">
-                  <option value="0">Jorge</option>
-                  <option value="1">Mariano</option>
-                </Field>
-                {errors.empleadoPerfilID && touched.empleadoPerfilID}
-                <br/>
-                <br/>
-              </div>
-            }
-            {
-              values.perfilID == 1 &&
-              <div> {/* teniendo el perfil, filtrar los empleadoperfil que se pidieron antes por perfilid elegido para armar el select de empleado */}
-                <p>Empleado: </p>
-                <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select">
-                  <option value="0">Abel</option>
-                  <option value="1">Mariano</option>
-                </Field>
-                {errors.empleadoID && touched.empleadoID}
-                <br/>
-                <br/>
-              </div>
-            }
-            <TextField onChange={handleChange} value={values.horasEstimadas} onBlur={handleBlur} id="horasEstimadas standard-basic" name="horasEstimadas" label="Horas estimadas" />
+            <p>Empleado</p>
+            <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select">
+              <option value={0}>Elija un empleado...</option>
+              { empleados.map((item,i) => (item.perfiles.find(element => element.perfilID == values.perfilID) ? 
+                <option key={i} value={item.id}>{ item.nombre }</option>
+               : 
+                <option key={i} value={-1}>Ningún empleado posee este perfil</option>
+              ))}
+            </Field>
+            {errors.empleadoID && touched.empleadoID}
+            <br/>
+            <br/>
+            <TextField onChange={handleChange} type="number" value={values.horasEstimadas} onBlur={handleBlur} id="horasEstimadas standard-basic" name="horasEstimadas" label="Horas estimadas" />
             {errors.horasEstimadas && touched.horasEstimadas}
             <br/>
             <br/>
-            <TextField onChange={handleChange} value={values.horasOB} onBlur={handleBlur} id="horasOB standard-basic" name="horasOB" label="Horas over budget" />
+            <TextField onChange={handleChange} type="number" value={values.horasOB} onBlur={handleBlur} id="horasOB standard-basic" name="horasOB" label="Horas over budget" />
             {errors.horasOB && touched.horasOB}
             <br/>
             <br/>

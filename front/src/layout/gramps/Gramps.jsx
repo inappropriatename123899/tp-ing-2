@@ -6,6 +6,7 @@ import ListaEmpleados from "../empleados/ListaEmpleados";
 import NuevoEmpleado from "../empleados/NuevoEmpleado";
 import Informes from "../informes/Informes";
 import NuevoPerfil from "../perfiles/NuevoPerfil";
+import ListaPerfiles from "../perfiles/ListaPerfiles";
 import ListaProyectos from "../proyectos/ListaProyectos";
 import NuevoProyecto from "../proyectos/NuevoProyecto";
 import ListaTareas from "../tareas/ListaTareas";
@@ -44,6 +45,9 @@ function Gramps() {
             </Route>
             <Route exact path="/nuevo-perfil">
                 <NuevoPerfil/>
+            </Route>
+            <Route exact path="/lista-perfiles">
+                <ListaPerfiles/>
             </Route>
             <Redirect from="*" to="/lista-proyectos"/>
         </Switch>

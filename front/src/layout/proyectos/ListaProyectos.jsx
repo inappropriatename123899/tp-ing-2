@@ -65,23 +65,23 @@ function ListaProyectos() {
         <TableHead>
           <TableRow>
             <TableCell align="center">Nombre</TableCell>
-            <TableCell align="center">Estado</TableCell>
-            <TableCell align="center">Cliente</TableCell>
+            <TableCell align="center">Estado del proyecto</TableCell>
+            <TableCell align="center">Cliente (nombre/razón social)</TableCell>
             <TableCell align="center"></TableCell>
             <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {proyectos.map((row) => (
             <TableRow key={row.nombre}>
               <TableCell align="center" component="th" scope="row">
                 {row.nombre}
               </TableCell>
               <TableCell align="center">
-                {row.estado}
+                {row.proyectoEstadoDescripcion}
               </TableCell>
               <TableCell align="center">
-                {row.cliente}
+                {row.clienteNombre}
               </TableCell>
               <TableCell align="center">
                 <IconButton>

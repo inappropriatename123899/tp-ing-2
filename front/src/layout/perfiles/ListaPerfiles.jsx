@@ -19,32 +19,32 @@ const useStyles = makeStyles({
   },
 });
 
-function ListaTareas() {
+function ListaPerfiles() {
   const classes = useStyles();
 
-  const [tareas,setTareas] =useState([]);
-  const [loadTareas,setLoadTareas] = useState(false);
+  const [perfiles,setPerfiles] =useState([]);
+  const [loadPerfiles,setLoadPerfiles] = useState(false);
 
-  console.log("tareas: ",tareas)
-  console.log("load: ",loadTareas)
+  console.log("perfiles: ",perfiles)
+  console.log("load: ",loadPerfiles)
 
   useEffect(() => {
-    setLoadTareas(true);
-    fetchTareas();
+    setLoadPerfiles(true);
+    fetchPerfiles();
     return () => {
       
     }
   }, [])
 
-  const fetchTareas = async () => {
+  const fetchPerfiles = async () => {
     
-    axios.get("http://localhost:27195/api/Tareas").then((response)=>{
+    axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
       const data = response;
-      setTareas(data.data);
-      setLoadTareas(false);
+      setPerfiles(data.data);
+      setLoadPerfiles(false);
     }).catch((error)=>{
       console.error("Error pidiendo datos: ",error);
-      setLoadTareas(false)
+      setLoadPerfiles(false)
     }); 
   }
 
@@ -54,36 +54,20 @@ function ListaTareas() {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="center">Tarea</TableCell>
-              <TableCell align="center">Empleado</TableCell>
               <TableCell align="center">Perfil</TableCell>
-              <TableCell align="center">Proyecto</TableCell>
-              <TableCell align="center">Horas estimadas</TableCell>
-              <TableCell align="center">Horas OB</TableCell>
+              <TableCell align="center">Paga por hora</TableCell>
               <TableCell align="center"></TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tareas.map((row) => (
+            {perfiles.map((row) => (
               <TableRow key={row.tarea}>
                 <TableCell align="center" component="th" scope="row">
-                  {row.nombre}
+                  {row.descripcion}
                 </TableCell>
                 <TableCell align="center">
-                  {row.empleadoPerfilNombreEmplado}
-                </TableCell>
-                <TableCell align="center">
-                  {row.empleadoPerfilDescripcion}
-                </TableCell>
-                <TableCell align="center">
-                  {row.proyectoNombre}
-                </TableCell>
-                <TableCell align="center">
-                  {row.horasEstimadas}
-                </TableCell>
-                <TableCell align="center">
-                  {row.horasOB}
+                  {row.valorHorario}
                 </TableCell>
                 <TableCell align="center">
                   <IconButton>
@@ -104,4 +88,4 @@ function ListaTareas() {
   )
 }
 
-export default ListaTareas
+export default ListaPerfiles

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {  IconButton, 
@@ -19,74 +19,34 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(nombre, apellido, dni, fechaIngreso, usuario/*irrelevante*/, clave/*irrelevante*/, perfiles) {
-  return { nombre, apellido, dni, fechaIngreso, usuario/*irrelevante*/, clave/*irrelevante*/, perfiles };
-}
-
-const rows = [
-  createData(
-    "sample string 2",
-    "sample string 3",
-    44444444,
-    "2021-02-15T16:28:33.7757647-03:00",
-    "sample string 6",
-    "sample string 7",
-    [
-      {
-        "id": 1,
-        "empleadoID": 2,
-        "empleadoNombre": "sample string 3",
-        "perfilID": 4,
-        "perfilDescripcion": "sample string 5"
-      },
-      {
-        "id": 1,
-        "empleadoID": 2,
-        "empleadoNombre": "sample string 3",
-        "perfilID": 4,
-        "perfilDescripcion": "sample string 5"
-      }
-    ]
-  ),
-  createData(
-    "sample string 2",
-    "sample string 3",
-    44444444,
-    "2021-02-15T16:28:33.7757647-03:00",
-    "sample string 6",
-    "sample string 7",
-    [
-      {
-        "id": 3,
-        "empleadoID": 2,
-        "empleadoNombre": "sample string 3",
-        "perfilID": 4,
-        "perfilDescripcion": "sample string 5"
-      },
-      {
-        "id": 4,
-        "empleadoID": 2,
-        "empleadoNombre": "sample string 3",
-        "perfilID": 4,
-        "perfilDescripcion": "sample string 5"
-      }
-    ]
-  ),
-];
-
 function ListaEmpleados() {
   const classes = useStyles();
 
+  const [empleados,setEmpleados] =useState([]);
+  const [loadEmpleados,setLoadEmpleados] = useState(false);
+
+  console.log("empleados: ",empleados)
+  console.log("load: ",loadEmpleados)
+
   useEffect(() => {
-    axios.get("http://localhost:27195/api/Empleados").then(res => {
-            console.log(res) //
-          }).catch((error)=> {
-            console.error("error en get proyectos: ",error)
-          })
+    setLoadEmpleados(true);
+    fetchEmpleados();
     return () => {
       
     }
   }, [])
+
+  const fetchEmpleados = async () => {
+    
+    axios.get("http://localhost:27195/api/Empleados").then((response)=>{
+      const data = response;
+      setEmpleados(data.data);
+      setLoadEmpleados(false);
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadEmpleados(false)
+    }); 
+  }
 
   return (
     <div>
@@ -104,7 +64,7 @@ function ListaEmpleados() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {empleados.map((row) => (
             <TableRow key={row.nombre}>
               <TableCell align="center" component="th" scope="row">
                 {row.nombre}

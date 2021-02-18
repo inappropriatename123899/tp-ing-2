@@ -238,6 +238,12 @@ export default function SwipeableTemporaryDrawer() {
                       </ListItem>
                   </AccordionDetails>
                     */}
+                    <AccordionDetails className={classes.buttonAccordion}>
+                  <ListItem button component={Link} to="/lista-perfiles" >
+                          <ListItemIcon><ListIcon/></ListItemIcon>
+                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                      </ListItem>
+                  </AccordionDetails>
                   <AccordionDetails className={classes.buttonAccordion}>
                   <ListItem button component={Link} to="/nuevo-perfil" >
                           <ListItemIcon><AddIcon /></ListItemIcon>
