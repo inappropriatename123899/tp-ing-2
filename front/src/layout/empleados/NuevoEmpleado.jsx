@@ -46,6 +46,7 @@ function NuevoEmpleado() {
           fechaIngreso: '',
           usuario: '',
           clave: '',
+          rolID: 0,
           perfiles2: [0] // array de int
         }}
 /*
@@ -120,6 +121,7 @@ https://material-ui.com/components/pickers/#date-time-pickers
             usuario: values.usuario,
             clave: values.clave,
             fechaIngreso: values.fechaIngreso,
+            rolID: parseInt(values.rolID),
             perfiles: array3
           }).then(res => {
             console.log(res) 
@@ -189,8 +191,18 @@ https://material-ui.com/components/pickers/#date-time-pickers
                 </button>
               </div>
             )}
-          </FieldArray>
-            {/* validaciones */}
+            </FieldArray>
+            <br/>
+            <br/>
+            <label>Rol: </label>
+            <br/>
+            <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state" name="rolID" label="Rol" as="select">
+              <option value="0">Elija un rol para el empleado...</option>
+              <option value="1">Administrador</option>
+              <option value="2">Supervisor</option>
+              <option value="3">Empleado</option>
+            </Field>
+            {errors.rolID && touched.rolID}
             <br/>
             <br/>
             { // para armar el empleadoperfilid, pido todos los perfiles, elijo uno y luego pido todos los empleadoperfil que tengan el id de ese perfil, desde ahí

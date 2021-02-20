@@ -95,6 +95,7 @@ function NuevoProyecto() {
                 onChange={handleChange}
                 // no poner default value xq empieza a dar el error de uncontrolled select
               >
+                <option value={0}>Elija un cliente...</option>
                 {clientes.map((item,i) => (
                         <option key={i} value={item.id}>{ item.razonSocial == null ? item.nombre : item.razonSocial }</option>
                     )

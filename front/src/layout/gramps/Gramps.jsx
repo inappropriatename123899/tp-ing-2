@@ -11,7 +11,7 @@ import ListaProyectos from "../proyectos/ListaProyectos";
 import NuevoProyecto from "../proyectos/NuevoProyecto";
 import ListaTareas from "../tareas/ListaTareas";
 import NuevaTarea from "../tareas/NuevaTarea";
-import NavBar from "../nav/Nav"
+import CargarHorasTarea from '../cargaHoras/CargarHorasTarea';
 
 function Gramps() {
     return (
@@ -48,6 +48,9 @@ function Gramps() {
             </Route>
             <Route exact path="/lista-perfiles">
                 <ListaPerfiles/>
+            </Route>
+            <Route exact path="/carga-horas-tarea">
+                <CargarHorasTarea/>
             </Route>
             <Redirect from="*" to="/lista-proyectos"/>
         </Switch>

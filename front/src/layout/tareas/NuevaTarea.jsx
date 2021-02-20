@@ -167,14 +167,15 @@ function NuevaTarea() {
             <p>Pertenece al proyecto: </p>
             <Field onChange={handleChange} value={values.proyectoID} onBlur={handleBlur} id="proyectoID" name="proyectoID" label="Pertenece al proyecto" as="select">
             <option value={0}>Elija un proyecto...</option>
-              { proyectos.map((item,i) => (
+              { proyectos.filter(x => x.proyectoEstadoID == 1)
+                         .map((item,i) => (
                 <option key={i} value={item.id}>{ item.nombre }</option>
               ))}
             </Field>
             {errors.proyectoID && touched.proyectoID}
             <br/>
             <br/>
-            <p>Perfil del empleado</p>
+            <p>Perfil para la tarea</p>
             <Field onChange={handleChange} value={values.perfilID} onBlur={handleBlur} id="perfilID standard-basic" name="perfilID" label="Perfil" as="select">
               <option value={0}>Elija un perfil...</option>
               { perfiles.map((item,i) => (
@@ -187,11 +188,13 @@ function NuevaTarea() {
             <p>Empleado</p>
             <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select">
               <option value={0}>Elija un empleado...</option>
-              { empleados.map((item,i) => (item.perfiles.find(element => element.perfilID == values.perfilID) ? 
-                <option key={i} value={item.id}>{ item.nombre }</option>
-               : 
-                <option key={i} value={-1}>Ningún empleado posee este perfil</option>
-              ))}
+              { 
+                empleados.filter(x => x.perfiles.find(element => element.perfilID == values.perfilID)).length != 0 ?
+                (
+                  empleados.filter(x => x.perfiles.find(element => element.perfilID == values.perfilID))
+                           .map((item,i) => <option key={i} value={item.id}>{ item.nombre }</option>)
+                ) : (<option value={-1}>Ningún empleado posee este perfil</option>)
+              }
             </Field>
             {errors.empleadoID && touched.empleadoID}
             <br/>

@@ -137,6 +137,12 @@ export default function SwipeableTemporaryDrawer() {
                           <ListItemText className={classes.ItemText} primary="Agregar"/>
                       </ListItem>
                   </AccordionDetails>
+                  <AccordionDetails className={classes.buttonAccordion}>
+                  <ListItem button component={Link} to="/carga-horas-tarea" >
+                          <ListItemIcon><AddIcon /></ListItemIcon>
+                          <ListItemText className={classes.ItemText} primary="Cargar horas"/>
+                      </ListItem>
+                  </AccordionDetails>
               </Accordion>
   
               <Accordion
