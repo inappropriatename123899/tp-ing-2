@@ -122,29 +122,29 @@ const Liquidacion = () => {
                 }
               </select>
             </Grid>
-              <Grid item className="grid-item">
+              <Grid item className="grid-item" xs={4}>
               <Button variant="contained" color="primary" onClick={()=>{fetchLiquidacion()}}> Liquidación </Button>
               </Grid>
-            {cargaLiquidacion && <Grid container className="form">
+              <Grid container className="list">
               <TableContainer>
                 <Table size="small" aria-label="a dense table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="center">Por Antigüedad</TableCell>
-                      <TableCell align="center">Cant. hs. no OB</TableCell>
-                      <TableCell align="center">Cant. hs. OB ({liquidacion.valorPorcentajeDeHoraOB*100}%)</TableCell>
-                      <TableCell align="center">Cant. hs. totales</TableCell>
-                      <TableCell align="center">Perfiles</TableCell>
-                      <TableCell align="center">Proyectos</TableCell>
-                      <TableCell align="center">Tareas</TableCell>
-                      <TableCell align="center">% por antigüedad</TableCell>
-                      <TableCell align="center">% por total de horas</TableCell>
-                      <TableCell align="center">% cant. de perfiles</TableCell>
-                      <TableCell align="center">Total</TableCell>
+                      <TableCell align="center"><b>Por Antigüedad</b></TableCell>
+                      <TableCell align="center"><b>Cant. hs. no OB</b></TableCell>
+                      <TableCell align="center"><b>Cant. hs. OB ({liquidacion.valorPorcentajeDeHoraOB*100}%)</b></TableCell>
+                      <TableCell align="center"><b>Cant. hs. totales</b></TableCell>
+                      <TableCell align="center"><b>Perfiles</b></TableCell>
+                      <TableCell align="center"><b>Proyectos</b></TableCell>
+                      <TableCell align="center"><b>Tareas</b></TableCell>
+                      <TableCell align="center"><b>% por antigüedad</b></TableCell>
+                      <TableCell align="center"><b>% por total de horas</b></TableCell>
+                      <TableCell align="center"><b>% cant. de perfiles</b></TableCell>
+                      <TableCell align="center"><b>Total</b></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
+                   {cargaLiquidacion &&  <TableRow>
                       <TableCell align="center">{liquidacion.antiguedadEmpleado}</TableCell>
                       <TableCell align="center">{liquidacion.cantidadHsNoOBLiquidados}</TableCell>
                       <TableCell align="center">{liquidacion.cantidadHsOBLiquidados}</TableCell>
@@ -156,11 +156,11 @@ const Liquidacion = () => {
                       <TableCell align="center">{liquidacion.porcentajeAplicadoCantidadHoras ? liquidacion.porcentajeAplicadoCantidadHoras : "-" }</TableCell>
                       <TableCell align="center">{liquidacion.porcentajeAplicadoCantidadPerfiles ? liquidacion.porcentajeAplicadoCantidadPerfiles : "-" }</TableCell>
                       <TableCell align="center">{liquidacion.totalLiquidado}</TableCell>
-                    </TableRow>
+                    </TableRow>}
                   </TableBody>
                 </Table>
               </TableContainer>
-            </Grid>}
+            </Grid>
           </Grid>
         </Grid>
 

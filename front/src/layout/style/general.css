@@ -1,5 +1,6 @@
 .container-form{
   width:100%;
+  flex-direction: column;
   height:auto;
   display:flex;
   justify-content:center;
@@ -85,4 +86,8 @@
   box-shadow: 0 0 0 3px -moz-mac-focusring;
   color: #222; 
   outline: none;
+}
+
+.table-title{
+  font-weight: bold;
 }

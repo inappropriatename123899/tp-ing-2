@@ -8,6 +8,7 @@ import Moment from 'react-moment';
 import "../style/general.css"
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
+import moment from 'moment'
 
 
 
@@ -135,9 +136,21 @@ function Formulario(props){
                     {errors.dni && touched.dni}
                  </Grid>
                  <Grid className="grid-item" item xs={5}>
-                    <TextField onChange={handleChange} placeholder='1976-04-19' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
+                    <TextField  
+                    type="date"
+                    onChange={handleChange} 
+                    defaultValue={moment()}
+                    value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha" 
+                    InputLabelProps={{
+                      shrink: true,
+                    }}/>
                     {errors.fechaIngreso && touched.fechaIngreso}
                   </Grid>
+                 
+                 {/* <Grid className="grid-item" item xs={5}>
+                    <TextField  onChange={handleChange} placeholder='1976-04-19' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
+                    {errors.fechaIngreso && touched.fechaIngreso}
+                  </Grid> */}
                </Grid>
                <Grid container className="form">
                   <Grid item className="grid-item" xs={5}>

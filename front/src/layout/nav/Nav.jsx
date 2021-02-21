@@ -78,6 +78,9 @@ function nameRoutes (link){
     case "/carga-horas-tarea":
       return " - Carga de horas";
       break;
+      case "/pedir-liquidacion":
+        return " - Liquidación";
+        break;
 
     default:
       break;
