@@ -49,17 +49,17 @@ function Formulario(props){
           <Card className="form">
             <Form onSubmit={handleSubmit}>
              <Grid container className="form">
-                <Grid item className="grid-item" >
+                <Grid item className="grid-item" xs={5} >
                   <TextField onChange={handleChange} value={values.descripcion} onBlur={handleBlur} id="descripcion standard-basic" name="descripcion" label="Descripcion" />
                   {errors.descripcion && touched.descripcion}
                 </Grid>
 
-                <Grid item className="grid-item">
+                <Grid item className="grid-item" xs={5}>
                   <TextField onChange={handleChange} value={values.valorHorario} onBlur={handleBlur} id="valorHorario standard-basic" name="valorHorario" label="Valor hora" />
                   {errors.valorHorario && touched.valorHorario}
 
                 </Grid>
-                <Grid item className="grid-item">
+                <Grid item className="grid-item" xs={12}>
                   <Button type="submit" variant="contained" size="medium" color="primary" disabled={isSubmitting}>
                     Agregar
                   </Button>

@@ -86,15 +86,16 @@ return (
             <Card className="form">
                 <Form onSubmit={handleSubmit}>
                   <Grid container className="form">
-                    <Grid item className="grid-item" xs={12}>
-                      <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre Proyecto" />
+                    <Grid item className="grid-item" xs={5}>
+                      <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre" />
                       {errors.nombre && touched.nombre}
                     </Grid>
-                    <Grid item className="grid-item" xs={12}>
+                    <Grid item className="grid-item" xs={5}>
                       <Field
                         id="clienteID standard-basic"
                         name="clienteID"
                         as="select"
+                        className="select-css"
                         onChange={handleChange}
                         // no poner default value xq empieza a dar el error de uncontrolled select
                       >
@@ -107,7 +108,8 @@ return (
                       </Field>
                     </Grid>
                     <Grid item className="grid-item" xs={12}>
-                      <Field onChange={handleChange} value={values.proyectoEstadoID} onBlur={handleBlur} id="state" name="proyectoEstadoID" label="Estado" as="select">
+                      <Field onChange={handleChange} value={values.proyectoEstadoID} onBlur={handleBlur} id="state" name="proyectoEstadoID" label="Estado" as="select"
+                      className="select-css">
                         <option value="0">Cambie el estado de su proyecto</option>
                         <option value="1">Vigente</option>
                         <option value="2">Pausado</option>

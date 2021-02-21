@@ -3,9 +3,11 @@ import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import axios from "axios";
 import {ListItemAvatar, TextField , Card , Grid} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import {Select,InputLabel, MenuItem,FormControl} from "@material-ui/core";
+import {Select,InputLabel, MenuItem,FormControl,IconButton} from "@material-ui/core";
 import Moment from 'react-moment';
 import "../style/general.css"
+import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
 
 
 
@@ -127,47 +129,73 @@ function Formulario(props){
                   </Grid>
                 </Grid>
 
-               <Grid item className="grid-item" xs={12}>
-                  <TextField onChange={handleChange} value={values.dni} placeholder="0" onBlur={handleBlur} id="dni standard-basic" name="dni" label="DNI" />
-                  {errors.dni && touched.dni}
+               <Grid container className="form">
+                 <Grid item className="grid-item" xs={5}>
+                    <TextField onChange={handleChange} value={values.dni} placeholder="0" onBlur={handleBlur} id="dni standard-basic" name="dni" label="DNI" />
+                    {errors.dni && touched.dni}
+                 </Grid>
+                 <Grid className="grid-item" item xs={5}>
+                    <TextField onChange={handleChange} placeholder='1976-04-19' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
+                    {errors.fechaIngreso && touched.fechaIngreso}
+                  </Grid>
                </Grid>
+               <Grid container className="form">
+                  <Grid item className="grid-item" xs={5}>
+                    <TextField onChange={handleChange} value={values.usuario} onBlur={handleBlur} id="usuario standard-basic" name="usuario" label="Usuario" />
+                    {errors.usuario && touched.usuario}
+                  </Grid>
+                  <Grid item className="grid-item" xs={5}>
+                    <TextField onChange={handleChange} value={values.clave} onBlur={handleBlur} id="clave standard-basic" name="clave" label="Contraseña" />
+                    {errors.clave && touched.clave}
+                  </Grid>
+                </Grid>
+ 
+                
 {/* a rellenar con un fetch de perfiles */}
                 <Grid container className="form">
+                <label>Perfil/es:</label>
                   <FieldArray name="perfiles2">
                   {({ insert, remove, push }) => (
-                    <div>
-                      {values.perfiles2.length > 0 &&
+                    <Grid container className="form">
+                      {values.perfiles2.length > 0 ?
                         values.perfiles2.map((perfil, index) => (
-                          <div className="row" key={index}>
-                            <div className="col">
-                              <label>Perfil: </label>
-                              <br/>
-                              <Field
-                                //labelId="labelSelectPerfiles"
-                                name={`perfiles2.${index}`}
-                                // component={Select} esto da error
-                                as="select"
-                                // defaultValue={`perfilesFetch[0]`}
-                                onChange={handleChange}
-                              >
-                                <option value={0}>Elija un perfil...</option>
-                                {profiles.map((item,i) => (
-                                        <option key={i} value={item.id}>{item.descripcion}</option>
-                                    )
-                                  )
-                                }
-                              </Field>
-                            </div>
-                            <div className="col">
-                              <Button color="primary" variant="outlined" className="secondary" onClick={() => remove(index)}>Descartar</Button>
-                            </div>
-                          </div>
-                        ))}
-                      <Button color="primary" variant="outlined" className="secondary" onClick={() => push(0)}
-                      >
-                        Agregar perfil
-                      </Button>
-                    </div>
+                              <Grid container key={index} className="form">
+                                <Grid item xs={5} >
+                                  <Field className="select-css"
+                                    //labelId="labelSelectPerfiles"
+                                    name={`perfiles2.${index}`}
+                                    // component={Select} esto da error
+                                    as="select"
+                                    // defaultValue={`perfilesFetch[0]`}
+                                    onChange={handleChange}
+                                  >
+                                    <option value={0}>Elija un perfil...</option>
+                                    {profiles.map((item,i) => (
+                                            <option key={i} value={item.id}>{item.descripcion}</option>
+                                        )
+                                      )
+                                    }
+                                  </Field>
+                                </Grid>
+  
+                              <Grid item  xs={1}>
+                                <IconButton color="secondary" onClick={() => remove(index)}><ClearIcon/></IconButton>
+                              </Grid>
+                              <Grid item xs={1}>
+                                <IconButton color="primary" onClick={() => push(0)}>
+                                  <AddIcon/>
+                                </IconButton>
+                              </Grid>
+                              </Grid> 
+                        ))
+                        :
+                        <Grid className="grid-item" item xs={3}>
+                          <IconButton color="primary" onClick={() => push(0)}>
+                            <AddIcon/>
+                          </IconButton>
+                         </Grid>}
+                      
+                    </Grid>
                   )}
                   </FieldArray>
                   </Grid>
@@ -175,7 +203,8 @@ function Formulario(props){
                   <Grid item className="grid-item" xs={12}>
                     <label>Rol: </label>
                     <br/>
-                    <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state" name="rolID" label="Rol" as="select">
+                    <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state"
+                    className="select-css" name="rolID" label="Rol" as="select">
                       <option value="0">Elija un rol para el empleado...</option>
                       <option value="1">Administrador</option>
                       <option value="2">Supervisor</option>
@@ -214,21 +243,7 @@ function Formulario(props){
                     <br/>
                   </div>
                 }
-                <Grid container className="form">
-                  <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.usuario} onBlur={handleBlur} id="usuario standard-basic" name="usuario" label="Usuario" />
-                    {errors.usuario && touched.usuario}
-                  </Grid>
-                  <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.clave} onBlur={handleBlur} id="clave standard-basic" name="clave" label="Contraseña" />
-                    {errors.clave && touched.clave}
-                  </Grid>
-                </Grid>
- 
-                <Grid className="grid-item" item xs={12}>
-                  <TextField onChange={handleChange} placeholder='1976-04-19' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
-                  {errors.fechaIngreso && touched.fechaIngreso}
-                </Grid>
+                
 
                 <Grid item className="grid-item" xs={12}>
                   <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>

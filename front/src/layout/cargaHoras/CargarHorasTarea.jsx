@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import "../style/general.css"
 
 
-function CargarHorasTarea() {
+function CargarHorasTarea(props) {
 
     const [tareasEmpleado,setTareasEmpleado] =useState([]);
     const [loadTareasEmpleado,setLoadTareasEmpleado] = useState(false);
@@ -36,7 +36,7 @@ function CargarHorasTarea() {
     const fetchTareasEmpleado = async () => {
       //el q se loggea es un empleado, al margen de su rol, por lo tanto empleadoID=loggedUser.ID
       // los empleados disponibles tienen los ids 3, 4, 5 y 6, pero el 6 no tiene tareas asignadas, los demás tienen 1 cada 1
-        axios.get(`http://localhost:27195/api/Tareas/empleado?empleadoID=${parseInt("4")}`).then((response)=>{
+        axios.get(`http://localhost:27195/api/Tareas/empleado?empleadoID=${parseInt(props.usuario.id)}`).then((response)=>{
         const data = response;
         setTareasEmpleado(data.data);
         setLoadTareasEmpleado(false);
@@ -141,9 +141,9 @@ function CargarHorasTarea() {
               <Card className="form">
                 <Form onSubmit={handleSubmit}>
                   <Grid container className="form">
-                   <Grid item className="grid-item" xs={12}>
+                   <Grid item className="grid-item" xs={5}>
                       <p>Tarea</p>
-                      <Field onChange={handleChange} value={values.tareaID} onBlur={handleBlur} id="tareaID standard-basic" name="tareaID" label="Tarea" as="select">
+                      <Field onChange={handleChange} value={values.tareaID} onBlur={handleBlur} id="tareaID standard-basic" name="tareaID" label="Tarea" as="select" className="select-css">
                           <option value={0}>Elija la tarea a la que le cargará horas...</option>
                           { tareasEmpleado.map((item,i) => 
                               <option key={i} value={item.id}>{ item.nombre }</option>
@@ -151,7 +151,7 @@ function CargarHorasTarea() {
                       </Field>
                       {errors.tareaID && touched.tareaID}
                    </Grid>
-                  <Grid item className="grid-item" xs={12}>
+                  <Grid item className="grid-item" xs={5}>
                       <TextField onChange={handleChange} value={values.horasTrabajadas} onBlur={handleBlur} id="horasTrabajadas standard-basic" name="horasTrabajadas" label="Horas trabajadas" />
                       {errors.horasTrabajadas && touched.horasTrabajadas}
                   </Grid>

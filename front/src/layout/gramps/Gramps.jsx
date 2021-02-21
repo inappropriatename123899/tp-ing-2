@@ -12,45 +12,49 @@ import NuevoProyecto from "../proyectos/NuevoProyecto";
 import ListaTareas from "../tareas/ListaTareas";
 import NuevaTarea from "../tareas/NuevaTarea";
 import CargarHorasTarea from '../cargaHoras/CargarHorasTarea';
+import Liquidacion from "../liquidacion/Liquidacion"
 
-function Gramps() {
+function Gramps(props) {
     return (
         <Switch>
             <Route exact path="/lista-proyectos">
-                <ListaProyectos/>
+                <ListaProyectos usuario={props.usuario}/>
             </Route>
             <Route exact path="/nuevo-proyecto">
-                <NuevoProyecto/>
+                <NuevoProyecto usuario={props.usuario}/>
             </Route>
             <Route exact path="/lista-tareas">
-                <ListaTareas/>
+                <ListaTareas usuario={props.usuario}/>
             </Route>
             <Route exact path="/nueva-tarea">
-                <NuevaTarea/>
+                <NuevaTarea  usuario={props.usuario}/>
             </Route>
             <Route exact path="/lista-clientes">
-                <ListaClientes/>
+                <ListaClientes usuario={props.usuario}/>
             </Route>
             <Route exact path="/nuevo-cliente">
-                <NuevoCliente/>
+                <NuevoCliente usuario={props.usuario}/>
             </Route>
             <Route exact path="/lista-empleados">
-                <ListaEmpleados/>
+                <ListaEmpleados usuario={props.usuario} /> 
             </Route>
             <Route exact path="/nuevo-empleado">
-                <NuevoEmpleado/>
+                <NuevoEmpleado usuario={props.usuario} />
             </Route>
             <Route exact path="/informes">
-                <Informes/>
+                <Informes usuario={props.usuario} />
             </Route>
             <Route exact path="/nuevo-perfil">
-                <NuevoPerfil/>
+                <NuevoPerfil usuario={props.usuario} />
             </Route>
             <Route exact path="/lista-perfiles">
-                <ListaPerfiles/>
+                <ListaPerfiles usuario={props.usuario} />
             </Route>
             <Route exact path="/carga-horas-tarea">
-                <CargarHorasTarea/>
+                <CargarHorasTarea usuario={props.usuario} />
+            </Route>
+            <Route exact path="/pedir-liquidacion">
+                <Liquidacion usuario={props.usuario} />
             </Route>
             <Redirect from="*" to="/lista-proyectos"/>
         </Switch>

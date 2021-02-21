@@ -1,12 +1,12 @@
 import React from 'react'
-import NavBar from "../nav/Nav.jsx"
 
-function Informes() {
+const Informes = () => {
   return (
     <div>
-      Informes
+      
     </div>
   )
 }
 
-export default Informes
+
+export default Informes;

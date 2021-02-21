@@ -28,21 +28,14 @@ const useStyles = makeStyles({
 });
 
 function App() {
-
-
-
   const classes = useStyles();
 
-  const [testFlag, setTestFlag] = useState(true);
-  const [falseCreds, setFalseCreds] = useState({
-    username: "admin",
-    password: "1234"
-  });
+  const [token, setToken] = useState("")
   
   return (
     <Router>
       {
-        !testFlag ? 
+        (token.length == 0) ? 
           <div className={style.ContainerLogin}> {/* login */}
         
           <Card className={classes.root, style.cardContainer}>
@@ -64,18 +57,12 @@ function App() {
                   }}
     
                 onSubmit={(values, setSubmitting) => {
-                  // enganchar a endpoint
-                  // http://localhost:27195/api/login/authenticate
-                  /*
                   axios.post("http://localhost:27195/api/login/authenticate",{username: values.username, password:values.password}).then(res => {
-                    console.log(res) //
+                    console.log(res)
+                    setToken(res.data)
                   }).catch((error)=> {
-                    console.error("error en get login: ",error)
+                    console.error("error en login: ",error)
                   })
-                  */
-                  if (values.password == falseCreds.password && values.username == falseCreds.username) {
-                    setTestFlag(true);
-                  }
                 }
               }>
               {
@@ -109,7 +96,7 @@ function App() {
           </Card>
         </div> 
         :
-          <NavBar/>      
+          <NavBar token={token} />      
       }
       {/* <Redirect from="*" to="/lista-proyectos"/> Redirecciona el login inclusive */}
     </Router>  

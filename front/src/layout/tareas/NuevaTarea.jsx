@@ -116,14 +116,14 @@ function Formulario(props) {
       <Card className="form">
         <Form onSubmit={handleSubmit}>
           <Grid container className="form">
-           <Grid item xs={12} className="grid-item">
+           <Grid item xs={5} className="grid-item">
               <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre" />
               {errors.nombre && touched.nombre}
               
            </Grid>
             <Grid item className="grid-item" xs={5}>
             <p>Pertenece al proyecto: </p> {props.data ? props.data.id : ""}
-              <Field onChange={handleChange} value={values.proyectoID} onBlur={handleBlur} id="proyectoID" name="proyectoID" label="Pertenece al proyecto" as="select">
+              <Field onChange={handleChange} value={values.proyectoID} onBlur={handleBlur} id="proyectoID" name="proyectoID" label="Pertenece al proyecto" as="select" className="select-css">
               <option value={0}>Elija un proyecto...</option>
                 { proyectos.filter(x => x.proyectoEstadoID == 1)
                            .map((item,i) => (
@@ -135,7 +135,7 @@ function Formulario(props) {
             </Grid>
             <Grid item className="grid-item" xs={5}>
               <p>Perfil para la tarea</p>
-              <Field onChange={handleChange} value={values.perfilID} onBlur={handleBlur} id="perfilID standard-basic" name="perfilID" label="Perfil" as="select">
+              <Field onChange={handleChange} value={values.perfilID} onBlur={handleBlur} id="perfilID standard-basic" name="perfilID" label="Perfil" as="select" className="select-css">
                 <option value={0}>Elija un perfil...</option>
                 { perfiles.map((item,i) => (
                   <option key={i} value={item.id}>{ item.descripcion }</option>
@@ -144,9 +144,9 @@ function Formulario(props) {
               {errors.perfilID && touched.perfilID}
             </Grid>
 
-           <Grid item classNAme="grid-item" xs={12}>
+           <Grid item classNAme="grid-item" xs={5}>
               <p>Empleado</p>
-              <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select">
+              <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select" className="select-css">
                 <option value={0}>Elija un empleado...</option>
                 { 
                   empleados.filter(x => x.perfiles.find(element => element.perfilID == values.perfilID)).length != 0 ?

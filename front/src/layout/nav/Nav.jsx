@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,7 @@ import LeftBar from "./LeftBar"
 import Gramps from "../gramps/Gramps"
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useLocation } from 'react-router-dom'
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -18,9 +19,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor:"#7d7d7d",
     height:"100vh"
     },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-    },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -34,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     alignContent:"center",
     alignSelf:"center",
     justifyContent:"center"    
-
   },
   toolbar: theme.mixins.toolbar
 
@@ -84,15 +84,41 @@ function nameRoutes (link){
   }
 }
 
+const Nav = (props) => {
 
-export default function Nav() {
+  const [loggedUser,setLoggedUser] = useState([]);
+  const [loadLoggedUser,setLoadLoggedUser] = useState(false);
+
+  console.log("perfiles: ",loggedUser)
+  console.log("load: ",loadLoggedUser)
+
+  const fetchLoggedUser = async () => {
+    axios.get("http://localhost:27195/api/Empleados/DameMisDatos",
+    {headers: {Authorization: `Bearer ${props.token}`} 
+    }).then((response)=>{
+      setLoggedUser(response.data);
+      setLoadLoggedUser(false);
+      console.log("response: ",response)
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+      setLoadLoggedUser(false)
+    }); 
+  }
+
+  useEffect(() => {
+    // perfiles
+    setLoadLoggedUser(true);
+    fetchLoggedUser();
+  }, [])
+
+
+
   const classes = useStyles();
   
   let link = useLocation()
 
-
-
   return (
+    !loadLoggedUser && (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar className={classes.appBar} position="fixed">
@@ -103,13 +129,13 @@ export default function Nav() {
           <Button onClick={()=>{window.location.href="/login"}} color="inherit">Salir</Button>
         </Toolbar>
       </AppBar>
-      <LeftBar/>
+      <LeftBar usuario={loggedUser}/>
       <div className={classes.content}>
         <div className={classes.toolbar}/>
-        <Gramps/>
+        <Gramps usuario={loggedUser}/>
       </div> 
-
-    </div>
+    </div>)
   );
-}
+};
 
+export default Nav;

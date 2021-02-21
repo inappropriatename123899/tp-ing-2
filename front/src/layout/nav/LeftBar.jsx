@@ -22,7 +22,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import InfoIcon from '@material-ui/icons/Info';
 import GroupIcon from '@material-ui/icons/Group';
 import WorkIcon from '@material-ui/icons/Work';
-
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const useStyles = makeStyles((theme) =>({
 
@@ -49,256 +49,279 @@ const useStyles = makeStyles((theme) =>({
   },
 }));
 
-export default function SwipeableTemporaryDrawer() {
+export default function SwipeableTemporaryDrawer(props) {
   const classes = useStyles();
 
+  console.log("props: ",props)
+
+    console.log("usuario: ",props.usuario)
 
   return (
     <div>
 
 <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <Toolbar />
-            <div className={classes.drawerContainer}>
-              <List>
-              <Accordion
-              defaultExpanded={false}
-              >
-                  <AccordionSummary 
-                   aria-controls="panel1a-content"
-                   id="panel1a-header" 
-                  >
-                      <ListItem>
-                          <ListItemIcon>
-                              <PersonIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText}>
-                              <b>Clientes</b>
-                          </ListItemText>
-                      </ListItem>
-                  </AccordionSummary>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                      <ListItem 
+    className={classes.drawer}
+    variant="permanent"
+    classes={{
+        paper: classes.drawerPaper,
+    }}
+>
+    <Toolbar />
+        <div className={classes.drawerContainer}>
+            <List>
+            {props.usuario.rolID === 1 ? //Solo puede entrar administrador
+            <Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <PersonIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Clientes</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
                         button 
                         component={Link} 
                         to="/lista-clientes">
-                          <ListItemIcon>
-                              <ListIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                      <ListItem button 
-                          component={Link} 
-                          to="/nuevo-cliente" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Agregar"/>
-                      </ListItem>
-                  </AccordionDetails>
-              </Accordion>
-  
-              <Accordion
-              defaultExpanded={false}
-              >
-                  <AccordionSummary 
-                   aria-controls="panel1a-content"
-                   id="panel1a-header" 
-                  >
-                      <ListItem>
-                          <ListItemIcon>
-                              <PlaylistAddCheckIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText}>
-                              <b>Tareas</b>
-                          </ListItemText>
-                      </ListItem>
-                  </AccordionSummary>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                      <ListItem 
-  
-                        button 
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                    </ListItem>
+                </AccordionDetails>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem button 
                         component={Link} 
-                        to="/lista-tareas">
-                          <ListItemIcon>
-                              <ListIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/nueva-tarea" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Agregar"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/carga-horas-tarea" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Cargar horas"/>
-                      </ListItem>
-                  </AccordionDetails>
-              </Accordion>
-  
-              <Accordion
-              defaultExpanded={false}
-              >
-                  <AccordionSummary 
-                   aria-controls="panel1a-content"
-                   id="panel1a-header" 
-                  >
-                      <ListItem>
-                          <ListItemIcon>
-                              <WorkIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText}>
-                              <b>Proyectos</b>
-                          </ListItemText>
-                      </ListItem>
-                  </AccordionSummary>
-                  <AccordionDetails  className={classes.buttonAccordion}>
-                      <ListItem 
-                        button 
-                        component={Link} 
-                        to="/lista-proyectos">
-                          <ListItemIcon>
-                              <ListIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/nuevo-proyecto" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Agregar"/>
-                      </ListItem>
-                  </AccordionDetails>
-              </Accordion>
+                        to="/nuevo-cliente" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Agregar"/>
+                    </ListItem>
+                </AccordionDetails>
+            </Accordion> : <div></div>
+            }
 
-              <Accordion
-              defaultExpanded={false}
-              >
-                  <AccordionSummary 
-                   aria-controls="panel1a-content"
-                   id="panel1a-header" 
-                  >
-                      <ListItem>
-                          <ListItemIcon>
-                              <GroupIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText}>
-                              <b>Empleados</b>
-                          </ListItemText>
-                      </ListItem>
-                  </AccordionSummary>
-                  <AccordionDetails  className={classes.buttonAccordion}>
-                      <ListItem 
-                        button 
-                        component={Link} 
-                        to="/lista-empleados">
-                          <ListItemIcon>
-                              <ListIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/nuevo-empleado" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Agregar"/>
-                      </ListItem>
-                  </AccordionDetails>
-              </Accordion>
+            <Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <PlaylistAddCheckIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Tareas</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
 
-              <Accordion
-              defaultExpanded={false}
-              >
-                  <AccordionSummary 
-                   aria-controls="panel1a-content"
-                   id="panel1a-header" 
-                  >
-                      <ListItem>
-                          <ListItemIcon>
-                              <AccountCircleIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText}>
-                              <b>Perfiles</b>
-                          </ListItemText>
-                      </ListItem>
-                  </AccordionSummary>
-                  {/*}
-                  <AccordionDetails  className={classes.buttonAccordion}>
-                      <ListItem 
-                        button 
-                        component={Link} 
-                        to="/lista-perfiles">
-                          <ListItemIcon>
-                              <ListIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                    */}
-                    <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/lista-perfiles" >
-                          <ListItemIcon><ListIcon/></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/nuevo-perfil" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Agregar"/>
-                      </ListItem>
-                  </AccordionDetails>
-              </Accordion>
+                    button 
+                    component={Link} 
+                    to="/lista-tareas">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                    </ListItem>
+                </AccordionDetails>
+                
+                {props.usuario.rolID !== 3 ? <AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/nueva-tarea" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Agregar"/>
+                    </ListItem>
+                </AccordionDetails> : <div></div> }
+                {props.usuario.rolID !== 2 ? //solo puede entrar el Empleado
+                <AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/carga-horas-tarea" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Cargar horas"/>
+                    </ListItem>
+                </AccordionDetails>: <div></div>}
+            </Accordion>
 
-              <Accordion
-              defaultExpanded={false}
-              >
-                  <AccordionSummary 
-                   aria-controls="panel1a-content"
-                   id="panel1a-header" 
-                  >
-                      <ListItem>
-                          <ListItemIcon>
-                              <InfoIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText}>
-                              <b>Informes</b>
-                          </ListItemText>
-                      </ListItem>
-                  </AccordionSummary>
-                  {/*}
-                  <AccordionDetails  className={classes.buttonAccordion}>
-                      <ListItem 
+            <Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <WorkIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Proyectos</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                <AccordionDetails  className={classes.buttonAccordion}>
+                    <ListItem 
+                    button 
+                    component={Link} 
+                    to="/lista-proyectos">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                    </ListItem>
+                </AccordionDetails>
+                {props.usuario.rolID !== 3 ?<AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/nuevo-proyecto" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Agregar"/>
+                    </ListItem>
+                </AccordionDetails> : <div></div>}
+            </Accordion>
+
+            {props.usuario.rolID === 1 ? <Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <GroupIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Empleados</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                <AccordionDetails  className={classes.buttonAccordion}>
+                    <ListItem 
+                    button 
+                    component={Link} 
+                    to="/lista-empleados">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                    </ListItem>
+                </AccordionDetails>
+                <AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/nuevo-empleado" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Agregar"/>
+                    </ListItem>
+                </AccordionDetails>
+            </Accordion> :<div></div>}
+
+            {props.usuario.rolID === 1 ? <Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <AccountCircleIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Perfiles</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                <AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/lista-perfiles" >
+                        <ListItemIcon><ListIcon/></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                    </ListItem>
+                </AccordionDetails>
+                <AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/nuevo-perfil" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Agregar"/>
+                    </ListItem>
+                </AccordionDetails>
+            </Accordion> : <div></div>}
+
+            {props.usuario.rolID !== 3 ?<Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <InfoIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Informes</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                {/*}
+                <AccordionDetails  className={classes.buttonAccordion}>
+                    <ListItem 
+                    button 
+                    component={Link} 
+                    to="/lista-perfiles">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Ver lista"/>
+                    </ListItem>
+                </AccordionDetails>
+                
+                <AccordionDetails className={classes.buttonAccordion}>
+                <ListItem button component={Link} to="/nuevo-perfil" >
+                        <ListItemIcon><AddIcon /></ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Agregar"/>
+                    </ListItem>
+                </AccordionDetails>
+                */}
+            </Accordion> : <div></div>}
+            {props.usuario.rolID !== 3 ? <Accordion
+            defaultExpanded={false}
+            >
+                <AccordionSummary 
+                aria-controls="panel1a-content"
+                id="panel1a-header" 
+                >
+                    <ListItem>
+                        <ListItemIcon>
+                            <AssignmentIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText}>
+                            <b>Liquidación</b>
+                        </ListItemText>
+                    </ListItem>
+                </AccordionSummary>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
                         button 
                         component={Link} 
-                        to="/lista-perfiles">
-                          <ListItemIcon>
-                              <ListIcon/>
-                          </ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Ver lista"/>
-                      </ListItem>
-                  </AccordionDetails>
-                    
-                  <AccordionDetails className={classes.buttonAccordion}>
-                  <ListItem button component={Link} to="/nuevo-perfil" >
-                          <ListItemIcon><AddIcon /></ListItemIcon>
-                          <ListItemText className={classes.ItemText} primary="Agregar"/>
-                      </ListItem>
-                  </AccordionDetails>
-                  */}
-              </Accordion>
-          </List>
-            </div>
-            
-          </Drawer>
+                        to="/pedir-liquidacion">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Pedir liquidación"/>
+                    </ListItem>
+                </AccordionDetails>
+                
+            </Accordion> : <div></div>}
+        </List>
+    </div>
+        
+    </Drawer>
     </div>
   );
 }

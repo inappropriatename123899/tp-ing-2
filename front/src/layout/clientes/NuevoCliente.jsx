@@ -87,7 +87,7 @@ function Formulario(props){
           <Grid container className="form">
             <Grid item xs={12} className="grid-item">
               <p>Tipo Persona: </p>
-              <Field onChange={handleChange} value={values.tipoPersona} onBlur={handleBlur} id="tipoPersona" name="tipoPersona" label="Tipo Persona" as="select">
+              <Field onChange={handleChange} value={values.tipoPersona} onBlur={handleBlur} id="tipoPersona" name="tipoPersona" label="Tipo Persona" as="select" className="select-css">
                 <option value="0">Elija un tipo de persona...</option>
                 <option value="1">Física</option>
                 <option value="2">Jurídica</option>
