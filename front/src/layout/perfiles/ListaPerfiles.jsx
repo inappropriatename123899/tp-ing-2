@@ -12,6 +12,10 @@ import {  IconButton,
         } from "@material-ui/core"
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import {Formulario} from "./NuevoPerfil";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import "../style/general.css"
 
 const useStyles = makeStyles({
   table: {
@@ -48,6 +52,14 @@ function ListaPerfiles() {
     }); 
   }
 
+  function funcionBorrar(id, index) {
+    axios.delete(`http://localhost:27195/api/Perfiles/${id}`).then((response)=>{
+      setPerfiles(perfiles.filter(x => x.id != id));
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+    }); 
+  }
+  
   return (
     <div>
       <TableContainer component={Paper}>
@@ -61,26 +73,34 @@ function ListaPerfiles() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {perfiles.map((row) => (
-              <TableRow key={row.tarea}>
-                <TableCell align="center" component="th" scope="row">
-                  {row.descripcion}
-                </TableCell>
-                <TableCell align="center">
-                  {row.valorHorario}
-                </TableCell>
-                <TableCell align="center">
+            {perfiles.length > 0 ? 
+              perfiles.map((row, index) => (
+                <TableRow key={row.tarea}>
+                  <TableCell align="center" component="th" scope="row">
+                    {row.descripcion}
+                  </TableCell>
+                  <TableCell align="center">
+                    {row.valorHorario}
+                  </TableCell>
+                  <TableCell align="center">
+                <Popup trigger={
                   <IconButton>
                     <EditIcon/>
                   </IconButton>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton>
-                    <DeleteIcon/>
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                } modal>
+                    <Formulario data={row}/>
+                </Popup>
+              </TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={()=> {funcionBorrar(row.id, index)}}>
+                      <DeleteIcon/>
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              )) : (
+                <div></div>
+              )
+            }
           </TableBody>
         </Table>
       </TableContainer>

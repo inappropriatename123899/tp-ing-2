@@ -1,0 +1,50 @@
+.container-form{
+  width:100%;
+  height:auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:0% 25% 0% 25%
+}
+
+.form{
+  width:auto;
+  text-align:center;
+  justify-content:center;
+  display:flex;
+  padding:10px;
+  align-items:center;
+}
+
+.grid-item{
+  text-align:center;
+  padding:10px
+
+}
+
+.popup-content {
+  margin: auto;
+  background: rgb(255, 255, 255);
+  width: auto;
+  padding: 0px;
+}
+
+.popup-arrow {
+  width: auto;
+  color: rgb(255, 255, 255);
+}
+
+[role='tooltip'].popup-content {
+  width: auto;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px;
+}
+
+.popup-overlay {
+  width: auto;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+[data-popup='tooltip'].popup-overlay {
+  width: auto;
+  background: transparent;
+}

@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form } from 'formik';
 import axios from "axios";
-import {TextField} from "@material-ui/core";
+import {TextField, Card , Grid} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
-import style from "../login/Login.module.css"
+import "../style/general.css"
 
-const useStyles = makeStyles({
-    root: {
-      maxWidth: 345,
-    },
-  });
 
 function CargarHorasTarea() {
-    const classes = useStyles();
 
     const [tareasEmpleado,setTareasEmpleado] =useState([]);
     const [loadTareasEmpleado,setLoadTareasEmpleado] = useState(false);
@@ -66,12 +58,7 @@ function CargarHorasTarea() {
       }
 
     return (
-        <div className={style.ContainerLogin}>
-      
-      <Card className={classes.root, style.cardContainer}>
-        <CardContent>
-          <p></p>
-
+      <div className="container-form">
           <Formik 
             initialValues={{
               tareaID: 0,
@@ -94,25 +81,43 @@ function CargarHorasTarea() {
               }).then(res => {
                 console.log(res.data);
 
-                alert(
-                  <div>
-                    <p>Está pasando horas over budget ({res.data}).</p>
-                  </div>
-                )
 
-                axios.post("http://localhost:27195/api/HorasTrabajadas/update", {
-                  id: 0,
-                  proyectoID: response.data.proyectoID,
-                  tareaID: response.data.id,
-                  cantHoras: parseFloat(values.horasTrabajadas),
-                  fecha: "2021-02-20T14:23:22.2676589-03:00", // de acá se manda cualquiera, pero se setea por back
-                  horasTrabajadasEstadoID: 2,
-                  horasTrabajadasEstadoDescripcion: null
-                }).then(res => {
-                console.log(res);
-                }).catch((error)=> {
-                console.error("error en get login: ",error);
-                })
+                if (res.data != 0) {
+                  let confirmarHOB = window.confirm(`Está pasando horas over budget (${res.data}).`)
+
+                    if (confirmarHOB === true) {
+                      axios.post("http://localhost:27195/api/HorasTrabajadas/update", {
+                        id: 0,
+                        proyectoID: response.data.proyectoID,
+                        tareaID: response.data.id,
+                        cantHoras: parseFloat(values.horasTrabajadas),
+                        fecha: "2021-02-20T14:23:22.2676589-03:00", // de acá se manda cualquiera, pero se setea por back
+                        horasTrabajadasEstadoID: 2,
+                        horasTrabajadasEstadoDescripcion: null
+                      }).then(res => {
+                      console.log(res);
+                      }).catch((error)=> {
+                      console.error("error en get login: ",error);
+                      })
+                    }else{
+                      console.log("...")
+                    }
+                  } else {
+                    axios.post("http://localhost:27195/api/HorasTrabajadas/update", {
+                        id: 0,
+                        proyectoID: response.data.proyectoID,
+                        tareaID: response.data.id,
+                        cantHoras: parseFloat(values.horasTrabajadas),
+                        fecha: "2021-02-20T14:23:22.2676589-03:00", // de acá se manda cualquiera, pero se setea por back
+                        horasTrabajadasEstadoID: 2,
+                        horasTrabajadasEstadoDescripcion: null
+                      }).then(res => {
+                      console.log(res);
+                      }).catch((error)=> {
+                      console.error("error en get login: ",error);
+                      })
+                  }
+                
               console.log(res);
               }).catch((error)=> {
               console.error("error en get login: ",error);
@@ -133,31 +138,35 @@ function CargarHorasTarea() {
               handleSubmit,   
               isSubmitting
             }) => (
-              <Form onSubmit={handleSubmit}>
-                <p>Tarea</p>
-                <Field onChange={handleChange} value={values.tareaID} onBlur={handleBlur} id="tareaID standard-basic" name="tareaID" label="Tarea" as="select">
-                    <option value={0}>Elija la tarea a la que le cargará horas...</option>
-                    { tareasEmpleado.map((item,i) => 
-                        <option key={i} value={item.id}>{ item.nombre }</option>
-                    )}
-                </Field>
-                {errors.tareaID && touched.tareaID}
-                <br/>
-                <br/>
-                <TextField onChange={handleChange} value={values.horasTrabajadas} onBlur={handleBlur} id="horasTrabajadas standard-basic" name="horasTrabajadas" label="Horas trabajadas" />
-                {errors.horasTrabajadas && touched.horasTrabajadas}
-                <br/>
-                <br/>
-                <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
-                    Cargar
-                </Button>
-              </Form>
+              <Card className="form">
+                <Form onSubmit={handleSubmit}>
+                  <Grid container className="form">
+                   <Grid item className="grid-item" xs={12}>
+                      <p>Tarea</p>
+                      <Field onChange={handleChange} value={values.tareaID} onBlur={handleBlur} id="tareaID standard-basic" name="tareaID" label="Tarea" as="select">
+                          <option value={0}>Elija la tarea a la que le cargará horas...</option>
+                          { tareasEmpleado.map((item,i) => 
+                              <option key={i} value={item.id}>{ item.nombre }</option>
+                          )}
+                      </Field>
+                      {errors.tareaID && touched.tareaID}
+                   </Grid>
+                  <Grid item className="grid-item" xs={12}>
+                      <TextField onChange={handleChange} value={values.horasTrabajadas} onBlur={handleBlur} id="horasTrabajadas standard-basic" name="horasTrabajadas" label="Horas trabajadas" />
+                      {errors.horasTrabajadas && touched.horasTrabajadas}
+                  </Grid>
+                    <Grid item className="grid-item">
+                      <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>
+                          Cargar
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Form>
+              </Card>
             )
           }
           </Formik>
-        </CardContent>
-      </Card>
-    </div>
+      </div>
     )
 }
 

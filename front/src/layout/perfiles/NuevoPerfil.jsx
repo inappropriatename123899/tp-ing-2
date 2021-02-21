@@ -1,25 +1,17 @@
 import React from 'react';
 import { Formik, Field, Form } from 'formik';
 import axios from "axios";
-import {TextField} from "@material-ui/core";
+import {TextField, Card, Grid} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
+import "../style/general.css"
 
-/*
-{
-  "id": 1,
-  "descripcion": "sample string 2",
-  "valorHorario": 3.0
-}
-*/
-
-function NuevoPerfil() {
+function Formulario(props){
   return (
-    <div>
-      <Formik 
+    <Formik 
         initialValues={{
-          id: 0,
-          descripcion: '',
-          valorHorario: ''
+          id: props.data ? props.data.id : 0,
+          descripcion: props.data ? props.data.descripcion : '',
+          valorHorario: props.data ? props.data.valorHorario : ''
         }}
 /*
         validate={values=>{
@@ -54,27 +46,42 @@ function NuevoPerfil() {
           handleSubmit,   
           isSubmitting
         }) => (
-          <Form onSubmit={handleSubmit}>
-            <br/>
-            <TextField onChange={handleChange} value={values.descripcion} onBlur={handleBlur} id="descripcion standard-basic" name="descripcion" label="Descripcion" />
-            {errors.descripcion && touched.descripcion}
-            <br/>
-            <br/>
-            <TextField onChange={handleChange} value={values.valorHorario} onBlur={handleBlur} id="valorHorario standard-basic" name="valorHorario" label="Valor hora" />
-            {errors.valorHorario && touched.valorHorario}
-            <br/>
-            <br/>
-            <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
-              Agregar
-            </Button>
-          </Form>
+          <Card className="form">
+            <Form onSubmit={handleSubmit}>
+             <Grid container className="form">
+                <Grid item className="grid-item" >
+                  <TextField onChange={handleChange} value={values.descripcion} onBlur={handleBlur} id="descripcion standard-basic" name="descripcion" label="Descripcion" />
+                  {errors.descripcion && touched.descripcion}
+                </Grid>
+
+                <Grid item className="grid-item">
+                  <TextField onChange={handleChange} value={values.valorHorario} onBlur={handleBlur} id="valorHorario standard-basic" name="valorHorario" label="Valor hora" />
+                  {errors.valorHorario && touched.valorHorario}
+
+                </Grid>
+                <Grid item className="grid-item">
+                  <Button type="submit" variant="contained" size="medium" color="primary" disabled={isSubmitting}>
+                    Agregar
+                  </Button>
+                </Grid>
+             </Grid>
+            </Form>
+          </Card>
         )
       }  
       </Formik>
+  )
+}
+
+function NuevoPerfil() {
+  return (
+    <div className="container-form">
+      <Formulario />
     </div>
   )
 }
 
 export default NuevoPerfil
+export {Formulario}
 
 

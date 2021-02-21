@@ -12,21 +12,16 @@ import {  IconButton,
         } from "@material-ui/core"
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import {Formulario} from "./NuevoProyecto";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import "../style/general.css"
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
-
-function createData(nombre, estado, cliente) {
-  return { nombre, estado, cliente };
-}
-
-const rows = [
-  createData('proyecto 1', 159, 6.0, 24, 4.0),
-  createData('proyecto 2', 237, 9.0, 37, 4.3),
-];
 
 function ListaProyectos() {
   const classes = useStyles();
@@ -58,6 +53,14 @@ function ListaProyectos() {
     }
   }, [])
 
+  function funcionBorrar(id, index) {
+    axios.delete(`http://localhost:27195/api/Proyectos/${id}`).then((response)=>{
+      setProyectos(proyectos.filter(x => x.id != id));
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+    }); 
+  }
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -72,7 +75,7 @@ function ListaProyectos() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {proyectos.map((row) => (
+          {proyectos.map((row, index) => (
             <TableRow key={row.nombre}>
               <TableCell align="center" component="th" scope="row">
                 {row.nombre}
@@ -84,12 +87,16 @@ function ListaProyectos() {
                 {row.clienteNombre}
               </TableCell>
               <TableCell align="center">
-                <IconButton>
-                  <EditIcon/>
-                </IconButton>
+                <Popup trigger={
+                  <IconButton>
+                    <EditIcon/>
+                  </IconButton>
+                } modal>
+                    <Formulario data={row}/>
+                </Popup>
               </TableCell>
               <TableCell align="center">
-                <IconButton>
+                <IconButton onClick={()=> {funcionBorrar(row.id, index)}}>
                   <DeleteIcon/>
                 </IconButton>
               </TableCell>

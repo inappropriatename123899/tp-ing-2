@@ -12,6 +12,10 @@ import {  IconButton,
         } from "@material-ui/core"
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import {Formulario} from "./NuevoCliente";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import "../style/general.css"
 
 const useStyles = makeStyles({
   table: {
@@ -36,6 +40,14 @@ function ListaClientes() {
     }
   }, [])
 
+  function funcionBorrar(id, index) {
+    axios.delete(`http://localhost:27195/api/Clientes/${id}`).then((response)=>{
+      setClientes(clientes.filter(x => x.id != id));
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
+    }); 
+  }
+
   const fetchClientes = async () => {
     
     axios.get("http://localhost:27195/api/Clientes").then((response)=>{
@@ -47,6 +59,18 @@ function ListaClientes() {
       setLoadClientes(false)
     }); 
   }
+  
+
+  /*
+  <Popup trigger={<button>{row.perfiles.length}</button>} position="center">
+    <div>
+      {row.perfiles.map((item, i) => {
+          return (<p>{item.perfilDescripcion}</p>)
+        }
+      )}
+    </div>
+  </Popup>
+   */
 
   return (
     <div>
@@ -67,7 +91,7 @@ function ListaClientes() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {!loadClientes && clientes.map((cliente) => (
+          {!loadClientes && clientes.map((cliente, index) => (
             <TableRow key={cliente.dniCuit}>
             <TableCell align="center" component="th" scope="row">
               {cliente.nombre === null ? "-" : cliente.nombre}
@@ -94,17 +118,20 @@ function ListaClientes() {
               {cliente.razonSocial === null  ? "Física" : "Jurídica"}
             </TableCell>
             <TableCell align="center">
-              <IconButton>
-                <EditIcon/>
-              </IconButton>
+              <Popup trigger={
+                <IconButton>
+                  <EditIcon/>
+                </IconButton>
+              } modal>
+                  <Formulario data={cliente}/>
+              </Popup>
             </TableCell>
             <TableCell align="center">
-              <IconButton>
+              <IconButton onClick={()=> {funcionBorrar(cliente.id, index)}}>
                 <DeleteIcon/>
               </IconButton>
             </TableCell>
           </TableRow>
-          
           ))}
         </TableBody>
       </Table>
@@ -113,4 +140,5 @@ function ListaClientes() {
   )
 }
 
-export default ListaClientes
+export default ListaClientes;
+

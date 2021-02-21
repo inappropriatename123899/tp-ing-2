@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, FieldArray } from 'formik';
 import axios from "axios";
-import {TextField} from "@material-ui/core";
+import {TextField, Grid , Card} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
+import "../style/general.css"
 
-function NuevoProyecto() {
+function Formulario(props) {
 
   const [clientes,setClientes] =useState([]);
   const [loadClientes,setLoadClientes] = useState(false);
@@ -31,15 +32,14 @@ function NuevoProyecto() {
     }); 
   }
 
-  return (
-    <div>
-      <Formik 
+return (
+  <Formik 
         initialValues={{
-          id: 0,
-          clienteID: 0,
+          id: props.data? props.data.id : 0,
+          clienteID: props.data? props.data.clienteID : 0,
           clienteNombre: "", // no se carga
-          nombre: "",
-          proyectoEstadoID: 0,
+          nombre: props.data? props.data.nombre : "",
+          proyectoEstadoID: props.data? props.data.proyectoEstadoID : 0,
           proyectoEstadoDescripcion: "" // no se carga
         }}
         /*
@@ -83,46 +83,61 @@ function NuevoProyecto() {
             handleSubmit,   
             isSubmitting
           }) => (
-            <Form onSubmit={handleSubmit}>
-              <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre Proyecto" />
-              {errors.nombre && touched.nombre}
-              <br/>
-              <br/> 
-              <Field
-                id="clienteID standard-basic"
-                name="clienteID"
-                as="select"
-                onChange={handleChange}
-                // no poner default value xq empieza a dar el error de uncontrolled select
-              >
-                <option value={0}>Elija un cliente...</option>
-                {clientes.map((item,i) => (
-                        <option key={i} value={item.id}>{ item.razonSocial == null ? item.nombre : item.razonSocial }</option>
-                    )
-                  )
-                }
-              </Field>
-              <br/>
-              <br/>
-              <Field onChange={handleChange} value={values.proyectoEstadoID} onBlur={handleBlur} id="state" name="proyectoEstadoID" label="Estado" as="select">
-                <option value="0">Cambie el estado de su proyecto</option>
-                <option value="1">Vigente</option>
-                <option value="2">Pausado</option>
-                <option value="3">Cancelado</option>
-                <option value="4">Finzalizado</option>
-              </Field>
-              {errors.proyectoEstadoID && touched.proyectoEstadoID}
-              <br/>
-              <br/>
-              <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
-                Agregar
-              </Button>
-            </Form>
+            <Card className="form">
+                <Form onSubmit={handleSubmit}>
+                  <Grid container className="form">
+                    <Grid item className="grid-item" xs={12}>
+                      <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre Proyecto" />
+                      {errors.nombre && touched.nombre}
+                    </Grid>
+                    <Grid item className="grid-item" xs={12}>
+                      <Field
+                        id="clienteID standard-basic"
+                        name="clienteID"
+                        as="select"
+                        onChange={handleChange}
+                        // no poner default value xq empieza a dar el error de uncontrolled select
+                      >
+                        <option value={0}>Elija un cliente...</option>
+                        {clientes.map((item,i) => (
+                                <option key={i} value={item.id}>{ item.razonSocial == null ? item.nombre : item.razonSocial }</option>
+                            )
+                          )
+                        }
+                      </Field>
+                    </Grid>
+                    <Grid item className="grid-item" xs={12}>
+                      <Field onChange={handleChange} value={values.proyectoEstadoID} onBlur={handleBlur} id="state" name="proyectoEstadoID" label="Estado" as="select">
+                        <option value="0">Cambie el estado de su proyecto</option>
+                        <option value="1">Vigente</option>
+                        <option value="2">Pausado</option>
+                        <option value="3">Cancelado</option>
+                        <option value="4">Finzalizado</option>
+                      </Field>
+                      {errors.proyectoEstadoID && touched.proyectoEstadoID}
+                    </Grid>
+                    <Grid item className="grid-item">
+                      <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>
+                        Agregar
+                      </Button>
+                    </Grid>
+                  </Grid>
+              </Form>
+            </Card>
           )
         }  
       </Formik>
+)
+}
+
+
+function NuevoProyecto() {
+  return (
+    <div className="container-form">
+      <Formulario/>
     </div>
   )
 }
 
 export default NuevoProyecto
+export { Formulario }

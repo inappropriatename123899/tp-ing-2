@@ -12,8 +12,10 @@ import {  IconButton,
         } from "@material-ui/core"
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import {Formulario} from "./NuevoEmpleado";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import "../style/general.css"
 
 const useStyles = makeStyles({
   table: {
@@ -91,9 +93,13 @@ function ListaEmpleados() {
                 </Popup>
               </TableCell>
               <TableCell align="center">
-                <IconButton>
-                  <EditIcon/>
-                </IconButton>
+                <Popup trigger={
+                  <IconButton>
+                    <EditIcon/>
+                  </IconButton>
+                } modal>
+                    <Formulario data={row}/>
+                </Popup>
               </TableCell>
               <TableCell align="center">
                 <IconButton>
