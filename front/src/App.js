@@ -57,7 +57,10 @@ function App() {
                   }}
     
                 onSubmit={(values, setSubmitting) => {
-                  axios.post("http://localhost:27195/api/login/authenticate",{username: values.username, password:values.password}).then(res => {
+                  axios.post("http://localhost:27195/api/login/authenticate", {
+                    username: values.username,
+                    password: values.password
+                  }).then(res => {
                     console.log(res)
                     setToken(res.data)
                   }).catch((error)=> {
@@ -98,7 +101,6 @@ function App() {
         :
           <NavBar token={token} />      
       }
-      {/* <Redirect from="*" to="/lista-proyectos"/> Redirecciona el login inclusive */}
     </Router>  
   );
 }

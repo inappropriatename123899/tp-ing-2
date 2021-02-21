@@ -152,6 +152,7 @@ export default function SwipeableTemporaryDrawer(props) {
                 </AccordionDetails>: <div></div>}
             </Accordion>
 
+            {props.usuario.rolID !== 3 ?
             <Accordion
             defaultExpanded={false}
             >
@@ -179,13 +180,13 @@ export default function SwipeableTemporaryDrawer(props) {
                         <ListItemText className={classes.ItemText} primary="Ver lista"/>
                     </ListItem>
                 </AccordionDetails>
-                {props.usuario.rolID !== 3 ?<AccordionDetails className={classes.buttonAccordion}>
-                <ListItem button component={Link} to="/nuevo-proyecto" >
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem button component={Link} to="/nuevo-proyecto" >
                         <ListItemIcon><AddIcon /></ListItemIcon>
                         <ListItemText className={classes.ItemText} primary="Agregar"/>
                     </ListItem>
-                </AccordionDetails> : <div></div>}
-            </Accordion>
+                </AccordionDetails>
+            </Accordion> : <div></div>}
 
             {props.usuario.rolID === 1 ? <Accordion
             defaultExpanded={false}
@@ -268,6 +269,17 @@ export default function SwipeableTemporaryDrawer(props) {
                         </ListItemText>
                     </ListItem>
                 </AccordionSummary>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
+                        button 
+                        component={Link} 
+                        to="/informes">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Opciones"/>
+                    </ListItem>
+                </AccordionDetails>
                 {/*}
                 <AccordionDetails  className={classes.buttonAccordion}>
                     <ListItem 
@@ -313,7 +325,7 @@ export default function SwipeableTemporaryDrawer(props) {
                         <ListItemIcon>
                             <ListIcon/>
                         </ListItemIcon>
-                        <ListItemText className={classes.ItemText} primary="Pedir liquidación"/>
+                        <ListItemText className={classes.ItemText} primary="Liquidar"/>
                     </ListItem>
                 </AccordionDetails>
                 

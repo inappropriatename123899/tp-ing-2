@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ListaTareas() {
+function ListaTareas(props) {
   const classes = useStyles();
 
   const [tareas,setTareas] =useState([]);
@@ -72,12 +72,18 @@ function ListaTareas() {
               <TableCell align="center">Proyecto</TableCell>
               <TableCell align="center">Horas estimadas</TableCell>
               <TableCell align="center">Horas OB</TableCell>
-              <TableCell align="center"></TableCell>
-              <TableCell align="center"></TableCell>
+              {/* hay dos chequeos porque de intentar hacerlo en uno se rompe visualmente la tabla */}
+              { props.usuario.rolID != 3 ?
+                <TableCell align="center"></TableCell>
+              : <div></div>}
+              { props.usuario.rolID != 3 ?
+                <TableCell align="center"></TableCell>
+              : <div></div>}
             </TableRow>
           </TableHead>
           <TableBody>
-            {tareas.map((row, index) => (
+            {(props.usuario.rolID != 3) ? (
+              tareas.map((row, index) => (
               <TableRow key={row.tarea}>
                 <TableCell align="center" component="th" scope="row">
                   {row.nombre}
@@ -112,6 +118,48 @@ function ListaTareas() {
                   </IconButton>
                 </TableCell>
               </TableRow>
+               ))) : (
+                tareas.filter(x => x.empleadoPerfilNombreEmplado == props.usuario.nombre)
+                      .map((row, index) => (
+                  <TableRow key={row.tarea}>
+                    <TableCell align="center" component="th" scope="row">
+                      {row.nombre}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.empleadoPerfilNombreEmplado}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.empleadoPerfilDescripcion}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.proyectoNombre}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.horasEstimadas}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.horasOB}
+                    </TableCell>
+                    { props.usuario.rolID != 3 ?
+                    <div>
+                    <TableCell align="center">
+                      <Popup trigger={
+                        <IconButton>
+                          <EditIcon/>
+                        </IconButton>
+                      } modal>
+                          <Formulario data={row}/>
+                      </Popup>
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={()=> {funcionBorrar(row.id, index)}}>
+                        <DeleteIcon/>
+                      </IconButton>
+                    </TableCell>
+                    </div>
+                    : <div></div>}
+                  </TableRow>
+                      )
             ))}
           </TableBody>
         </Table>

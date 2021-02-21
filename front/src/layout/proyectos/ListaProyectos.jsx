@@ -20,7 +20,7 @@ import "../style/general.css"
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
-  },
+  }
 });
 
 function ListaProyectos() {

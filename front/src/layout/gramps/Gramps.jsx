@@ -17,14 +17,14 @@ import Liquidacion from "../liquidacion/Liquidacion"
 function Gramps(props) {
     return (
         <Switch>
+            <Route exact path="/lista-tareas">
+                <ListaTareas usuario={props.usuario}/>
+            </Route>
             <Route exact path="/lista-proyectos">
                 <ListaProyectos usuario={props.usuario}/>
             </Route>
             <Route exact path="/nuevo-proyecto">
                 <NuevoProyecto usuario={props.usuario}/>
-            </Route>
-            <Route exact path="/lista-tareas">
-                <ListaTareas usuario={props.usuario}/>
             </Route>
             <Route exact path="/nueva-tarea">
                 <NuevaTarea  usuario={props.usuario}/>
@@ -56,7 +56,7 @@ function Gramps(props) {
             <Route exact path="/pedir-liquidacion">
                 <Liquidacion usuario={props.usuario} />
             </Route>
-            <Redirect from="*" to="/lista-proyectos"/>
+            <Redirect from="*" to="/lista-tareas"/>
         </Switch>
     )
 }

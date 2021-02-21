@@ -92,7 +92,7 @@ const Nav = (props) => {
   const [loggedUser,setLoggedUser] = useState([]);
   const [loadLoggedUser,setLoadLoggedUser] = useState(false);
 
-  console.log("perfiles: ",loggedUser)
+  console.log("usuario: ",loggedUser)
   console.log("load: ",loadLoggedUser)
 
   const fetchLoggedUser = async () => {
@@ -113,8 +113,6 @@ const Nav = (props) => {
     setLoadLoggedUser(true);
     fetchLoggedUser();
   }, [])
-
-
 
   const classes = useStyles();
   

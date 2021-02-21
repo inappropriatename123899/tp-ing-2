@@ -88,6 +88,11 @@
   outline: none;
 }
 
-.table-title{
+.table-title {
   font-weight: bold;
+}
+
+.trial {
+  height: inherit;
+  width: inherit;
 }

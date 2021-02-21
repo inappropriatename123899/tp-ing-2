@@ -144,7 +144,7 @@ function Formulario(props) {
               {errors.perfilID && touched.perfilID}
             </Grid>
 
-           <Grid item classNAme="grid-item" xs={5}>
+           <Grid item className="grid-item" xs={5}>
               <p>Empleado</p>
               <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select" className="select-css">
                 <option value={0}>Elija un empleado...</option>

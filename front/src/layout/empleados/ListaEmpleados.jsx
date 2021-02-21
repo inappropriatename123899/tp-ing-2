@@ -61,7 +61,7 @@ function ListaEmpleados() {
             <TableCell align="center">Nombre</TableCell>
             <TableCell align="center">Apellido</TableCell>
             <TableCell align="center">DNI</TableCell>
-            <TableCell align="center">Fecha de Ingreso</TableCell>
+            <TableCell align="center">Fecha de Ingreso (año/mes/día)</TableCell>
             <TableCell align="center">Perfiles</TableCell>
             <TableCell align="center"></TableCell>
             <TableCell align="center"></TableCell>
@@ -80,7 +80,7 @@ function ListaEmpleados() {
                 {row.dni}
               </TableCell>
               <TableCell align="center">
-                {row.fechaIngreso}
+                {row.fechaIngreso.slice(0, 10)}
               </TableCell>
               <TableCell align="center">
                 <Popup trigger={<button>{row.perfiles.length}</button>} position="center">
