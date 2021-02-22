@@ -23,11 +23,13 @@ const useStyles = makeStyles({
   },
 });
 
-function ListaClientes() {
+function ListaClientes(props) {
   const classes = useStyles();
 
   const [clientes,setClientes] =useState([]);
   const [loadClientes,setLoadClientes] = useState(false);
+
+  console.log("PROPS LISTACLIENTES: ",props)
 
   console.log("clientes: ",clientes)
   console.log("load: ",loadClientes)
@@ -41,7 +43,13 @@ function ListaClientes() {
   }, [])
 
   function funcionBorrar(id, index) {
-    axios.delete(`http://localhost:27195/api/Clientes/${id}`).then((response)=>{
+    axios.delete(`http://localhost:27195/api/Clientes/${id}`, {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       setClientes(clientes.filter(x => x.id != id));
     }).catch((error)=>{
       console.error("Error pidiendo datos: ",error);
@@ -50,7 +58,13 @@ function ListaClientes() {
 
   const fetchClientes = async () => {
     
-    axios.get("http://localhost:27195/api/Clientes").then((response)=>{
+    axios.get("http://localhost:27195/api/Clientes", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setClientes(data.data);
       setLoadClientes(false);
@@ -123,7 +137,11 @@ function ListaClientes() {
                   <EditIcon/>
                 </IconButton>
               } modal>
-                  <Formulario data={cliente}/>
+                  <Formulario usuarioTokenData={[
+                    props.usuarioToken[0],
+                    props.usuarioToken[1],
+                    cliente
+                  ]}/>
               </Popup>
             </TableCell>
             <TableCell align="center">

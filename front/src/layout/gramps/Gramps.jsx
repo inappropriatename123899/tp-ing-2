@@ -1,10 +1,13 @@
-import React from 'react'
+import React from 'react';
 import { BrowserRouter as Router, Route ,Switch , Redirect } from "react-router-dom";
 import ListaClientes from "../clientes/ListaClientes";
 import NuevoCliente from "../clientes/NuevoCliente";
 import ListaEmpleados from "../empleados/ListaEmpleados";
 import NuevoEmpleado from "../empleados/NuevoEmpleado";
-import Informes from "../informes/Informes";
+import SemanalHsOB from "../informes/SemanalHsOB";
+import HsTrabProy from "../informes/HsTrabProy";
+import HsTrabEmpPer from "../informes/HsTrabEmpPer";
+import HsAdeudadas from "../informes/HsAdeudadas";
 import NuevoPerfil from "../perfiles/NuevoPerfil";
 import ListaPerfiles from "../perfiles/ListaPerfiles";
 import ListaProyectos from "../proyectos/ListaProyectos";
@@ -12,49 +15,63 @@ import NuevoProyecto from "../proyectos/NuevoProyecto";
 import ListaTareas from "../tareas/ListaTareas";
 import NuevaTarea from "../tareas/NuevaTarea";
 import CargarHorasTarea from '../cargaHoras/CargarHorasTarea';
-import Liquidacion from "../liquidacion/Liquidacion"
+import Liquidacion from "../liquidacion/Liquidacion";
 
 function Gramps(props) {
+    console.log("ESTOY EN GRAMPS")
+    console.log("usuarioToken[0]: ",props.usuarioToken[0]) // usuario
+    console.log("usuarioToken[1]: ",props.usuarioToken[1]) // token
     return (
         <Switch>
             <Route exact path="/lista-tareas">
-                <ListaTareas usuario={props.usuario}/>
+                <ListaTareas usuarioToken={props.usuarioToken}/>
             </Route>
             <Route exact path="/lista-proyectos">
-                <ListaProyectos usuario={props.usuario}/>
+                <ListaProyectos usuarioToken={props.usuarioToken}/>
             </Route>
             <Route exact path="/nuevo-proyecto">
-                <NuevoProyecto usuario={props.usuario}/>
+                <NuevoProyecto usuarioToken={props.usuarioToken}/>
             </Route>
             <Route exact path="/nueva-tarea">
-                <NuevaTarea  usuario={props.usuario}/>
+                <NuevaTarea usuarioToken={props.usuarioToken}/>
             </Route>
             <Route exact path="/lista-clientes">
-                <ListaClientes usuario={props.usuario}/>
+                <ListaClientes usuarioToken={props.usuarioToken}/>
             </Route>
             <Route exact path="/nuevo-cliente">
-                <NuevoCliente usuario={props.usuario}/>
+                <NuevoCliente usuarioToken={props.usuarioToken}/>
             </Route>
             <Route exact path="/lista-empleados">
-                <ListaEmpleados usuario={props.usuario} /> 
+                <ListaEmpleados usuarioToken={props.usuarioToken} /> 
             </Route>
             <Route exact path="/nuevo-empleado">
-                <NuevoEmpleado usuario={props.usuario} />
+                <NuevoEmpleado usuarioToken={props.usuarioToken} />
             </Route>
-            <Route exact path="/informes">
-                <Informes usuario={props.usuario} />
+
+            <Route exact path="/semanal-ob">
+                <SemanalHsOB usuarioToken={props.usuarioToken} />
             </Route>
+            <Route exact path="/hs-trab-proy">
+                <HsTrabProy usuarioToken={props.usuarioToken} />
+            </Route>
+            <Route exact path="/hs-trab-emp-per">
+                <HsTrabEmpPer usuarioToken={props.usuarioToken} />
+            </Route>
+            <Route exact path="/hs-adeudadas">
+                <HsAdeudadas usuarioToken={props.usuarioToken} />
+            </Route>
+
             <Route exact path="/nuevo-perfil">
-                <NuevoPerfil usuario={props.usuario} />
+                <NuevoPerfil usuarioToken={props.usuarioToken} />
             </Route>
             <Route exact path="/lista-perfiles">
-                <ListaPerfiles usuario={props.usuario} />
+                <ListaPerfiles usuarioToken={props.usuarioToken} />
             </Route>
             <Route exact path="/carga-horas-tarea">
-                <CargarHorasTarea usuario={props.usuario} />
+                <CargarHorasTarea usuarioToken={props.usuarioToken} />
             </Route>
             <Route exact path="/pedir-liquidacion">
-                <Liquidacion usuario={props.usuario} />
+                <Liquidacion usuarioToken={props.usuarioToken} />
             </Route>
             <Redirect from="*" to="/lista-tareas"/>
         </Switch>

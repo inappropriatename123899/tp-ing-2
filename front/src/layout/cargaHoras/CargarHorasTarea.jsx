@@ -15,6 +15,8 @@ function CargarHorasTarea(props) {
     const [estadoHoras,setEstadoHoras] =useState([]);
     const [loadEstadoHoras,setLoadEstadoHoras] = useState(false);
 
+    console.log("props: ",props)
+
     console.log("tareas: ",tareasEmpleado)
     console.log("load: ",loadTareasEmpleado)
 
@@ -36,7 +38,13 @@ function CargarHorasTarea(props) {
     const fetchTareasEmpleado = async () => {
       //el q se loggea es un empleado, al margen de su rol, por lo tanto empleadoID=loggedUser.ID
       // los empleados disponibles tienen los ids 3, 4, 5 y 6, pero el 6 no tiene tareas asignadas, los demás tienen 1 cada 1
-        axios.get(`http://localhost:27195/api/Tareas/empleado?empleadoID=${parseInt(props.usuario.id)}`).then((response)=>{
+        axios.get(`http://localhost:27195/api/Tareas/empleado?empleadoID=${parseInt(props.usuarioToken[0].id)}`, {
+          headers: 
+            {
+              Authorization: `Bearer ${props.usuarioToken[1]}`
+            }
+          }
+        ).then((response)=>{
         const data = response;
         setTareasEmpleado(data.data);
         setLoadTareasEmpleado(false);
@@ -47,7 +55,13 @@ function CargarHorasTarea(props) {
     }
 
     const fetchEstadoHoras = async () => {
-          axios.get(`http://localhost:27195/api/HorasTrabajadas`).then((response)=>{
+          axios.get(`http://localhost:27195/api/HorasTrabajadas`, {
+            headers: 
+              {
+                Authorization: `Bearer ${props.usuarioToken[1]}`
+              }
+            }
+          ).then((response)=>{
           const data = response;
           setEstadoHoras(data.data);
           setLoadEstadoHoras(false);
@@ -66,7 +80,13 @@ function CargarHorasTarea(props) {
             }}
 
             onSubmit={(values, {setSubmitting}) => {
-            axios.get(`http://localhost:27195/api/Tareas/${values.tareaID}`).then((response)=>{
+            axios.get(`http://localhost:27195/api/Tareas/${values.tareaID}`, {
+              headers: 
+                {
+                  Authorization: `Bearer ${props.usuarioToken[1]}`
+                }
+              }
+            ).then((response)=>{
               console.log("proyectoID: ",response.data.proyectoID);
               console.log("tareaID: ",response.data.id);
               
@@ -78,7 +98,13 @@ function CargarHorasTarea(props) {
                 fecha: "2021-02-20T14:23:22.2676589-03:00", // de acá se manda cualquiera, pero se setea por back
                 horasTrabajadasEstadoID: 2,
                 horasTrabajadasEstadoDescripcion: "algo"
-              }).then(res => {
+              }, {
+                headers: 
+                  {
+                    Authorization: `Bearer ${props.usuarioToken[1]}`
+                  }
+                }
+              ).then(res => {
                 console.log(res.data);
 
 
@@ -91,10 +117,16 @@ function CargarHorasTarea(props) {
                         proyectoID: response.data.proyectoID,
                         tareaID: response.data.id,
                         cantHoras: parseFloat(values.horasTrabajadas),
-                        fecha: "2021-02-20T14:23:22.2676589-03:00", // de acá se manda cualquiera, pero se setea por back
+                        fecha: "2021-02-20", // de acá se manda cualquiera, pero se setea por back
                         horasTrabajadasEstadoID: 2,
                         horasTrabajadasEstadoDescripcion: null
-                      }).then(res => {
+                      }, {
+                        headers: 
+                          {
+                            Authorization: `Bearer ${props.usuarioToken[1]}`
+                          }
+                        }
+                      ).then(res => {
                       console.log(res);
                       }).catch((error)=> {
                       console.error("error en get login: ",error);
@@ -108,10 +140,16 @@ function CargarHorasTarea(props) {
                         proyectoID: response.data.proyectoID,
                         tareaID: response.data.id,
                         cantHoras: parseFloat(values.horasTrabajadas),
-                        fecha: "2021-02-20T14:23:22.2676589-03:00", // de acá se manda cualquiera, pero se setea por back
+                        fecha: "2021-02-20", // de acá se manda cualquiera, pero se setea por back
                         horasTrabajadasEstadoID: 2,
                         horasTrabajadasEstadoDescripcion: null
-                      }).then(res => {
+                      }, {
+                        headers: 
+                          {
+                            Authorization: `Bearer ${props.usuarioToken[1]}`
+                          }
+                        }
+                      ).then(res => {
                       console.log(res);
                       }).catch((error)=> {
                       console.error("error en get login: ",error);

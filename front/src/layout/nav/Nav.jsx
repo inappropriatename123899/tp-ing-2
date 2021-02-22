@@ -80,7 +80,19 @@ function nameRoutes (link){
       break;
       case "/pedir-liquidacion":
         return " - Liquidación";
-        break;
+      break;
+      case "/semanal-ob":
+        return " - Informe semanal de horas over budget";
+      break;
+      case "/hs-trab-proy":
+        return " - Horas trabajadas por proyectos";
+      break;
+      case "/hs-trab-emp-per":
+        return " - Horas trabajadas por empleado";
+      break;
+      case "/hs-adeudadas":
+        return " - Horas adeudadas";
+      break;
 
     default:
       break;
@@ -130,10 +142,16 @@ const Nav = (props) => {
           <Button onClick={()=>{window.location.href="/login"}} color="inherit">Salir</Button>
         </Toolbar>
       </AppBar>
-      <LeftBar usuario={loggedUser}/>
+      <LeftBar usuarioToken={[
+        loggedUser,
+        props.token
+      ]}/>
       <div className={classes.content}>
         <div className={classes.toolbar}/>
-        <Gramps usuario={loggedUser}/>
+        <Gramps usuarioToken={[
+          loggedUser,
+          props.token
+        ]}/>
       </div> 
     </div>)
   );

@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from "axios"
 
-const Liquidacion = () => {
+const Liquidacion = (props) => {
 
   const [inicio,setInicio] = useState();
   const [fin, setFin] = useState()
@@ -42,11 +42,19 @@ const Liquidacion = () => {
 
     console.log(empleado)
 
+    console.log("ACÁ: ",props)
+
     axios.post("http://localhost:27195/api/Proyectos/Liquidacion", {
       empleadoID: parseInt(empleado),
       desde: inicio,
       hasta: fin
-    }).then((response)=>{
+    }, {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       setLiquidacion(response.data);
       console.log(liquidacion);
       setCargaLiquidacion(true);
@@ -57,7 +65,13 @@ const Liquidacion = () => {
   }
 
   const fetchEmpleados = async () => {  
-    axios.get("http://localhost:27195/api/Empleados").then((response)=>{
+    axios.get("http://localhost:27195/api/Empleados", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       setEmpleados(response.data);
       setLoadEmpleados(false);
     }).catch((error)=>{
@@ -130,15 +144,15 @@ const Liquidacion = () => {
                 <Table size="small" aria-label="a dense table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="center"><b>Por Antigüedad</b></TableCell>
-                      <TableCell align="center"><b>Cant. hs. no OB</b></TableCell>
-                      <TableCell align="center"><b>Cant. hs. OB ({liquidacion.valorPorcentajeDeHoraOB*100}%)</b></TableCell>
-                      <TableCell align="center"><b>Cant. hs. totales</b></TableCell>
+                      <TableCell align="center"><b>Antigüedad</b></TableCell>
+                      <TableCell align="center"><b>Hs. no OB</b></TableCell>
+                      <TableCell align="center"><b>Hs. OB (50%)</b></TableCell>
+                      <TableCell align="center"><b>Hs. totales</b></TableCell>
                       <TableCell align="center"><b>Perfiles</b></TableCell>
                       <TableCell align="center"><b>Proyectos</b></TableCell>
                       <TableCell align="center"><b>Tareas</b></TableCell>
-                      <TableCell align="center"><b>% por antigüedad</b></TableCell>
-                      <TableCell align="center"><b>% por total de horas</b></TableCell>
+                      <TableCell align="center"><b>% antigüedad</b></TableCell>
+                      <TableCell align="center"><b>% total de horas</b></TableCell>
                       <TableCell align="center"><b>% cant. de perfiles</b></TableCell>
                       <TableCell align="center"><b>Total</b></TableCell>
                     </TableRow>
@@ -163,53 +177,9 @@ const Liquidacion = () => {
             </Grid>
           </Grid>
         </Grid>
-
       </Card>
-
     </div>
   )
 }
 
 export default Liquidacion;
-
-// endpoint
-// api/Proyectos/Liquidacion
-
-/*
-pedido
-{
-  "empleadoID": 1,
-  "desde": "2021-02-20T21:11:47.576122-03:00",
-  "hasta": "2021-02-20T21:11:47.576122-03:00"
-}
-*/
-
-/*
-respuesta
-{
-  "cantidadProyectosLiquidados": 1,
-  "cantidadTareasLiquidados": 2,
-  "cantidadPerfiles": 3,
-  "antiguedadEmpleado": 4,
-  "cantidadHsNoOBLiquidados": 5.0,
-  "cantidadHsOBLiquidados": 6.0,
-  "cantidadHsTotalesLiquidados": 7.0,
-  "porcentajeAplicadoAntiguedad": 1.0,
-  "porcentajeAplicadoCantidadPerfiles": 1.0,
-  "porcentajeAplicadoCantidadHoras": 1.0,
-  "totalLiquidado": 8.0,
-  "valoresInformativosPerfilHora": [
-    {
-      "id": 1,
-      "descripcion": "sample string 2",
-      "valorHorario": 3.0
-    },
-    {
-      "id": 1,
-      "descripcion": "sample string 2",
-      "valorHorario": 3.0
-    }
-  ],
-  "valorPorcentajeDeHoraOB": 9.0
-}
-*/

@@ -9,9 +9,9 @@ function Formulario(props){
   return (
     <Formik 
         initialValues={{
-          id: props.data ? props.data.id : 0,
-          descripcion: props.data ? props.data.descripcion : '',
-          valorHorario: props.data ? props.data.valorHorario : ''
+          id: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].id : 0) : 0,
+          descripcion: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].descripcion : '') : '',
+          valorHorario: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].valorHorario : '') : ''
         }}
 /*
         validate={values=>{
@@ -28,7 +28,13 @@ function Formulario(props){
           }}
 */
         onSubmit={(values, {setSubmitting}) => {
-          axios.post("http://localhost:27195/api/Perfiles/update", values).then(res => {
+          axios.post("http://localhost:27195/api/Perfiles/update", values, {
+            headers: 
+              {
+                Authorization: `Bearer ${props.usuarioTokenData[1]}`
+              }
+            }
+          ).then(res => {
             console.log(res) 
           }).catch((error)=> {
             console.error("error: ",error)
@@ -73,10 +79,13 @@ function Formulario(props){
   )
 }
 
-function NuevoPerfil() {
+function NuevoPerfil(props) {
   return (
     <div className="container-form">
-      <Formulario />
+      <Formulario usuarioTokenData={[
+        props.usuarioToken[0],
+        props.usuarioToken[1]
+      ]}/>
     </div>
   )
 }

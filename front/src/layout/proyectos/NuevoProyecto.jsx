@@ -10,6 +10,8 @@ function Formulario(props) {
   const [clientes,setClientes] =useState([]);
   const [loadClientes,setLoadClientes] = useState(false);
 
+  console.log("PROPS EN NUEVOPROYECTO: ", props)
+
   console.log("clientes: ", clientes)
   console.log("load: ", loadClientes)
 
@@ -22,7 +24,13 @@ function Formulario(props) {
   }, [])
 
   const fetchClientes = async () => {
-    await axios.get("http://localhost:27195/api/Clientes").then((response)=>{
+    await axios.get("http://localhost:27195/api/Clientes", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioTokenData[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setClientes(data.data);
       setLoadClientes(false);
@@ -35,11 +43,11 @@ function Formulario(props) {
 return (
   <Formik 
         initialValues={{
-          id: props.data? props.data.id : 0,
-          clienteID: props.data? props.data.clienteID : 0,
+          id: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].id : 0) : 0,
+          clienteID: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].clienteID : 0) : 0,
           clienteNombre: "", // no se carga
-          nombre: props.data? props.data.nombre : "",
-          proyectoEstadoID: props.data? props.data.proyectoEstadoID : 0,
+          nombre: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].nombre : "") : "",
+          proyectoEstadoID: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].proyectoEstadoID : 0) : 0,
           proyectoEstadoDescripcion: "" // no se carga
         }}
         /*
@@ -65,7 +73,13 @@ return (
         //   }}
 
           onSubmit={(values, {setSubmitting}) => {
-            axios.post("http://localhost:27195/api/Proyectos/update", values).then(res => {
+            axios.post("http://localhost:27195/api/Proyectos/update", values, {
+              headers: 
+                {
+                  Authorization: `Bearer ${props.usuarioTokenData[1]}`
+                }
+              }
+            ).then(res => {
               console.log(res) 
             }).catch((error)=> {
               console.error("error en get login: ",error)
@@ -133,10 +147,13 @@ return (
 }
 
 
-function NuevoProyecto() {
+function NuevoProyecto(props) {
   return (
     <div className="container-form">
-      <Formulario/>
+      <Formulario usuarioTokenData={[
+        props.usuarioToken[0],
+        props.usuarioToken[1]
+      ]}/>
     </div>
   )
 }

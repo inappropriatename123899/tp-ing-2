@@ -26,6 +26,8 @@ const useStyles = makeStyles({
 function ListaTareas(props) {
   const classes = useStyles();
 
+  console.log("props lista tareas: ",props)
+
   const [tareas,setTareas] =useState([]);
   const [loadTareas,setLoadTareas] = useState(false);
 
@@ -42,7 +44,13 @@ function ListaTareas(props) {
 
   const fetchTareas = async () => {
     
-    axios.get("http://localhost:27195/api/Tareas").then((response)=>{
+    axios.get("http://localhost:27195/api/Tareas", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setTareas(data.data);
       setLoadTareas(false);
@@ -53,7 +61,13 @@ function ListaTareas(props) {
   }
 
   function funcionBorrar(id, index) {
-    axios.delete(`http://localhost:27195/api/Tareas/${id}`).then((response)=>{
+    axios.delete(`http://localhost:27195/api/Tareas/${id}`, {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       setTareas(tareas.filter(x => x.id != id));
     }).catch((error)=>{
       console.error("Error pidiendo datos: ",error);
@@ -73,16 +87,16 @@ function ListaTareas(props) {
               <TableCell align="center">Horas estimadas</TableCell>
               <TableCell align="center">Horas OB</TableCell>
               {/* hay dos chequeos porque de intentar hacerlo en uno se rompe visualmente la tabla */}
-              { props.usuario.rolID != 3 ?
+              { props.usuarioToken[0].rolID != 3 ?
                 <TableCell align="center"></TableCell>
               : <div></div>}
-              { props.usuario.rolID != 3 ?
+              { props.usuarioToken[0].rolID != 3 ?
                 <TableCell align="center"></TableCell>
               : <div></div>}
             </TableRow>
           </TableHead>
           <TableBody>
-            {(props.usuario.rolID != 3) ? (
+            {(props.usuarioToken[0].rolID != 3) ? (
               tareas.map((row, index) => (
               <TableRow key={row.tarea}>
                 <TableCell align="center" component="th" scope="row">
@@ -109,7 +123,11 @@ function ListaTareas(props) {
                       <EditIcon/>
                     </IconButton>
                   } modal>
-                      <Formulario data={row}/>
+                      <Formulario usuarioTokenData={[
+                        props.usuarioToken[0],
+                        props.usuarioToken[1],
+                        row
+                      ]}/>
                   </Popup>
                 </TableCell>
                 <TableCell align="center">
@@ -119,7 +137,7 @@ function ListaTareas(props) {
                 </TableCell>
               </TableRow>
                ))) : (
-                tareas.filter(x => x.empleadoPerfilNombreEmplado == props.usuario.nombre)
+                tareas.filter(x => x.empleadoPerfilNombreEmplado == props.usuarioToken[0].nombre)
                       .map((row, index) => (
                   <TableRow key={row.tarea}>
                     <TableCell align="center" component="th" scope="row">
@@ -140,27 +158,10 @@ function ListaTareas(props) {
                     <TableCell align="center">
                       {row.horasOB}
                     </TableCell>
-                    { props.usuario.rolID != 3 ?
-                    <div>
-                    <TableCell align="center">
-                      <Popup trigger={
-                        <IconButton>
-                          <EditIcon/>
-                        </IconButton>
-                      } modal>
-                          <Formulario data={row}/>
-                      </Popup>
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton onClick={()=> {funcionBorrar(row.id, index)}}>
-                        <DeleteIcon/>
-                      </IconButton>
-                    </TableCell>
-                    </div>
-                    : <div></div>}
                   </TableRow>
-                      )
-            ))}
+                )
+              ))
+            }
           </TableBody>
         </Table>
       </TableContainer>

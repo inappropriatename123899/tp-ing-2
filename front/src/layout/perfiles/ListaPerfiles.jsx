@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-function ListaPerfiles() {
+function ListaPerfiles(props) {
   const classes = useStyles();
 
   const [perfiles,setPerfiles] =useState([]);
@@ -42,7 +42,12 @@ function ListaPerfiles() {
 
   const fetchPerfiles = async () => {
     
-    axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
+    axios.get("http://localhost:27195/api/Perfiles", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }).then((response)=>{
       const data = response;
       setPerfiles(data.data);
       setLoadPerfiles(false);
@@ -53,7 +58,13 @@ function ListaPerfiles() {
   }
 
   function funcionBorrar(id, index) {
-    axios.delete(`http://localhost:27195/api/Perfiles/${id}`).then((response)=>{
+    axios.delete(`http://localhost:27195/api/Perfiles/${id}`, {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       setPerfiles(perfiles.filter(x => x.id != id));
     }).catch((error)=>{
       console.error("Error pidiendo datos: ",error);
@@ -88,7 +99,11 @@ function ListaPerfiles() {
                     <EditIcon/>
                   </IconButton>
                 } modal>
-                    <Formulario data={row}/>
+                    <Formulario usuarioTokenData={[
+                        props.usuarioToken[0],
+                        props.usuarioToken[1],
+                        row
+                      ]}/>
                 </Popup>
               </TableCell>
                   <TableCell align="center">

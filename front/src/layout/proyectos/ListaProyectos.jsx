@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   }
 });
 
-function ListaProyectos() {
+function ListaProyectos(props) {
   const classes = useStyles();
 
   const [proyectos,setProyectos] = useState([]);
@@ -31,7 +31,13 @@ function ListaProyectos() {
 
   const fetchProyectos = async () => {
     
-    axios.get("http://localhost:27195/api/Proyectos").then((response)=>{
+    axios.get("http://localhost:27195/api/Proyectos", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setProyectos(data.data);
       setLoadProyectos(false);
@@ -54,7 +60,13 @@ function ListaProyectos() {
   }, [])
 
   function funcionBorrar(id, index) {
-    axios.delete(`http://localhost:27195/api/Proyectos/${id}`).then((response)=>{
+    axios.delete(`http://localhost:27195/api/Proyectos/${id}`, {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       setProyectos(proyectos.filter(x => x.id != id));
     }).catch((error)=>{
       console.error("Error pidiendo datos: ",error);
@@ -92,7 +104,11 @@ function ListaProyectos() {
                     <EditIcon/>
                   </IconButton>
                 } modal>
-                    <Formulario data={row}/>
+                    <Formulario usuarioTokenData={[
+                        props.usuarioToken[0],
+                        props.usuarioToken[1],
+                        row
+                      ]}/>
                 </Popup>
               </TableCell>
               <TableCell align="center">

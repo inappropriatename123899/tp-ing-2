@@ -54,7 +54,8 @@ export default function SwipeableTemporaryDrawer(props) {
 
   console.log("props: ",props)
 
-    console.log("usuario: ",props.usuario)
+  console.log("usuarioToken[0]: ",props.usuarioToken[0]) // usuario
+  console.log("usuarioToken[1]: ",props.usuarioToken[1]) // token
 
   return (
     <div>
@@ -69,7 +70,7 @@ export default function SwipeableTemporaryDrawer(props) {
     <Toolbar />
         <div className={classes.drawerContainer}>
             <List>
-            {props.usuario.rolID === 1 ? //Solo puede entrar administrador
+            {props.usuarioToken[0].rolID == 1 ? //Solo puede entrar administrador
             <Accordion
             defaultExpanded={false}
             >
@@ -137,13 +138,13 @@ export default function SwipeableTemporaryDrawer(props) {
                     </ListItem>
                 </AccordionDetails>
                 
-                {props.usuario.rolID !== 3 ? <AccordionDetails className={classes.buttonAccordion}>
+                {props.usuarioToken[0].rolID !== 3 ? <AccordionDetails className={classes.buttonAccordion}>
                 <ListItem button component={Link} to="/nueva-tarea" >
                         <ListItemIcon><AddIcon /></ListItemIcon>
                         <ListItemText className={classes.ItemText} primary="Agregar"/>
                     </ListItem>
                 </AccordionDetails> : <div></div> }
-                {props.usuario.rolID !== 2 ? //solo puede entrar el Empleado
+                {props.usuarioToken[0].rolID !== 2 ? //solo puede entrar el Empleado
                 <AccordionDetails className={classes.buttonAccordion}>
                 <ListItem button component={Link} to="/carga-horas-tarea" >
                         <ListItemIcon><AddIcon /></ListItemIcon>
@@ -152,7 +153,7 @@ export default function SwipeableTemporaryDrawer(props) {
                 </AccordionDetails>: <div></div>}
             </Accordion>
 
-            {props.usuario.rolID !== 3 ?
+            {props.usuarioToken[0].rolID !== 3 ?
             <Accordion
             defaultExpanded={false}
             >
@@ -188,7 +189,7 @@ export default function SwipeableTemporaryDrawer(props) {
                 </AccordionDetails>
             </Accordion> : <div></div>}
 
-            {props.usuario.rolID === 1 ? <Accordion
+            {props.usuarioToken[0].rolID === 1 ? <Accordion
             defaultExpanded={false}
             >
                 <AccordionSummary 
@@ -223,7 +224,7 @@ export default function SwipeableTemporaryDrawer(props) {
                 </AccordionDetails>
             </Accordion> :<div></div>}
 
-            {props.usuario.rolID === 1 ? <Accordion
+            {props.usuarioToken[0].rolID === 1 ? <Accordion
             defaultExpanded={false}
             >
                 <AccordionSummary 
@@ -253,7 +254,7 @@ export default function SwipeableTemporaryDrawer(props) {
                 </AccordionDetails>
             </Accordion> : <div></div>}
 
-            {props.usuario.rolID !== 3 ?<Accordion
+            {props.usuarioToken[0].rolID !== 3 ?<Accordion
             defaultExpanded={false}
             >
                 <AccordionSummary 
@@ -273,11 +274,44 @@ export default function SwipeableTemporaryDrawer(props) {
                     <ListItem 
                         button 
                         component={Link} 
-                        to="/informes">
+                        to="/semanal-ob">
                         <ListItemIcon>
                             <ListIcon/>
                         </ListItemIcon>
-                        <ListItemText className={classes.ItemText} primary="Opciones"/>
+                        <ListItemText className={classes.ItemText} primary="Hs ob de la semana"/>
+                    </ListItem>
+                </AccordionDetails>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
+                        button 
+                        component={Link} 
+                        to="/hs-trab-proy">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Hs trabajadas por proyecto"/>
+                    </ListItem>
+                </AccordionDetails>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
+                        button 
+                        component={Link} 
+                        to="/hs-trab-emp-per">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Hs trabajadas por empleado"/>
+                    </ListItem>
+                </AccordionDetails>
+                <AccordionDetails className={classes.buttonAccordion}>
+                    <ListItem 
+                        button 
+                        component={Link} 
+                        to="/hs-adeudadas">
+                        <ListItemIcon>
+                            <ListIcon/>
+                        </ListItemIcon>
+                        <ListItemText className={classes.ItemText} primary="Hs adeudadas"/>
                     </ListItem>
                 </AccordionDetails>
                 {/*}
@@ -301,7 +335,7 @@ export default function SwipeableTemporaryDrawer(props) {
                 </AccordionDetails>
                 */}
             </Accordion> : <div></div>}
-            {props.usuario.rolID !== 3 ? <Accordion
+            {props.usuarioToken[0].rolID !== 3 ? <Accordion
             defaultExpanded={false}
             >
                 <AccordionSummary 

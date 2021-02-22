@@ -23,8 +23,10 @@ const useStyles = makeStyles({
   },
 });
 
-function ListaEmpleados() {
+function ListaEmpleados(props) {
   const classes = useStyles();
+
+  console.log("props lista empleados: ",props)
 
   const [empleados,setEmpleados] =useState([]);
   const [loadEmpleados,setLoadEmpleados] = useState(false);
@@ -42,13 +44,33 @@ function ListaEmpleados() {
 
   const fetchEmpleados = async () => {
     
-    axios.get("http://localhost:27195/api/Empleados").then((response)=>{
+    axios.get("http://localhost:27195/api/Empleados", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setEmpleados(data.data);
       setLoadEmpleados(false);
     }).catch((error)=>{
       console.error("Error pidiendo datos: ",error);
       setLoadEmpleados(false)
+    }); 
+  }
+
+  function funcionBorrar(id, index) {
+    axios.delete(`http://localhost:27195/api/Empleados/${id}`, {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        }
+      }
+    ).then((response)=>{
+      setEmpleados(empleados.filter(x => x.id != id));
+    }).catch((error)=>{
+      console.error("Error pidiendo datos: ",error);
     }); 
   }
 
@@ -68,7 +90,7 @@ function ListaEmpleados() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {empleados.map((row) => (
+          {empleados.map((row, index) => (
             <TableRow key={row.nombre}>
               <TableCell align="center" component="th" scope="row">
                 {row.nombre}
@@ -98,11 +120,15 @@ function ListaEmpleados() {
                     <EditIcon/>
                   </IconButton>
                 } modal>
-                    <Formulario data={row}/>
+                    <Formulario usuarioTokenData={[
+                        props.usuarioToken[0],
+                        props.usuarioToken[1],
+                        row
+                      ]}/>
                 </Popup>
               </TableCell>
               <TableCell align="center">
-                <IconButton>
+                <IconButton onClick={()=> {funcionBorrar(row.id, index)}}>
                   <DeleteIcon/>
                 </IconButton>
               </TableCell>

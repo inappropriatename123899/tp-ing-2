@@ -6,52 +6,46 @@ import Button from '@material-ui/core/Button';
 import "../style/general.css"
 
 function Formulario(props){
+  console.log("NUEVOCLIENTE PROPS: ",props)
   return (
     <Formik
     initialValues={{
-      id: props.data!==undefined ? props.data.id : 0,
-      tipoPersona: props.data!==undefined ? (props.data.razonSocial ? "2" : "1") : "0",
-      nombre: props.data!==undefined ? (props.data.razonSocial ? "" : props.data.nombre) : "",
-      apellido: props.data!==undefined ? (props.data.razonSocial ? "" : props.data.apellido) : "",
-      dniCuit: props.data!==undefined ? props.data.dniCuit : '',
-      razonSocial: props.data!==undefined ? (props.data.razonSocial ? props.data.razonSocial : "") : "",
-      direccion: props.data!==undefined ? props.data.direccion : '',
-      telefonoContacto: props.data!==undefined ? props.data.telefonoContacto : '',
-      email: props.data!==undefined ? props.data.email : ''
+      id: props.usuarioTokenData!== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].id : 0) : 0,
+      tipoPersona: props.usuarioTokenData!==undefined ? 
+        (props.usuarioTokenData[2]!==undefined ? 
+          (props.usuarioTokenData[2].razonSocial ? 
+            "2" : "1"
+          ) : "0")
+        : "0",
+      nombre: props.usuarioTokenData!==undefined ? 
+      (props.usuarioTokenData[2]!==undefined ? 
+        (props.usuarioTokenData[2].razonSocial ? 
+          "" : props.usuarioTokenData[2].nombre
+        ) : "")
+      : "",
+      apellido: props.usuarioTokenData!==undefined ? 
+      (props.usuarioTokenData[2]!==undefined ? 
+        (props.usuarioTokenData[2].razonSocial ? 
+          "" : props.usuarioTokenData[2].apellido
+        ) : "")
+      : "",
+      dniCuit: props.usuarioTokenData!==undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].dniCuit : '') : '',
+      razonSocial: props.usuarioTokenData!==undefined ? 
+      (props.usuarioTokenData[2]!==undefined ? 
+        (props.usuarioTokenData[2].razonSocial ? 
+          props.usuarioTokenData[2].razonSocial : ""
+        ) : "")
+      : "",
+      direccion: props.usuarioTokenData!==undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].direccion : '') : '',
+      telefonoContacto: props.usuarioTokenData!==undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].telefonoContacto : '') : '',
+      email: props.usuarioTokenData!==undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].email : '') : ''
     }}
-  /*
-  {
-  "id": 1,
-  "nombre": "sample string 2",
-  "apellido": "sample string 3",
-  "dniCuit": 4,
-  "razonSocial": "sample string 5",
-  "direccion": "sample string 6",
-  "telefonoContacto": 1,
-  "email": "sample string 7",
-  "tipoPersona": 8
-  }
-  */
-    // validate={values=>{
-    //   const errors ={};
-    //   if (!values.tipoPersona || !values.name || !values.surname || !values.dniCuit || !values.razonSocial
-    //    || !values.direccion || !values.telefonoContacto || !values.telefonoCelular || !values.email){
-    //     errors.tipoPersona = "Requerido";
-    //     errors.name = "Requerido";
-    //     errors.surname = "Requerido";
-    //     errors.dniCuit = "Requerido";
-    //     errors.razonSocial = "Requerido";
-    //     errors.direccion = "Requerido";
-    //     errors.telefonoContacto = "Requerido";
-    //     errors.email = "Requerido";
-    //   }
-    //   return errors;
-    //   }}
 
     onSubmit={(values, {setSubmitting}) => {
       // enganchar a endpoint
       // http://localhost:27195/api/login/authenticate
       console.log(values);
+      console.log("token ",(props.usuarioTokenData[1]));
       axios.post("http://localhost:27195/api/Clientes/update", {
         id: values.id,
         tipoPersona: parseInt(values.tipoPersona),
@@ -62,7 +56,11 @@ function Formulario(props){
         direccion: values.direccion,
         telefonoContacto: values.telefonoContacto,
         email: values.email
-      }).then(res => {
+      }, { headers: {
+            Authorization: `Bearer ${props.usuarioTokenData[1]}`
+          }
+        }
+      ).then(res => {
         console.log(res) 
       }).catch((error)=> {
         console.error("error al subir datos: ",error)
@@ -160,14 +158,16 @@ function Formulario(props){
 
 
 
-function NuevoCliente() {
+function NuevoCliente(props) {
 
   return (
     <div className="container-form">
-      <Formulario/>
+      <Formulario usuarioTokenData={[
+        props.usuarioToken[0],
+        props.usuarioToken[1]
+      ]}/>
     </div>
   )
-
 }
 
 

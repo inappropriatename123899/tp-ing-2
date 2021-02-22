@@ -28,9 +28,18 @@ function Formulario(props) {
     fetchEmpleados();
   }, [])
 
+  console.log("ESTOY EN NUEVA TAREA")
+  console.log("props: ",props)
+
   const fetchProyectos = async () => {
     
-    axios.get("http://localhost:27195/api/Proyectos").then((response)=>{
+    axios.get("http://localhost:27195/api/Proyectos", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioTokenData[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setProyectos(data.data);
       setLoadProyectos(false);
@@ -41,7 +50,13 @@ function Formulario(props) {
   }
 
   const fetchPerfiles = async () => {
-    axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
+    axios.get("http://localhost:27195/api/Perfiles", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioTokenData[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setPerfiles(data.data);
       setLoadPerfiles(false);
@@ -52,7 +67,13 @@ function Formulario(props) {
   }
 
   const fetchEmpleados = async () => {
-    axios.get("http://localhost:27195/api/Empleados").then((response)=>{
+    axios.get("http://localhost:27195/api/Empleados", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioTokenData[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setEmpleados(data.data);
       setLoadEmpleados(false);
@@ -65,25 +86,24 @@ function Formulario(props) {
   return (
     <Formik 
     initialValues={{
-      id: props.data!==undefined ? props.data.id : 0,
-      nombre: props.data!==undefined ? props.data.nombre : '',
-      proyectoID: props.data!==undefined ? props.data.proyectoID : 0,
+      id: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].id : 0) : 0,
+      nombre: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].nombre : '') : 0,
+      proyectoID: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].proyectoID : 0) : 0,
       perfilID: "0",
       empleadoID: "0",
-      horasEstimadas: props.data!==undefined ? props.data.horasEstimadas : 0,
-      horasOB: props.data!==undefined ? props.data.horasOB : 0
+      horasEstimadas: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].horasEstimadas : 0) : 0,
+      horasOB: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].horasOB : 0) : 0
     }}
 
     onSubmit={(values, {setSubmitting}) => {
-      // console.log(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${values.empleadoID}&perfilID=${values.perfilID}`);
-      // console.log(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`);
-      // console.log(values.empleadoID);
-      // console.log(values.perfilID);
-      // console.log(parseInt(values.empleadoID));
-      // console.log(parseInt(values.perfilID));
-      axios.get(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`).then((response)=>{
+      axios.get(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`, {
+        headers: 
+          {
+            Authorization: `Bearer ${props.usuarioTokenData[1]}`
+          }
+        }
+      ).then((response)=>{
         console.log(response.data);
-
           axios.post("http://localhost:27195/api/Tareas/update", {
           id: values.id,
           nombre: values.nombre,
@@ -91,7 +111,13 @@ function Formulario(props) {
           empleadoPerfilID: response.data,
           horasEstimadas: parseFloat(values.horasEstimadas),
           horasOB: parseFloat(values.horasOB)
-        }).then(res => {
+        }, {
+          headers: 
+            {
+              Authorization: `Bearer ${props.usuarioTokenData[1]}`
+            }
+          }
+        ).then(res => {
           console.log(res) 
         }).catch((error)=> {
           console.error("error en get login: ",error)
@@ -183,31 +209,17 @@ function Formulario(props) {
 }
 
 
-function NuevaTarea() {
+function NuevaTarea(props) {
 
   return (
     <div className="container-form">
-      <Formulario />
+      <Formulario usuarioTokenData={[
+        props.usuarioToken[0],
+        props.usuarioToken[1]
+      ]}/>
     </div>
   )
 }
 
 export default NuevaTarea
 export {Formulario}
-
-/*
-{
-  "id": 1,
-  "proyectoID": 2,
-  "proyectoNombre": "sample string 3",
-  "empleadoPerfilID": 4,
-  "empleadoPerfilNombreEmplado": "sample string 5",
-  "empleadoPerfilDescripcion": "sample string 6",
-  "nombre": "sample string 7",
-  "horasEstimadas": 8.0,
-  "horasOB": 9.0
-}
-
-<add name="DBGestionProyectos" connectionString="Data Source=DESKTOP-96SE15A\SQLEXPRESS;Initial Catalog=DBGestionProyectos;Integrated Security=SSPI; MultipleActiveResultSets=true" providerName="System.Data.SqlClient" />
-
-*/

@@ -10,8 +10,6 @@ import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import moment from 'moment'
 
-
-
 function Formulario(props){
 
   const [profiles,setProfiles] = useState([]);
@@ -29,9 +27,18 @@ function Formulario(props){
     }
   }, [])
 
+  console.log("ESTOY EN NUEVO EMPLEADO")
+  console.log("props: ",props)
+
   const fetchProfiles = async () => {
     
-    axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
+    axios.get("http://localhost:27195/api/Perfiles", {
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioTokenData[1]}`
+        }
+      }
+    ).then((response)=>{
       const data = response;
       setProfiles(data.data);
       setLoadProfiles(false);
@@ -57,15 +64,15 @@ function Formulario(props){
 
   <Formik 
         initialValues= {{
-          id: props.data? props.data.id : 0,
-          nombre: props.data? props.data.nombre : '',
-          apellido: props.data? props.data.apellido : '',
-          dni: props.data? props.data.dni : '',
-          fechaIngreso: props.data? props.data.fechaIngreso : '',
-          usuario: props.data? props.data.usuario : '',
-          clave: props.data? props.data.clave : '',
-          rolID: props.data? props.data.rolID : 0,
-          perfiles2: props.data? armarArrayInt(props.data.perfiles) : [0] // array de int
+          id: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].id : 0) : 0,
+          nombre: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].nombre : '') : '',
+          apellido: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].apellido : '') : '',
+          dni: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].dni : '') : '',
+          fechaIngreso: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].fechaIngreso : '') : '',
+          usuario: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].usuario : '') : '',
+          clave: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].clave : '') : '',
+          rolID: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].rolID : 0) : 0,
+          perfiles2: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? armarArrayInt(props.usuarioTokenData[2].perfiles) : [0]) : [0] // array de int
         }}
 
         onSubmit={ async (values, setSubmitting) => {
@@ -77,14 +84,28 @@ function Formulario(props){
           let array3 = [];
 
           array2.forEach((x) => {
-            array3.push({
-              id: 0,
-              empleadoID: 0,
-              empleadoNombre: null,
-              perfilID: x.id,
-              perfilDescripcion: null
-            })
-          })
+              props.usuarioTokenData[2] ? (
+                  array3.push({
+                    id: props.usuarioTokenData[2].perfiles.find(y => y.perfilID == x.id) ? props.usuarioTokenData[2].perfiles.find(y => y.perfilID == x.id).id : 0,
+                    empleadoID: props.usuarioTokenData[2].perfiles.find(y => y.perfilID == x.id) ? props.usuarioTokenData[2].perfiles.find(y => y.perfilID == x.id).empleadoID : 0,
+                    empleadoNombre: null,
+                    perfilID: x.id,
+                    perfilDescripcion: null
+                  })
+                )
+              : (
+                array3.push({
+                  id: 0,
+                  empleadoID: 0,
+                  empleadoNombre: null,
+                  perfilID: x.id,
+                  perfilDescripcion: null
+                })
+              )
+            }
+          )
+
+          console.log("array3: ", array3)
 
           axios.post("http://localhost:27195/api/Empleados/update", {
             id: values.id,
@@ -96,12 +117,17 @@ function Formulario(props){
             fechaIngreso: values.fechaIngreso,
             rolID: parseInt(values.rolID),
             perfiles: array3
-          }).then(res => {
+          }, {
+            headers: 
+              {
+                Authorization: `Bearer ${props.usuarioTokenData[1]}`
+              }
+            }
+          ).then(res => {
             console.log(res) 
           }).catch((error)=> {
             console.error("error en get login: ",error)
           })
-          setSubmitting(false)
         }
       }>
       {
@@ -146,11 +172,6 @@ function Formulario(props){
                     }}/>
                     {errors.fechaIngreso && touched.fechaIngreso}
                   </Grid>
-                 
-                 {/* <Grid className="grid-item" item xs={5}>
-                    <TextField  onChange={handleChange} placeholder='1976-04-19' value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha de Ingreso" />
-                    {errors.fechaIngreso && touched.fechaIngreso}
-                  </Grid> */}
                </Grid>
                <Grid container className="form">
                   <Grid item className="grid-item" xs={5}>
@@ -163,8 +184,6 @@ function Formulario(props){
                   </Grid>
                 </Grid>
  
-                
-{/* a rellenar con un fetch de perfiles */}
                 <Grid container className="form">
                 <label>Perfil/es:</label>
                   <FieldArray name="perfiles2">
@@ -175,30 +194,27 @@ function Formulario(props){
                               <Grid container key={index} className="form">
                                 <Grid item xs={5} >
                                   <Field className="select-css"
-                                    //labelId="labelSelectPerfiles"
                                     name={`perfiles2.${index}`}
-                                    // component={Select} esto da error
                                     as="select"
-                                    // defaultValue={`perfilesFetch[0]`}
                                     onChange={handleChange}
                                   >
                                     <option value={0}>Elija un perfil...</option>
                                     {profiles.map((item,i) => (
-                                            <option key={i} value={item.id}>{item.descripcion}</option>
+                                          <option key={i} value={item.id}>{item.descripcion}</option>
                                         )
                                       )
                                     }
                                   </Field>
                                 </Grid>
   
-                              <Grid item  xs={1}>
-                                <IconButton color="secondary" onClick={() => remove(index)}><ClearIcon/></IconButton>
-                              </Grid>
-                              <Grid item xs={1}>
-                                <IconButton color="primary" onClick={() => push(0)}>
-                                  <AddIcon/>
-                                </IconButton>
-                              </Grid>
+                                <Grid item  xs={1}>
+                                  <IconButton color="secondary" onClick={() => remove(index)}><ClearIcon/></IconButton>
+                                </Grid>
+                                <Grid item xs={1}>
+                                  <IconButton color="primary" onClick={() => push(0)}>
+                                    <AddIcon/>
+                                  </IconButton>
+                                </Grid>
                               </Grid> 
                         ))
                         :
@@ -206,57 +222,26 @@ function Formulario(props){
                           <IconButton color="primary" onClick={() => push(0)}>
                             <AddIcon/>
                           </IconButton>
-                         </Grid>}
-                      
+                        </Grid>
+                      }
                     </Grid>
                   )}
                   </FieldArray>
-                  </Grid>
+                </Grid>
 
-                  <Grid item className="grid-item" xs={12}>
-                    <label>Rol: </label>
-                    <br/>
-                    <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state"
-                    className="select-css" name="rolID" label="Rol" as="select">
-                      <option value="0">Elija un rol para el empleado...</option>
-                      <option value="1">Administrador</option>
-                      <option value="2">Supervisor</option>
-                      <option value="3">Empleado</option>
-                    </Field>
-                    {errors.rolID && touched.rolID}
-                  
-                  </Grid>
-
-                { // para armar el empleadoperfilid, pido todos los perfiles, elijo uno y luego pido todos los empleadoperfil que tengan el id de ese perfil, desde ahí
-                  // se arma el select de empleadoid y luego se consigue el empleadoperfilid adecuado para enviar en este dto para dar de alta/modificar
-                  
-                  // en realidad no sería values.perfilID sino fetch de axios
-                  values.perfilID == 0 &&
-                  <div> {/* teniendo el perfil, filtrar los empleadoperfil que se pidieron antes por perfilid elegido para armar el select de empleado */}
-                    <p>Empleado: </p>
-                    <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select">
-                      <option value="0">Jorge</option>
-                      <option value="1">Mariano</option>
-                    </Field>
-                    {errors.empleadoID && touched.empleadoID}
-                    <br/>
-                    <br/>
-                  </div>
-                }
-                {
-                  values.perfilID == 1 &&
-                  <div> {/* teniendo el perfil, filtrar los empleadoperfil que se pidieron antes por perfilid elegido para armar el select de empleado */}
-                    <p>Empleado: </p>
-                    <Field onChange={handleChange} value={values.empleadoID} onBlur={handleBlur} id="empleadoID standard-basic" name="empleadoID" label="Empleado" as="select">
-                      <option value="0">Abel</option>
-                      <option value="1">Mariano</option>
-                    </Field>
-                    {errors.empleadoID && touched.empleadoID}
-                    <br/>
-                    <br/>
-                  </div>
-                }
+                <Grid item className="grid-item" xs={12}>
+                  <label>Rol: </label>
+                  <br/>
+                  <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state"
+                  className="select-css" name="rolID" label="Rol" as="select">
+                    <option value="0">Elija un rol para el empleado...</option>
+                    <option value="1">Administrador</option>
+                    <option value="2">Supervisor</option>
+                    <option value="3">Empleado</option>
+                  </Field>
+                  {errors.rolID && touched.rolID}
                 
+                </Grid>
 
                 <Grid item className="grid-item" xs={12}>
                   <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>
@@ -272,38 +257,14 @@ function Formulario(props){
 }
 
 
-function NuevoEmpleado() {
-
-  // const [profiles,setProfiles] = useState([]);
-  // const [loadProfiles,setLoadProfiles] = useState(false);
-
-  // console.log("perfiles: ",profiles)
-  // console.log("load: ",loadProfiles)
-
-  // useEffect(() => {
-  //   // perfiles
-  //   setLoadProfiles(true);
-  //   fetchProfiles();
-  //   return () => {
-      
-  //   }
-  // }, [])
-
-  // const fetchProfiles = async () => {
-    
-  //   axios.get("http://localhost:27195/api/Perfiles").then((response)=>{
-  //     const data = response;
-  //     setProfiles(data.data);
-  //     setLoadProfiles(false);
-  //   }).catch((error)=>{
-  //     console.error("Error pidiendo datos: ",error);
-  //     setLoadProfiles(false)
-  //   }); 
-  // }
+function NuevoEmpleado(props) {
 
   return (
     <div className="container-form">
-      <Formulario />
+      <Formulario usuarioTokenData={[
+        props.usuarioToken[0],
+        props.usuarioToken[1]
+      ]}/>
     </div>
   )
 }
