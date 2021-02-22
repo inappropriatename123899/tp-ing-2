@@ -64,7 +64,7 @@ function App() {
                     console.log(res)
                     setToken(res.data)
                   }).catch((error)=> {
-                    console.error("error en login: ",error)
+                    alert(error.response.data.exceptionMessage)
                   })
                 }
               }>

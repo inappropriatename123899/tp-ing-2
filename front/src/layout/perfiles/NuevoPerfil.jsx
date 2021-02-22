@@ -13,21 +13,7 @@ function Formulario(props){
           descripcion: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].descripcion : '') : '',
           valorHorario: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].valorHorario : '') : ''
         }}
-/*
-        validate={values=>{
-          const errors ={};
-          if (!values.proyectoNombre || !values.proyectoID || !values.perfilID || !values.empleadoID || !values.horasEstimadas || !values.horasOB){
-            errors.name = "Requerido";
-            errors.proyectoID = "Requerido";
-            errors.perfilID = "Requerido";
-            errors.empleadoPerfilID = "Requerido";
-            errors.horasEstimadas = "Requerido";
-            errors.horasOB = "Requerido";
-          }
-          return errors;
-          }}
-*/
-        onSubmit={(values, {setSubmitting}) => {
+        onSubmit={(values, {resetForm}, initialValues) => {
           axios.post("http://localhost:27195/api/Perfiles/update", values, {
             headers: 
               {
@@ -35,11 +21,15 @@ function Formulario(props){
               }
             }
           ).then(res => {
-            console.log(res) 
+            if (values.id == 0) {
+              alert("Se ha creado un nuevo perfil");
+              resetForm({values: initialValues})
+            } else {
+              alert("Se ha modificado el perfil");
+            }
           }).catch((error)=> {
-            console.error("error: ",error)
+            alert(error.response.data.exceptionMessage)
           })
-          setSubmitting(false)
         }
       }>
       {
@@ -66,9 +56,14 @@ function Formulario(props){
 
                 </Grid>
                 <Grid item className="grid-item" xs={12}>
-                  <Button type="submit" variant="contained" size="medium" color="primary" disabled={isSubmitting}>
-                    Agregar
+                {props.usuarioTokenData[2]!==undefined ? 
+                  <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
+                    Modificar
                   </Button>
+                  : 
+                  <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
+                    Agregar
+                  </Button>}
                 </Grid>
              </Grid>
             </Form>

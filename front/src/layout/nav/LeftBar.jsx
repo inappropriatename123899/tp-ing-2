@@ -144,13 +144,13 @@ export default function SwipeableTemporaryDrawer(props) {
                         <ListItemText className={classes.ItemText} primary="Agregar"/>
                     </ListItem>
                 </AccordionDetails> : <div></div> }
-                {props.usuarioToken[0].rolID !== 2 ? //solo puede entrar el Empleado
+                
                 <AccordionDetails className={classes.buttonAccordion}>
                 <ListItem button component={Link} to="/carga-horas-tarea" >
                         <ListItemIcon><AddIcon /></ListItemIcon>
                         <ListItemText className={classes.ItemText} primary="Cargar horas"/>
                     </ListItem>
-                </AccordionDetails>: <div></div>}
+                </AccordionDetails>
             </Accordion>
 
             {props.usuarioToken[0].rolID !== 3 ?

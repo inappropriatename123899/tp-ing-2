@@ -22,6 +22,10 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  container:{
+    maxHeight: 440,
+    minWidth: 700,
+  }
 });
 
 function HsTrabProy(props) {
@@ -41,7 +45,7 @@ function HsTrabProy(props) {
       setLoadInformeHorasTrabajadasPorProyecto(true);
     }).catch((error)=> {
       setLoadInformeHorasTrabajadasPorProyecto(false);
-    console.error("error en get login: ",error);
+      alert(error.response.data.exceptionMessage)
     })
   }
 
@@ -56,9 +60,13 @@ function HsTrabProy(props) {
   console.log("loadInformeHorasTrabajadasPorProyecto: ",loadInformeHorasTrabajadasPorProyecto)
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+    <Card scroll="paper">
+      {/* Agregado className={classes.container} y se sacó component={paper} */}
+      <TableContainer className={classes.container} >
+        {/* a los demas cambiarle a <Table> los atributos stickyHeader aria-label="sticky table" y modificar el classes de los estilos en use styles
+        https://material-ui.com/components/tables/#fixed-header
+        */}
+        <Table stickyHeader aria-label="sticky table" className={classes.table} > 
           <TableHead>
             <TableRow>
               <TableCell align="center">Proyecto</TableCell>
@@ -90,7 +98,7 @@ function HsTrabProy(props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Card>
   )
 }
 

@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     display:"flex",
+
     alignContent:"center",
     alignSelf:"center",
     justifyContent:"center"    
@@ -115,7 +116,7 @@ const Nav = (props) => {
       setLoadLoggedUser(false);
       console.log("response: ",response)
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadLoggedUser(false)
     }); 
   }

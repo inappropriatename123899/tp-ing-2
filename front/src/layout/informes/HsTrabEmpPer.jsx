@@ -22,6 +22,10 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  container:{
+    maxHeight: 440,
+    minWidth: 700,
+  }
 });
 
 function HsTrabEmpPer(props) {
@@ -30,7 +34,7 @@ function HsTrabEmpPer(props) {
   const [informeHorasTrabajadasPorEmpleadoYPerfil,setInformeHorasTrabajadasPorEmpleadoYPerfil] = useState([]);
   const [loadInformeHorasTrabajadasPorEmpleadoYPerfil,setLoadInformeHorasTrabajadasPorEmpleadoYPerfil] = useState(false);
 
-  const [inicio,setInicio] = useState();
+  const [inicio, setInicio] = useState();
   const [fin, setFin] = useState()
 
   console.log("fechaDesde: ",inicio);
@@ -47,7 +51,7 @@ function HsTrabEmpPer(props) {
       setLoadInformeHorasTrabajadasPorEmpleadoYPerfil(true);
     }).catch((error)=> {
       setLoadInformeHorasTrabajadasPorEmpleadoYPerfil(false);
-    console.error("error en get login: ",error);
+      alert(error.response.data.exceptionMessage)
     })
   }
 
@@ -61,9 +65,13 @@ function HsTrabEmpPer(props) {
   console.log("loadInformeHorasTrabajadasPorEmpleadoYPerfil: ",loadInformeHorasTrabajadasPorEmpleadoYPerfil)
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+    <Card scroll="paper">
+      {/* Agregado className={classes.container} y se sacó component={paper} */}
+      <TableContainer className={classes.container} >
+        {/* a los demas cambiarle a <Table> los atributos stickyHeader aria-label="sticky table" y modificar el classes de los estilos en use styles
+        https://material-ui.com/components/tables/#fixed-header
+        */}
+        <Table stickyHeader aria-label="sticky table" className={classes.table} > 
           <TableHead>
             <TableRow>
               <TableCell align="center">
@@ -113,44 +121,44 @@ function HsTrabEmpPer(props) {
                 <Button onClick={() => bothReady()} size="medium" variant="contained" color="primary">Solicitar</Button>
               </TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
             <TableRow>
               <TableCell align="center">Proyecto</TableCell>
               <TableCell align="center">Perfil</TableCell>
               <TableCell align="center">Nombre Empleado</TableCell>
               <TableCell align="center">Horas trabajadas</TableCell>
             </TableRow>
-              {loadInformeHorasTrabajadasPorEmpleadoYPerfil &&
-                informeHorasTrabajadasPorEmpleadoYPerfil.map((item) => {
+          </TableHead>
+          <TableBody>
+            {loadInformeHorasTrabajadasPorEmpleadoYPerfil &&
+              informeHorasTrabajadasPorEmpleadoYPerfil.map((item) => {
+                return (
+                item.perfilesEmpleadosHoras.map((itemInt) => {
                   return (
-                  item.perfilesEmpleadosHoras.map((itemInt) => {
-                    return (
-                      itemInt.empleadosHoras.map((itemIntInt) => {
-                        return (
-                        <TableRow>
-                          <TableCell align="center">
-                            {item.proyectoNombre}
-                          </TableCell>
-                          <TableCell align="center">
-                            {itemInt.perfilDescripcion}
-                          </TableCell>
-                          <TableCell align="center">
-                            {itemIntInt.empleado.nombre + " " + itemIntInt.empleado.apellido}
-                          </TableCell>
-                          <TableCell align="center">
-                            {itemIntInt.cantidadHoras}
-                          </TableCell>
-                        </TableRow>
-                        )
-                      }))
-                  }))
-                })
-              }
+                    itemInt.empleadosHoras.map((itemIntInt) => {
+                      return (
+                      <TableRow>
+                        <TableCell align="center">
+                          {item.proyectoNombre}
+                        </TableCell>
+                        <TableCell align="center">
+                          {itemInt.perfilDescripcion}
+                        </TableCell>
+                        <TableCell align="center">
+                          {itemIntInt.empleado.nombre + " " + itemIntInt.empleado.apellido}
+                        </TableCell>
+                        <TableCell align="center">
+                          {itemIntInt.cantidadHoras}
+                        </TableCell>
+                      </TableRow>
+                      )
+                    }))
+                }))
+              })
+            }
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Card>
   )
 }
 

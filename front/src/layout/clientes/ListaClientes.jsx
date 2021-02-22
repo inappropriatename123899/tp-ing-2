@@ -16,11 +16,16 @@ import {Formulario} from "./NuevoCliente";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import "../style/general.css"
+import {TextField , Card , Grid , Button} from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  container:{
+    maxHeight: 440,
+    minWidth: 700,
+  }
 });
 
 function ListaClientes(props) {
@@ -52,7 +57,7 @@ function ListaClientes(props) {
     ).then((response)=>{
       setClientes(clientes.filter(x => x.id != id));
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
     }); 
   }
 
@@ -69,27 +74,19 @@ function ListaClientes(props) {
       setClientes(data.data);
       setLoadClientes(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadClientes(false)
     }); 
   }
   
-
-  /*
-  <Popup trigger={<button>{row.perfiles.length}</button>} position="center">
-    <div>
-      {row.perfiles.map((item, i) => {
-          return (<p>{item.perfilDescripcion}</p>)
-        }
-      )}
-    </div>
-  </Popup>
-   */
-
   return (
-    <div>
-      <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+    <Card scroll="paper">
+      {/* Agregado className={classes.container} y se sacó component={paper} */}
+      <TableContainer className={classes.container} >
+        {/* a los demas cambiarle a <Table> los atributos stickyHeader aria-label="sticky table" y modificar el classes de los estilos en use styles
+        https://material-ui.com/components/tables/#fixed-header
+        */}
+        <Table stickyHeader aria-label="sticky table" className={classes.table} > 
         <TableHead>
           <TableRow>
             <TableCell align="center">Nombre</TableCell>
@@ -154,7 +151,7 @@ function ListaClientes(props) {
         </TableBody>
       </Table>
     </TableContainer>
-    </div>
+    </Card>
   )
 }
 

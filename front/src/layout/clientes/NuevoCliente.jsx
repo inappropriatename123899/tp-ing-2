@@ -41,7 +41,7 @@ function Formulario(props){
       email: props.usuarioTokenData!==undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].email : '') : ''
     }}
 
-    onSubmit={(values, {setSubmitting}) => {
+    onSubmit={(values, {resetForm}, initialValues) => {
       // enganchar a endpoint
       // http://localhost:27195/api/login/authenticate
       console.log(values);
@@ -61,12 +61,15 @@ function Formulario(props){
           }
         }
       ).then(res => {
-        console.log(res) 
+        if (values.id == 0) {
+          alert("Se ha creado un nuevo cliente");
+          resetForm({values: initialValues})
+        } else {
+          alert("Se ha modificado el cliente");
+        }
       }).catch((error)=> {
-        console.error("error al subir datos: ",error)
+        alert(error.response.data.exceptionMessage)
       })
-      setSubmitting(false)
-      
     }
   }>
   {
@@ -136,7 +139,7 @@ function Formulario(props){
             </Grid>
             <Grid container className="form">
               <Grid item xs={12} className="grid-item" >
-                { props.data!==undefined ? 
+                { props.usuarioTokenData[2]!==undefined ? 
                 <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
                   Modificar
                 </Button>
@@ -144,7 +147,6 @@ function Formulario(props){
                 <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
                   Agregar
                 </Button>}
-                
               </Grid>
             </Grid>
           </Grid>

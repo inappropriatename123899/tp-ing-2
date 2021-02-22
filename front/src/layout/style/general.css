@@ -17,6 +17,15 @@
   align-items:center;
 }
 
+.form-grid{
+  width:auto;
+  text-align:center;
+  justify-content:center;
+  display:flex;
+  align-items:center;
+}
+
+
 .grid-item{
   text-align:center;
   padding:10px

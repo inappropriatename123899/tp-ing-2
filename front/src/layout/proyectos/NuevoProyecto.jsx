@@ -31,11 +31,10 @@ function Formulario(props) {
         }
       }
     ).then((response)=>{
-      const data = response;
-      setClientes(data.data);
+      setClientes(response.data);
       setLoadClientes(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadClientes(false)
     }); 
   }
@@ -50,29 +49,8 @@ return (
           proyectoEstadoID: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].proyectoEstadoID : 0) : 0,
           proyectoEstadoDescripcion: "" // no se carga
         }}
-        /*
-        Para enviar al servidor
-        {
-          "id": 1,
-          "clienteID": 2,
-          "clienteNombre": "sample string 3",
-          "nombre": "sample string 4",
-          "proyectoEstadoID": 5,
-          "proyectoEstadoDescripcion": "sample string 6"
-        }
-        */
-        
 
-        // validate={values=>{
-        //   const errors ={};
-        //   if (!values.username || !values.password){
-        //     errors.name = "Requerido";
-        //     errors.state = "Requerido"
-        //   }
-        //   return errors
-        //   }}
-
-          onSubmit={(values, {setSubmitting}) => {
+          onSubmit={(values, {resetForm}, initialValues) => {
             axios.post("http://localhost:27195/api/Proyectos/update", values, {
               headers: 
                 {
@@ -80,11 +58,15 @@ return (
                 }
               }
             ).then(res => {
-              console.log(res) 
+              if (values.id == 0) {
+                alert("Se ha creado un nuevo proyecto");
+                resetForm({values: initialValues})
+              } else {
+                alert("Se ha modificado el proyecto");
+              }
             }).catch((error)=> {
               console.error("error en get login: ",error)
             })
-            setSubmitting(false)
           }
         }>
         {
@@ -133,9 +115,14 @@ return (
                       {errors.proyectoEstadoID && touched.proyectoEstadoID}
                     </Grid>
                     <Grid item className="grid-item">
-                      <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>
-                        Agregar
+                    {props.usuarioTokenData[2]!==undefined ? 
+                      <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
+                        Modificar
                       </Button>
+                      : 
+                      <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
+                        Agregar
+                      </Button>}
                     </Grid>
                   </Grid>
               </Form>

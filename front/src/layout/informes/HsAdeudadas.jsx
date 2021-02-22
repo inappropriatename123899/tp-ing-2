@@ -22,6 +22,10 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  container:{
+    maxHeight: 440,
+    minWidth: 700,
+  }
 });
 
 function HsAdeudadas(props) {
@@ -44,7 +48,7 @@ function HsAdeudadas(props) {
       setLoadInformeHsAdeudadas(true);
     }).catch((error) => {
       setLoadInformeHsAdeudadas(false);
-      console.error("error en get login: ",error);
+      alert(error.response.data.exceptionMessage)
     })
   }
 
@@ -59,9 +63,13 @@ function HsAdeudadas(props) {
   console.log("loadInformeHsAdeudadas: ",loadInformeHsAdeudadas)
 
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+    <Card scroll="paper">
+      {/* Agregado className={classes.container} y se sacó component={paper} */}
+      <TableContainer className={classes.container} >
+        {/* a los demas cambiarle a <Table> los atributos stickyHeader aria-label="sticky table" y modificar el classes de los estilos en use styles
+        https://material-ui.com/components/tables/#fixed-header
+        */}
+        <Table stickyHeader aria-label="sticky table" className={classes.table} > 
           <TableHead>
             
           </TableHead>
@@ -96,7 +104,7 @@ function HsAdeudadas(props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Card>
   )
 }
 

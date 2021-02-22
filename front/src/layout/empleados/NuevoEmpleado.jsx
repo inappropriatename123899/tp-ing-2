@@ -9,6 +9,7 @@ import "../style/general.css"
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import moment from 'moment'
+import { Redirect } from "react-router-dom";
 
 function Formulario(props){
 
@@ -43,7 +44,7 @@ function Formulario(props){
       setProfiles(data.data);
       setLoadProfiles(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadProfiles(false)
     }); 
   }
@@ -75,11 +76,10 @@ function Formulario(props){
           perfiles2: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? armarArrayInt(props.usuarioTokenData[2].perfiles) : [0]) : [0] // array de int
         }}
 
-        onSubmit={ async (values, setSubmitting) => {
+        onSubmit={ async (values, {resetForm}, initialValues) => {
           // acá se arma el array de perfiles para enviar como detalle
-          let array2 = profiles
-            .map((element) => (values.perfiles2.find(x => x == element.id) ? element : null))
-            .filter((element) => element !== null);
+          let array2 = profiles.map((element) => (values.perfiles2.find(x => x == element.id) ? element : null))
+                               .filter((element) => element !== null);
 
           let array3 = [];
 
@@ -107,6 +107,8 @@ function Formulario(props){
 
           console.log("array3: ", array3)
 
+          
+
           axios.post("http://localhost:27195/api/Empleados/update", {
             id: values.id,
             nombre: values.nombre,
@@ -124,9 +126,14 @@ function Formulario(props){
               }
             }
           ).then(res => {
-            console.log(res) 
+            if (values.id == 0) {
+              alert("Se ha creado un nuevo empleado");
+              resetForm({values: initialValues})
+            } else {
+              alert("Se ha modificado el empleado");
+            }
           }).catch((error)=> {
-            console.error("error en get login: ",error)
+            alert(error.response.data.exceptionMessage)
           })
         }
       }>
@@ -140,115 +147,118 @@ function Formulario(props){
           handleSubmit,   
           isSubmitting
         }) => (
-          <Card className="form">
+          <Card style={{minWidth:"800px"}}>
             <Form onSubmit={handleSubmit}>
-             <Grid container className="form">
-                <br/>
-                <Grid container className="form">
-                  <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre" />
-                    {errors.nombre && touched.nombre}
+             <Grid container className="form-grid">
+                <Grid item xs={7}>
+                  <Grid container className="form">
+                    <Grid item className="grid-item" xs={6}>
+                      <TextField onChange={handleChange} value={values.nombre} onBlur={handleBlur} id="nombre standard-basic" name="nombre" label="Nombre" />
+                      {errors.nombre && touched.nombre}
+                    </Grid>
+  
+                    <Grid item className="grid-item" xs={6}>
+                      <TextField onChange={handleChange} value={values.apellido} onBlur={handleBlur} id="apellido standard-basic" name="apellido" label="Apellido" />
+                      {errors.apellido && touched.apellido}
+                    </Grid>
                   </Grid>
-
-                  <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.apellido} onBlur={handleBlur} id="apellido standard-basic" name="apellido" label="Apellido" />
-                    {errors.apellido && touched.apellido}
-                  </Grid>
-                </Grid>
-
-               <Grid container className="form">
-                 <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.dni} placeholder="0" onBlur={handleBlur} id="dni standard-basic" name="dni" label="DNI" />
-                    {errors.dni && touched.dni}
+  
+                 <Grid container className="form">
+                   <Grid item className="grid-item" xs={6}>
+                      <TextField onChange={handleChange} value={values.dni} placeholder="0" onBlur={handleBlur} id="dni standard-basic" name="dni" label="DNI" />
+                      {errors.dni && touched.dni}
+                   </Grid>
+                   <Grid className="grid-item" item xs={6}>
+                      <TextField  
+                      type="date"
+                      onChange={handleChange} value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha" 
+                      InputLabelProps={{
+                        shrink: true,
+                      }}/>
+                      {errors.fechaIngreso && touched.fechaIngreso}
+                    </Grid>
                  </Grid>
-                 <Grid className="grid-item" item xs={5}>
-                    <TextField  
-                    type="date"
-                    onChange={handleChange} 
-                    defaultValue={moment()}
-                    value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha" 
-                    InputLabelProps={{
-                      shrink: true,
-                    }}/>
-                    {errors.fechaIngreso && touched.fechaIngreso}
+                 <Grid container className="form">
+                    <Grid item className="grid-item" xs={6}>
+                      <TextField onChange={handleChange} value={values.usuario} onBlur={handleBlur} id="usuario standard-basic" name="usuario" label="Usuario" />
+                      {errors.usuario && touched.usuario}
+                    </Grid>
+                    <Grid item className="grid-item" xs={6}>
+                      <TextField onChange={handleChange} value={values.clave} onBlur={handleBlur} id="clave standard-basic" name="clave" label="Contraseña" />
+                      {errors.clave && touched.clave}
+                    </Grid>
                   </Grid>
-               </Grid>
-               <Grid container className="form">
-                  <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.usuario} onBlur={handleBlur} id="usuario standard-basic" name="usuario" label="Usuario" />
-                    {errors.usuario && touched.usuario}
-                  </Grid>
-                  <Grid item className="grid-item" xs={5}>
-                    <TextField onChange={handleChange} value={values.clave} onBlur={handleBlur} id="clave standard-basic" name="clave" label="Contraseña" />
-                    {errors.clave && touched.clave}
+                  <Grid item className="grid-item" xs={12}>
+                    <label>Rol: </label>
+                    <br/>
+                    <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state"
+                    className="select-css" name="rolID" label="Rol" as="select">
+                      <option value="0">Elija un rol para el empleado...</option>
+                      <option value="1">Administrador</option>
+                      <option value="2">Supervisor</option>
+                      <option value="3">Empleado</option>
+                    </Field>
+                    {errors.rolID && touched.rolID}
+                  
                   </Grid>
                 </Grid>
  
-                <Grid container className="form">
-                <label>Perfil/es:</label>
-                  <FieldArray name="perfiles2">
-                  {({ insert, remove, push }) => (
-                    <Grid container className="form">
-                      {values.perfiles2.length > 0 ?
-                        values.perfiles2.map((perfil, index) => (
-                              <Grid container key={index} className="form">
-                                <Grid item xs={5} >
-                                  <Field className="select-css"
-                                    name={`perfiles2.${index}`}
-                                    as="select"
-                                    onChange={handleChange}
-                                  >
-                                    <option value={0}>Elija un perfil...</option>
-                                    {profiles.map((item,i) => (
-                                          <option key={i} value={item.id}>{item.descripcion}</option>
+                <Grid item xs={5}>
+                  <Grid container className="form">
+                  <label>Perfil/es:</label>
+                    <FieldArray name="perfiles2">
+                    {({ insert, remove, push }) => (
+                      <Grid container className="form">
+                        {values.perfiles2.length > 0  ?
+                          values.perfiles2.map((perfil, index) => (
+                                <Grid container key={index} className="form">
+                                  <Grid item xs={8} >
+                                    <Field className="select-css"
+                                      name={`perfiles2.${index}`}
+                                      as="select"
+                                      onChange={handleChange}
+                                    >
+                                      <option value={0}>Elija un perfil...</option>
+                                      {profiles.map((item,i) => (
+                                            <option key={i} value={item.id}>{item.descripcion}</option>
+                                          )
                                         )
-                                      )
-                                    }
-                                  </Field>
-                                </Grid>
-  
-                                <Grid item  xs={1}>
-                                  <IconButton color="secondary" onClick={() => remove(index)}><ClearIcon/></IconButton>
-                                </Grid>
-                                <Grid item xs={1}>
-                                  <IconButton color="primary" onClick={() => push(0)}>
-                                    <AddIcon/>
-                                  </IconButton>
-                                </Grid>
-                              </Grid> 
-                        ))
-                        :
-                        <Grid className="grid-item" item xs={3}>
-                          <IconButton color="primary" onClick={() => push(0)}>
-                            <AddIcon/>
-                          </IconButton>
-                        </Grid>
-                      }
-                    </Grid>
-                  )}
-                  </FieldArray>
-                </Grid>
-
-                <Grid item className="grid-item" xs={12}>
-                  <label>Rol: </label>
-                  <br/>
-                  <Field onChange={handleChange} value={values.rolID} onBlur={handleBlur} id="state"
-                  className="select-css" name="rolID" label="Rol" as="select">
-                    <option value="0">Elija un rol para el empleado...</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Supervisor</option>
-                    <option value="3">Empleado</option>
-                  </Field>
-                  {errors.rolID && touched.rolID}
-                
-                </Grid>
-
-                <Grid item className="grid-item" xs={12}>
-                  <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>
-                    Agregar
+                                      }
+                                    </Field>
+                                  </Grid>
+    
+                                  <Grid item  xs={1}>
+                                    <IconButton color="secondary" onClick={() => remove(index)}><ClearIcon/></IconButton>
+                                  </Grid>
+                                  
+                                </Grid> 
+                          ))
+                          :
+                          <Grid/>
+                        }
+                        {profiles.length > values.perfiles2.length ? <Grid item xs={1}>
+                                    <IconButton color="primary" onClick={() => push(0)}>
+                                      <AddIcon/>
+                                    </IconButton>
+                        </Grid>:
+                        <Grid/>}
+                      </Grid>
+                    )}
+                    </FieldArray>
+                  </Grid>
+                    
+               </Grid>
+               <Grid item className="grid-item" xs={12}>
+                {props.usuarioTokenData[2]!==undefined ? 
+                  <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
+                    Modificar
                   </Button>
+                  : 
+                  <Button type="submit" size="medium" color="primary" variant="contained" disabled={isSubmitting}>
+                    Agregar
+                  </Button>}
                 </Grid>
-             </Grid>
+              </Grid>
             </Form>
           </Card>
         )

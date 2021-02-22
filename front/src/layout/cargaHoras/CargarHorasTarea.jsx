@@ -45,11 +45,10 @@ function CargarHorasTarea(props) {
             }
           }
         ).then((response)=>{
-        const data = response;
-        setTareasEmpleado(data.data);
+        setTareasEmpleado(response.data);
         setLoadTareasEmpleado(false);
       }).catch((error)=>{
-        console.error("Error pidiendo datos: ",error);
+        alert(error.response.data.exceptionMessage)
         setLoadTareasEmpleado(false)
       }); 
     }
@@ -62,11 +61,10 @@ function CargarHorasTarea(props) {
               }
             }
           ).then((response)=>{
-          const data = response;
-          setEstadoHoras(data.data);
+          setEstadoHoras(response.data);
           setLoadEstadoHoras(false);
         }).catch((error)=>{
-          console.error("Error pidiendo datos: ",error);
+          alert(error.response.data.exceptionMessage)
           setLoadEstadoHoras(false)
         }); 
       }
@@ -107,7 +105,6 @@ function CargarHorasTarea(props) {
               ).then(res => {
                 console.log(res.data);
 
-
                 if (res.data != 0) {
                   let confirmarHOB = window.confirm(`Está pasando horas over budget (${res.data}).`)
 
@@ -129,39 +126,38 @@ function CargarHorasTarea(props) {
                       ).then(res => {
                       console.log(res);
                       }).catch((error)=> {
-                      console.error("error en get login: ",error);
+                        alert(error.response.data.exceptionMessage)
                       })
                     }else{
-                      console.log("...")
+                      console.log("nada")
                     }
                   } else {
                     axios.post("http://localhost:27195/api/HorasTrabajadas/update", {
-                        id: 0,
-                        proyectoID: response.data.proyectoID,
-                        tareaID: response.data.id,
-                        cantHoras: parseFloat(values.horasTrabajadas),
-                        fecha: "2021-02-20", // de acá se manda cualquiera, pero se setea por back
-                        horasTrabajadasEstadoID: 2,
-                        horasTrabajadasEstadoDescripcion: null
-                      }, {
-                        headers: 
-                          {
-                            Authorization: `Bearer ${props.usuarioToken[1]}`
-                          }
+                      id: 0,
+                      proyectoID: response.data.proyectoID,
+                      tareaID: response.data.id,
+                      cantHoras: parseFloat(values.horasTrabajadas),
+                      fecha: "2021-02-20", // de acá se manda cualquiera, pero se setea por back
+                      horasTrabajadasEstadoID: 2,
+                      horasTrabajadasEstadoDescripcion: null
+                    }, {
+                      headers: 
+                        {
+                          Authorization: `Bearer ${props.usuarioToken[1]}`
                         }
-                      ).then(res => {
-                      console.log(res);
-                      }).catch((error)=> {
-                      console.error("error en get login: ",error);
-                      })
+                      }
+                    ).then(res => {
+                    console.log(res);
+                    }).catch((error)=> {
+                      alert(error.response.data.exceptionMessage)
+                    })
                   }
                 
               console.log(res);
               }).catch((error)=> {
-              console.error("error en get login: ",error);
+                alert(error.response.data.exceptionMessage)
               })
             }).catch((error)=>{
-                console.error("Error pidiendo datos: ",error);
             }); 
             setSubmitting(false)
             }

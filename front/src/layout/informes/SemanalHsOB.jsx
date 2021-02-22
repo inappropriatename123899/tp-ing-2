@@ -48,7 +48,7 @@ function SemanalHsOB(props) {
       setLoadInformeSemanalHsOB(true);
     }).catch((error)=> {
       setLoadInformeSemanalHsOB(false);
-    console.error("error en get login: ",error);
+      alert(error.response.data.exceptionMessage)
     })
   }
 
@@ -68,7 +68,6 @@ function SemanalHsOB(props) {
       <TableContainer className={classes.container} >
         {/* a los demas cambiarle a <Table> los atributos stickyHeader aria-label="sticky table" y modificar el classes de los estilos en use styles
         https://material-ui.com/components/tables/#fixed-header
-
         */}
         <Table stickyHeader aria-label="sticky table" className={classes.table} > 
           <TableHead  >
@@ -95,21 +94,25 @@ function SemanalHsOB(props) {
               </TableRow>
               )
             })
-            }
-            {loadInformeSemanalHsOB && 
-            <TableRow>
-              <TableCell/>
-              <TableCell align="center">
-                Total
-              </TableCell>
-              <TableCell align="center">
-                {informeSemanalHsOB.hsOBTotales}
-              </TableCell>
-            </TableRow>
-            }
+          }
           </TableBody>
         </Table>
       </TableContainer>
+    
+      <Table>
+        <TableHead>
+          {loadInformeSemanalHsOB && 
+          <TableRow>
+            <TableCell align="center">
+              Total
+            </TableCell>
+            <TableCell align="center">
+              {informeSemanalHsOB.hsOBTotales}
+            </TableCell>
+          </TableRow>
+          }
+        </TableHead>
+      </Table>
     </Card>
   )
 }

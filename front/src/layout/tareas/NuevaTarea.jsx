@@ -40,11 +40,10 @@ function Formulario(props) {
         }
       }
     ).then((response)=>{
-      const data = response;
-      setProyectos(data.data);
+      setProyectos(response.data);
       setLoadProyectos(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos de Proyectos: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadProyectos(false)
     }); 
   }
@@ -57,11 +56,10 @@ function Formulario(props) {
         }
       }
     ).then((response)=>{
-      const data = response;
-      setPerfiles(data.data);
+      setPerfiles(response.data);
       setLoadPerfiles(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos de Perfiles: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadPerfiles(false)
     }); 
   }
@@ -74,11 +72,10 @@ function Formulario(props) {
         }
       }
     ).then((response)=>{
-      const data = response;
-      setEmpleados(data.data);
+      setEmpleados(response.data);
       setLoadEmpleados(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos Empleados: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadEmpleados(false)
     }); 
   }
@@ -95,7 +92,7 @@ function Formulario(props) {
       horasOB: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].horasOB : 0) : 0
     }}
 
-    onSubmit={(values, {setSubmitting}) => {
+    onSubmit={(values, {resetForm}, initialValues) => {
       axios.get(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`, {
         headers: 
           {
@@ -118,15 +115,19 @@ function Formulario(props) {
             }
           }
         ).then(res => {
-          console.log(res) 
+          if (values.id == 0) {
+            alert("Se ha creado una nueva tarea");
+            resetForm({values: initialValues})
+          } else {
+            alert("Se ha modificado la tarea");
+          }
         }).catch((error)=> {
-          console.error("error en get login: ",error)
+          alert(error.response.data.exceptionMessage)
         })
       }).catch((error)=>{
-        console.error("Error pidiendo datos: ",error);
+        alert(error.response.data.exceptionMessage)
         setLoadEmpleados(false)
-      }); 
-      setSubmitting(false)
+      });
     }
   }>
   {
@@ -189,10 +190,10 @@ function Formulario(props) {
               <TextField onChange={handleChange} type="number" value={values.horasEstimadas} onBlur={handleBlur} id="horasEstimadas standard-basic" name="horasEstimadas" label="Horas estimadas" />
               {errors.horasEstimadas && touched.horasEstimadas}
            </Grid>
-           <Grid item className="grid-item" xs={5}>
+           {/* <Grid item className="grid-item" xs={5}>
               <TextField onChange={handleChange} type="number" value={values.horasOB} onBlur={handleBlur} id="horasOB standard-basic" name="horasOB" label="Horas over budget" />
               {errors.horasOB && touched.horasOB}
-           </Grid>
+           </Grid> */}
 
             <Grid item className="grid-item" xs={12}>
               <Button type="submit" size="medium" variant="contained" color="primary" disabled={isSubmitting}>

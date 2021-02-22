@@ -16,11 +16,16 @@ import {Formulario} from "./NuevoPerfil";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import "../style/general.css"
+import {TextField , Card , Grid , Button} from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  container:{
+    maxHeight: 440,
+    minWidth: 700,
+  }
 });
 
 function ListaPerfiles(props) {
@@ -52,7 +57,7 @@ function ListaPerfiles(props) {
       setPerfiles(data.data);
       setLoadPerfiles(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadPerfiles(false)
     }); 
   }
@@ -67,14 +72,18 @@ function ListaPerfiles(props) {
     ).then((response)=>{
       setPerfiles(perfiles.filter(x => x.id != id));
     }).catch((error)=>{
-      console.error("Error pidiendo datos: ",error);
+      alert(error.response.data.exceptionMessage)
     }); 
   }
   
   return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
+    <Card scroll="paper">
+      {/* Agregado className={classes.container} y se sacó component={paper} */}
+      <TableContainer className={classes.container} >
+        {/* a los demas cambiarle a <Table> los atributos stickyHeader aria-label="sticky table" y modificar el classes de los estilos en use styles
+        https://material-ui.com/components/tables/#fixed-header
+        */}
+        <Table stickyHeader aria-label="sticky table" className={classes.table} > 
           <TableHead>
             <TableRow>
               <TableCell align="center">Perfil</TableCell>
@@ -119,7 +128,7 @@ function ListaPerfiles(props) {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Card>
   )
 }
 

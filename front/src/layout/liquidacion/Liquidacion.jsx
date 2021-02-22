@@ -59,7 +59,7 @@ const Liquidacion = (props) => {
       console.log(liquidacion);
       setCargaLiquidacion(true);
     }).catch((error)=>{
-      console.error("Error pidiendo datos liquidacion: ",error);
+      alert(error.response.data.exceptionMessage)
       setCargaLiquidacion(true)
     }); 
   }
@@ -75,7 +75,7 @@ const Liquidacion = (props) => {
       setEmpleados(response.data);
       setLoadEmpleados(false);
     }).catch((error)=>{
-      console.error("Error pidiendo datos empleados: ",error);
+      alert(error.response.data.exceptionMessage)
       setLoadEmpleados(false)
     }); 
   }
