@@ -59,6 +59,27 @@ function HsAdeudadas(props) {
     }
   }, [])
 
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get("http://localhost:27195/api/Clientes/ClientesReporte", {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+  })
+  .then(response => {//Create a Blob from the PDF Stream
+      const file = new Blob(
+        [response.data], 
+        {type: 'application/pdf'});//Build a URL from the file
+      const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+      window.open(fileURL);})
+  .catch(error => {
+      console.log(error);
+  });
+  }
+
   console.log("informeHsAdeudadas: ",informeHsAdeudadas)
   console.log("loadInformeHsAdeudadas: ",loadInformeHsAdeudadas)
 
@@ -104,6 +125,7 @@ function HsAdeudadas(props) {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>Pedir reporte</Button>
     </Card>
   )
 }

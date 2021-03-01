@@ -137,7 +137,7 @@ const Liquidacion = (props) => {
               </select>
             </Grid>
               <Grid item className="grid-item" xs={4}>
-              <Button variant="contained" color="primary" onClick={()=>{fetchLiquidacion()}}> Liquidación </Button>
+                <Button variant="contained" color="primary" onClick={()=>{fetchLiquidacion()}}> Liquidación </Button>
               </Grid>
               <Grid container className="list">
               <TableContainer>
