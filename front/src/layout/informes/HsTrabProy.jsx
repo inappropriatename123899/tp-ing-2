@@ -59,6 +59,27 @@ function HsTrabProy(props) {
   console.log("informeHorasTrabajadasPorProyecto: ",informeHorasTrabajadasPorProyecto)
   console.log("loadInformeHorasTrabajadasPorProyecto: ",loadInformeHorasTrabajadasPorProyecto)
 
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get(`http://localhost:27195/api/Proyectos/HsTrabajadasProyectorPerfilReporte`, {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {//Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'});//Build a URL from the file
+        const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+        window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
+
   return (
     <Card scroll="paper">
       {/* Agregado className={classes.container} y se sacó component={paper} */}
@@ -72,6 +93,9 @@ function HsTrabProy(props) {
               <TableCell align="center">Proyecto</TableCell>
               <TableCell align="center">Perfil</TableCell>
               <TableCell align="center">Horas Trabajadas</TableCell>
+              <TableCell align="center">
+                <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>Reporte PDF</Button>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -90,6 +114,7 @@ function HsTrabProy(props) {
                     <TableCell align="center">
                       {itemInt.cantidadHoras}
                     </TableCell>
+                    <TableCell></TableCell>
                   </TableRow>
                   )
               }))

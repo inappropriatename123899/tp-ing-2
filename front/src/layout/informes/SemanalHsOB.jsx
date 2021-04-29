@@ -62,6 +62,27 @@ function SemanalHsOB(props) {
   console.log("informeSemanalHsOB: ",informeSemanalHsOB)
   console.log("loadInformeSemanalHsOB: ",loadInformeSemanalHsOB)
 
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get(`http://localhost:27195/api/HorasTrabajadas/InformeSemanalHsOBReporte`, {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {//Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'});//Build a URL from the file
+        const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+        window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
+
   return (
     <Card scroll="paper">
       {/* Agregado className={classes.container} y se sacó component={paper} */}
@@ -108,6 +129,9 @@ function SemanalHsOB(props) {
             </TableCell>
             <TableCell align="center">
               {informeSemanalHsOB.hsOBTotales}
+            </TableCell>
+            <TableCell align="center">
+              <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>Reporte PDF</Button>
             </TableCell>
           </TableRow>
           }

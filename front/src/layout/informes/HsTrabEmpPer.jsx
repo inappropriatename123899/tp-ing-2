@@ -64,6 +64,27 @@ function HsTrabEmpPer(props) {
   console.log("informeHorasTrabajadasPorEmpleadoYPerfil: ",informeHorasTrabajadasPorEmpleadoYPerfil)
   console.log("loadInformeHorasTrabajadasPorEmpleadoYPerfil: ",loadInformeHorasTrabajadasPorEmpleadoYPerfil)
 
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get(`http://localhost:27195/api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotales?desde=${inicio}&hasta=${fin}`, {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {//Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'});//Build a URL from the file
+        const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+        window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
+
   return (
     <Card scroll="paper">
       {/* Agregado className={classes.container} y se sacó component={paper} */}
@@ -116,9 +137,12 @@ function HsTrabEmpPer(props) {
                   </Grid>
               </TableCell>
               <TableCell>
+                <Button onClick={() => bothReady()} size="medium" variant="contained" color="primary">Solicitar</Button>
               </TableCell>
               <TableCell>
-                <Button onClick={() => bothReady()} size="medium" variant="contained" color="primary">Solicitar</Button>
+              </TableCell>
+              <TableCell align="center">
+                <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>Reporte PDF</Button>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -126,6 +150,7 @@ function HsTrabEmpPer(props) {
               <TableCell align="center">Perfil</TableCell>
               <TableCell align="center">Nombre Empleado</TableCell>
               <TableCell align="center">Horas trabajadas</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -149,6 +174,7 @@ function HsTrabEmpPer(props) {
                         <TableCell align="center">
                           {itemIntInt.cantidadHoras}
                         </TableCell>
+                        <TableCell align="center"></TableCell>
                       </TableRow>
                       )
                     }))
