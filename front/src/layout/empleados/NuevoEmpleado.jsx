@@ -10,6 +10,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
 import moment from 'moment'
 import { Redirect } from "react-router-dom";
+import { apiLink } from "../../utils/stringBack";
 
 function Formulario(props){
 
@@ -33,7 +34,7 @@ function Formulario(props){
 
   const fetchProfiles = async () => {
     
-    axios.get("http://localhost:27195/api/Perfiles", {
+    axios.get(apiLink + "api/Perfiles", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioTokenData[1]}`
@@ -109,7 +110,7 @@ function Formulario(props){
 
           
 
-          axios.post("http://localhost:27195/api/Empleados/update", {
+          axios.post(apiLink + "api/Empleados/update", {
             id: values.id,
             nombre: values.nombre,
             apellido: values.apellido,

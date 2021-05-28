@@ -16,7 +16,8 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import "../style/general.css"
 import {TextField , Card , Grid , Button, Dialog} from '@material-ui/core';
-import moment from "moment"
+import moment from "moment";
+import { apiLink } from "../../utils/stringBack";
 
 const useStyles = makeStyles({
   table: {
@@ -37,7 +38,7 @@ function SemanalHsOB(props) {
   const [loadInformeSemanalHsOB,setLoadInformeSemanalHsOB] = useState(false);
 
   function solicitarSemanalHorasOB() {
-    axios.get("http://localhost:27195/api/HorasTrabajadas/informeSemanalHsOB", {
+    axios.get(apiLink + "api/HorasTrabajadas/informeSemanalHsOB", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -64,7 +65,7 @@ function SemanalHsOB(props) {
 
   // para recibir streams
   const fetchReporte = () => {
-    axios.get(`http://localhost:27195/api/HorasTrabajadas/InformeSemanalHsOBReporte`, {
+    axios.get(apiLink + `api/HorasTrabajadas/InformeSemanalHsOBReporte`, {
       method: 'GET',
       headers: 
         {

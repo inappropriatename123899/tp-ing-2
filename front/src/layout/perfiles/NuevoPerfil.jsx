@@ -3,7 +3,8 @@ import { Formik, Field, Form } from 'formik';
 import axios from "axios";
 import {TextField, Card, Grid} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import "../style/general.css"
+import "../style/general.css";
+import { apiLink } from "../../utils/stringBack";
 
 function Formulario(props){
   return (
@@ -14,7 +15,7 @@ function Formulario(props){
           valorHorario: props.usuarioTokenData !== undefined ? (props.usuarioTokenData[2]!==undefined ? props.usuarioTokenData[2].valorHorario : '') : ''
         }}
         onSubmit={(values, {resetForm}, initialValues) => {
-          axios.post("http://localhost:27195/api/Perfiles/update", values, {
+          axios.post(apiLink + "api/Perfiles/update", values, {
             headers: 
               {
                 Authorization: `Bearer ${props.usuarioTokenData[1]}`

@@ -4,6 +4,7 @@ import axios from "axios";
 import {TextField, Grid , Card} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import "../style/general.css"
+import { apiLink } from "../../utils/stringBack";
 
 function Formulario(props) {
 
@@ -24,7 +25,7 @@ function Formulario(props) {
   }, [])
 
   const fetchClientes = async () => {
-    await axios.get("http://localhost:27195/api/Clientes", {
+    await axios.get(apiLink + "api/Clientes", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioTokenData[1]}`
@@ -51,7 +52,7 @@ return (
         }}
 
           onSubmit={(values, {resetForm}, initialValues) => {
-            axios.post("http://localhost:27195/api/Proyectos/update", values, {
+            axios.post(apiLink + "api/Proyectos/update", values, {
               headers: 
                 {
                   Authorization: `Bearer ${props.usuarioTokenData[1]}`

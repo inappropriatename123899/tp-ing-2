@@ -5,7 +5,7 @@ import {TextField, Card , Grid} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import "../style/general.css"
-
+import { apiLink } from "../../utils/stringBack";
 
 function CargarHorasTarea(props) {
 
@@ -38,7 +38,7 @@ function CargarHorasTarea(props) {
     const fetchTareasEmpleado = async () => {
       //el q se loggea es un empleado, al margen de su rol, por lo tanto empleadoID=loggedUser.ID
       // los empleados disponibles tienen los ids 3, 4, 5 y 6, pero el 6 no tiene tareas asignadas, los demás tienen 1 cada 1
-        axios.get(`http://localhost:27195/api/Tareas/empleado?empleadoID=${parseInt(props.usuarioToken[0].id)}`, {
+        axios.get(apiLink + `api/Tareas/empleado?empleadoID=${parseInt(props.usuarioToken[0].id)}`, {
           headers: 
             {
               Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -54,7 +54,7 @@ function CargarHorasTarea(props) {
     }
 
     const fetchEstadoHoras = async () => {
-          axios.get(`http://localhost:27195/api/HorasTrabajadas`, {
+          axios.get(apiLink + `api/HorasTrabajadas`, {
             headers: 
               {
                 Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -78,7 +78,7 @@ function CargarHorasTarea(props) {
             }}
 
             onSubmit={(values, {setSubmitting}) => {
-            axios.get(`http://localhost:27195/api/Tareas/${values.tareaID}`, {
+            axios.get(apiLink + `api/Tareas/${values.tareaID}`, {
               headers: 
                 {
                   Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -88,7 +88,7 @@ function CargarHorasTarea(props) {
               console.log("proyectoID: ",response.data.proyectoID);
               console.log("tareaID: ",response.data.id);
               
-              axios.post("http://localhost:27195/api/HorasTrabajadas/getHsOB", {
+              axios.post(apiLink + "api/HorasTrabajadas/getHsOB", {
                 id: 0,
                 proyectoID: response.data.proyectoID,
                 tareaID: response.data.id,
@@ -109,7 +109,7 @@ function CargarHorasTarea(props) {
                   let confirmarHOB = window.confirm(`Está pasando horas over budget (${res.data}).`)
 
                     if (confirmarHOB === true) {
-                      axios.post("http://localhost:27195/api/HorasTrabajadas/update", {
+                      axios.post(apiLink + "api/HorasTrabajadas/update", {
                         id: 0,
                         proyectoID: response.data.proyectoID,
                         tareaID: response.data.id,
@@ -132,7 +132,7 @@ function CargarHorasTarea(props) {
                       console.log("nada")
                     }
                   } else {
-                    axios.post("http://localhost:27195/api/HorasTrabajadas/update", {
+                    axios.post(apiLink + "api/HorasTrabajadas/update", {
                       id: 0,
                       proyectoID: response.data.proyectoID,
                       tareaID: response.data.id,

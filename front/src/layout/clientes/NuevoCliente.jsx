@@ -4,6 +4,7 @@ import axios from "axios";
 import {TextField, Grid, Card} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import "../style/general.css"
+import { apiLink } from "../../utils/stringBack";
 
 function Formulario(props){
   console.log("NUEVOCLIENTE PROPS: ",props)
@@ -42,11 +43,9 @@ function Formulario(props){
     }}
 
     onSubmit={(values, {resetForm}, initialValues) => {
-      // enganchar a endpoint
-      // http://localhost:27195/api/login/authenticate
       console.log(values);
       console.log("token ",(props.usuarioTokenData[1]));
-      axios.post("http://localhost:27195/api/Clientes/update", {
+      axios.post(apiLink + "api/Clientes/update", {
         id: values.id,
         tipoPersona: parseInt(values.tipoPersona),
         nombre: values.nombre,

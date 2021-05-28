@@ -17,6 +17,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import "../style/general.css"
 import {TextField , Card , Grid , Button} from '@material-ui/core';
+import { apiLink } from "../../utils/stringBack";
 
 const useStyles = makeStyles({
   table: {
@@ -36,7 +37,7 @@ function ListaProyectos(props) {
 
   const fetchProyectos = async () => {
     
-    axios.get("http://localhost:27195/api/Proyectos", {
+    axios.get(apiLink + "api/Proyectos", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -65,7 +66,7 @@ function ListaProyectos(props) {
   }, [])
 
   function funcionBorrar(id, index) {
-    axios.delete(`http://localhost:27195/api/Proyectos/${id}`, {
+    axios.delete(apiLink + `api/Proyectos/${id}`, {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -135,7 +136,3 @@ function ListaProyectos(props) {
 }
 
 export default ListaProyectos
-
-
-
-

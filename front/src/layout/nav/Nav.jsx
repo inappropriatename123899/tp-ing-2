@@ -10,6 +10,7 @@ import Gramps from "../gramps/Gramps"
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useLocation } from 'react-router-dom'
 import axios from "axios";
+import { apiLink } from "../../utils/stringBack";
 
 const drawerWidth = 240;
 
@@ -109,7 +110,7 @@ const Nav = (props) => {
   console.log("load: ",loadLoggedUser)
 
   const fetchLoggedUser = async () => {
-    axios.get("http://localhost:27195/api/Empleados/DameMisDatos",
+    axios.get(apiLink + "api/Empleados/DameMisDatos",
     {headers: {Authorization: `Bearer ${props.token}`} 
     }).then((response)=>{
       setLoggedUser(response.data);

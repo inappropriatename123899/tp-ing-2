@@ -17,6 +17,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import "../style/general.css"
 import {TextField , Card , Grid , Button} from '@material-ui/core';
+import { apiLink } from "../../utils/stringBack";
 
 const useStyles = makeStyles({
   table: {
@@ -49,7 +50,7 @@ function ListaTareas(props) {
 
   const fetchTareas = async () => {
     
-    axios.get("http://localhost:27195/api/Tareas", {
+    axios.get(apiLink + "api/Tareas", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -66,7 +67,7 @@ function ListaTareas(props) {
   }
 
   function funcionBorrar(id, index) {
-    axios.delete(`http://localhost:27195/api/Tareas/${id}`, {
+    axios.delete(apiLink + `api/Tareas/${id}`, {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`

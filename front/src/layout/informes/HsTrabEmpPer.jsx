@@ -17,6 +17,7 @@ import 'reactjs-popup/dist/index.css';
 import "../style/general.css"
 import {TextField , Card , Grid , Button} from '@material-ui/core';
 import moment from "moment"
+import { apiLink } from "../../utils/stringBack";
 
 const useStyles = makeStyles({
   table: {
@@ -41,7 +42,7 @@ function HsTrabEmpPer(props) {
   console.log("fechaHasta: ",fin);
 
   function solicitarHorasTrabajadasPorEmpleadoYPerfil() {
-    axios.get(`http://localhost:27195/api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotales?desde=${inicio}&hasta=${fin}`, {
+    axios.get(apiLink + `api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotales?desde=${inicio}&hasta=${fin}`, {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`
@@ -66,7 +67,7 @@ function HsTrabEmpPer(props) {
 
   // para recibir streams
   const fetchReporte = () => {
-    axios.get(`http://localhost:27195/api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotales?desde=${inicio}&hasta=${fin}`, {
+    axios.get(apiLink + `api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotales?desde=${inicio}&hasta=${fin}`, {
       method: 'GET',
       headers: 
         {

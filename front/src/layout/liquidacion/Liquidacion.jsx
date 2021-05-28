@@ -9,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import axios from "axios"
+import { apiLink } from "../../utils/stringBack";
 
 const Liquidacion = (props) => {
 
@@ -44,7 +45,7 @@ const Liquidacion = (props) => {
 
     console.log("ACÁ: ",props)
 
-    axios.post("http://localhost:27195/api/Proyectos/Liquidacion", {
+    axios.post(apiLink + "api/Proyectos/Liquidacion", {
       empleadoID: parseInt(empleado),
       desde: inicio,
       hasta: fin
@@ -65,7 +66,7 @@ const Liquidacion = (props) => {
   }
 
   const fetchEmpleados = async () => {  
-    axios.get("http://localhost:27195/api/Empleados", {
+    axios.get(apiLink + "api/Empleados", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioToken[1]}`

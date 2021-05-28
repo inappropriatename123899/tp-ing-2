@@ -3,7 +3,8 @@ import { Formik, Field, Form } from 'formik';
 import axios from "axios";
 import {TextField , Card , Grid} from "@material-ui/core";
 import Button from '@material-ui/core/Button';
-import "../style/general.css"
+import "../style/general.css";
+import { apiLink } from "../../utils/stringBack";
 
 function Formulario(props) {
 
@@ -33,7 +34,7 @@ function Formulario(props) {
 
   const fetchProyectos = async () => {
     
-    axios.get("http://localhost:27195/api/Proyectos", {
+    axios.get(apiLink + "api/Proyectos", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioTokenData[1]}`
@@ -49,7 +50,7 @@ function Formulario(props) {
   }
 
   const fetchPerfiles = async () => {
-    axios.get("http://localhost:27195/api/Perfiles", {
+    axios.get(apiLink + "api/Perfiles", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioTokenData[1]}`
@@ -65,7 +66,7 @@ function Formulario(props) {
   }
 
   const fetchEmpleados = async () => {
-    axios.get("http://localhost:27195/api/Empleados", {
+    axios.get(apiLink + "api/Empleados", {
       headers: 
         {
           Authorization: `Bearer ${props.usuarioTokenData[1]}`
@@ -93,7 +94,7 @@ function Formulario(props) {
     }}
 
     onSubmit={(values, {resetForm}, initialValues) => {
-      axios.get(`http://localhost:27195/api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`, {
+      axios.get(apiLink + `api/Empleados/GetEmpleadoPerfilID?empleadoID=${parseInt(values.empleadoID)}&perfilID=${parseInt(values.perfilID)}`, {
         headers: 
           {
             Authorization: `Bearer ${props.usuarioTokenData[1]}`
@@ -101,7 +102,7 @@ function Formulario(props) {
         }
       ).then((response)=>{
         console.log(response.data);
-          axios.post("http://localhost:27195/api/Tareas/update", {
+          axios.post(apiLink + "api/Tareas/update", {
           id: values.id,
           nombre: values.nombre,
           proyectoID: values.proyectoID,
