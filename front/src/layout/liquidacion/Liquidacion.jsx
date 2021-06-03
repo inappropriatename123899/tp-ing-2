@@ -65,6 +65,31 @@ const Liquidacion = (props) => {
     }); 
   }
 
+  const fetchLiquidacionPDF = () => {
+
+    console.log(empleado)
+
+    console.log("ACÁ: ",props)
+
+    axios.get(apiLink + `api/Proyectos/LiquidacionReporte?EmpleadoID=${parseInt(empleado)}&Desde=${inicio}&Hasta=${fin}`, {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+        responseType: 'blob'
+      })
+    .then(response => {//Create a Blob from the PDF Stream
+      const file = new Blob(
+        [response.data], 
+        {type: 'application/pdf'});//Build a URL from the file
+      const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+      window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
+
   const fetchEmpleados = async () => {  
     axios.get(apiLink + "api/Empleados", {
       headers: 
@@ -88,59 +113,62 @@ const Liquidacion = (props) => {
           <Grid container className="form">
             <Grid item className="grid-item" xs={5}>
               <form noValidate>
-                    <TextField
-      
-                      onChange={(event)=>{
-                          setInicio(event.target.value)
-                        }
-                      }
-                      id="date"
-                      label="Inicio de periodo"
-                      type="date"
-                      defaultValue={moment()}
-                      style={{ width: 220 }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
+                <TextField
+  
+                  onChange={(event)=>{
+                      setInicio(event.target.value)
+                    }
+                  }
+                  id="date"
+                  label="Inicio de periodo"
+                  type="date"
+                  defaultValue={moment()}
+                  style={{ width: 160 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </form>
             </Grid>
+            <Grid/>
             <Grid item className="grid-item" xs={5}>
               <form noValidate>
-                    <TextField
-                      onChange={(event)=>{
-                          setFin(event.target.value)
-                        }
-                      }
-                      id="date"
-                      label="Fin de periodo"
-                      type="date"
-                      defaultValue={moment()}
-                      style={{ width: 220 }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
+                <TextField
+                  onChange={(event)=>{
+                      setFin(event.target.value)
+                    }
+                  }
+                  id="date"
+                  label="Fin de periodo"
+                  type="date"
+                  defaultValue={moment()}
+                  style={{ width: 160 }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </form>
             </Grid>
           </Grid>
   
           <Grid container className="form">
-            <Grid item className="grid-item" xs={5}>
-              <p>Empleado</p>
+            <Grid item className="grid-item" xs={3}>
               <select onChange={(event)=>{
                 setEmpleado(event.target.value)
-              }}  id="empleadoID standard-basic" label="Empleado" className="select-css">
+              }} id="empleadoID standard-basic" label="Empleado" className="select-css">
                 <option value={0}>Elija un empleado...</option>
                 { 
                   empleados.map((item,i) => <option key={i} value={item.id}>{ item.nombre }</option>)
                 }
               </select>
             </Grid>
-              <Grid item className="grid-item" xs={4}>
-                <Button variant="contained" color="primary" onClick={()=>{fetchLiquidacion()}}> Liquidación </Button>
-              </Grid>
-              <Grid container className="list">
+            <Grid item className="grid-item" xs={2}>
+              <Button variant="contained" color="primary" onClick={()=>{fetchLiquidacion()}}>Liquidar</Button>
+            </Grid>
+            <Grid item className="grid-item" xs={2}>
+              <Button variant="contained" color="primary" onClick={()=>{fetchLiquidacionPDF()}}>Ver PDF</Button>
+            </Grid>
+            <Grid container className="list">
               <TableContainer>
                 <Table size="small" aria-label="a dense table">
                   <TableHead>
@@ -159,7 +187,8 @@ const Liquidacion = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                   {cargaLiquidacion &&  <TableRow>
+                    {cargaLiquidacion && 
+                    <TableRow>
                       <TableCell align="center">{liquidacion.antiguedadEmpleado}</TableCell>
                       <TableCell align="center">{liquidacion.cantidadHsNoOBLiquidados}</TableCell>
                       <TableCell align="center">{liquidacion.cantidadHsOBLiquidados}</TableCell>

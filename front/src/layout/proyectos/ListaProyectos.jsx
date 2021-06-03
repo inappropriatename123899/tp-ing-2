@@ -79,6 +79,27 @@ function ListaProyectos(props) {
     }); 
   }
 
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get(apiLink + "api/Proyectos/ProyectosReporte", {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {//Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'});//Build a URL from the file
+        const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+        window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
+
   return (
     <Card scroll="paper">
       {/* Agregado className={classes.container} y se sacó component={paper} */}
@@ -93,7 +114,9 @@ function ListaProyectos(props) {
             <TableCell align="center">Estado del proyecto</TableCell>
             <TableCell align="center">Cliente (nombre/razón social)</TableCell>
             <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
+            <TableCell align="center">
+              <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>PDF</Button>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

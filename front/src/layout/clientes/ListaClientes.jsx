@@ -48,6 +48,27 @@ function ListaClientes(props) {
     }
   }, [])
 
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get(apiLink + "api/Clientes/ClientesReporte", {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {//Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'});//Build a URL from the file
+        const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+        window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
+
   function funcionBorrar(id, index) {
     axios.delete(apiLink + `api/Clientes/${id}`, {
       headers: 
@@ -99,7 +120,9 @@ function ListaClientes(props) {
             <TableCell align="center">Email</TableCell>
             <TableCell align="center">Tipo de persona</TableCell>
             <TableCell align="center"></TableCell>
-            <TableCell align="center"></TableCell>
+            <TableCell align="center">
+              <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>PDF</Button>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

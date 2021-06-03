@@ -172,7 +172,7 @@ function Formulario(props){
                    <Grid className="grid-item" item xs={6}>
                       <TextField  
                       type="date"
-                      onChange={handleChange} value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha" 
+                      onChange={handleChange} value={values.fechaIngreso} onBlur={handleBlur} id="fechaIngreso standard-basic" name="fechaIngreso" label="Fecha Ingreso" 
                       InputLabelProps={{
                         shrink: true,
                       }}/>

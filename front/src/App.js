@@ -75,8 +75,7 @@ function App() {
                   touched,
                   handleChange,   
                   handleBlur,   
-                  handleSubmit,   
-                  isSubmitting
+                  handleSubmit
                 }) => (
                   <Form onSubmit={handleSubmit}>
                     <br/>
@@ -88,7 +87,7 @@ function App() {
                     {errors.password && touched.password}
                     <br/>
                     <br/>
-                    <Button type="submit" size="small" color="primary" disabled={isSubmitting}>
+                    <Button type="submit" size="small" color="primary">
                       Ingresar
                     </Button>
                   </Form>

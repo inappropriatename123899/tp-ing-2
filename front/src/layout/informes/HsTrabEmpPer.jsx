@@ -56,10 +56,18 @@ function HsTrabEmpPer(props) {
     })
   }
 
-  function bothReady() {
+  function bothReady(pdf) {
     console.log("inicio: ",inicio)
     console.log("fin: ",fin)
-    if (inicio !== undefined && fin !== undefined) solicitarHorasTrabajadasPorEmpleadoYPerfil();
+    if (inicio !== undefined && fin !== undefined && inicio.trim() !== "" && fin.trim() !== "") {
+      if (pdf) {
+        fetchReporte();
+      } else {
+        solicitarHorasTrabajadasPorEmpleadoYPerfil();
+      }
+    } else {
+      alert('Debe introducir ambas fechas para poder pedir el reporte.');
+    }
   }
 
   console.log("informeHorasTrabajadasPorEmpleadoYPerfil: ",informeHorasTrabajadasPorEmpleadoYPerfil)
@@ -67,7 +75,7 @@ function HsTrabEmpPer(props) {
 
   // para recibir streams
   const fetchReporte = () => {
-    axios.get(apiLink + `api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotales?desde=${inicio}&hasta=${fin}`, {
+    axios.get(apiLink + `api/Proyectos/HorasTrabajadasPorProyectoPorPerfilPorEmpleadoTotalesReporte?desde=${inicio}&hasta=${fin}`, {
       method: 'GET',
       headers: 
         {
@@ -102,7 +110,6 @@ function HsTrabEmpPer(props) {
                       <TextField
                         onChange={(event)=>{
                           setInicio(event.target.value);
-                          bothReady();
                         }}
                         id="date"
                         label="Inicio de periodo"
@@ -122,7 +129,6 @@ function HsTrabEmpPer(props) {
                           <TextField
                             onChange={(event)=>{
                                 setFin(event.target.value);
-                                bothReady();
                               }
                             }
                             id="date"
@@ -138,12 +144,10 @@ function HsTrabEmpPer(props) {
                   </Grid>
               </TableCell>
               <TableCell>
-                <Button onClick={() => bothReady()} size="medium" variant="contained" color="primary">Solicitar</Button>
-              </TableCell>
-              <TableCell>
+                <Button onClick={() => bothReady(false)} size="medium" variant="contained" color="primary">Solicitar</Button>
               </TableCell>
               <TableCell align="center">
-                <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>Reporte PDF</Button>
+                <Button variant="contained" color="primary" onClick={()=>{bothReady(true)}}>Ver PDF</Button>
               </TableCell>
             </TableRow>
             <TableRow>

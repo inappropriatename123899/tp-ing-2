@@ -76,6 +76,27 @@ function ListaPerfiles(props) {
       alert(error.response.data.exceptionMessage)
     }); 
   }
+
+  // para recibir streams
+  const fetchReporte = () => {
+    axios.get(apiLink + "api/Perfiles/PerfilesReporte", {
+      method: 'GET',
+      headers: 
+        {
+          Authorization: `Bearer ${props.usuarioToken[1]}`
+        },
+      responseType: 'blob' //Force to receive data in a Blob Format
+    })
+    .then(response => {//Create a Blob from the PDF Stream
+        const file = new Blob(
+          [response.data], 
+          {type: 'application/pdf'});//Build a URL from the file
+        const fileURL = URL.createObjectURL(file);//Open the URL on new Window
+        window.open(fileURL);})
+    .catch(error => {
+        console.log(error);
+    });
+  }
   
   return (
     <Card scroll="paper">
@@ -90,7 +111,9 @@ function ListaPerfiles(props) {
               <TableCell align="center">Perfil</TableCell>
               <TableCell align="center">Paga por hora</TableCell>
               <TableCell align="center"></TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell align="center">
+                <Button variant="contained" color="primary" onClick={()=>{fetchReporte()}}>PDF</Button>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

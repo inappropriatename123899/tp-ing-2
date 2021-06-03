@@ -62,7 +62,7 @@ function HsAdeudadas(props) {
 
   // para recibir streams
   const fetchReporte = () => {
-    axios.get(apiLink + "api/Clientes/ClientesReporte", {
+    axios.get(apiLink + "api/Proyectos/HorasAdeudadasProyectoEmpleadoReporte", {
       method: 'GET',
       headers: 
         {
