@@ -86,7 +86,8 @@ const Liquidacion = (props) => {
       const fileURL = URL.createObjectURL(file);//Open the URL on new Window
       window.open(fileURL);})
     .catch(error => {
-        console.log(error);
+      alert(error.response.data.exceptionMessage);
+      console.log(error);
     });
   }
 
